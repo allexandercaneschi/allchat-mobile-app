@@ -1,5 +1,5 @@
 import { useTailwind } from '@/theme/useTailwind';
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { StatusBar, Text, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated';
 // import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,16 +24,12 @@ import {
   SwitchAccount,
   SettingsList,
 } from '@/components-next';
-import { AppearancePicker } from './components/AppearancePicker';
-import { Theme } from '@/types/common/Theme';
-import { selectTheme } from '@/store/settings/settingsSelectors';
-import { SheetRef } from '@/components-next/common/sheet/Sheet';
 import { Sheet } from '@/components-next/common/sheet/Sheet';
 import { UserAvatar } from './components/UserAvatar';
 
 import { LANGUAGES } from '@/constants';
 import { useRefsContext } from '@/context';
-import { AppearanceIcon, NotificationIcon, SwitchIcon, TranslateIcon } from '@/svg-icons';
+import { NotificationIcon, SwitchIcon, TranslateIcon } from '@/svg-icons';
 import { GenericListType } from '@/types';
 
 import {
@@ -71,13 +67,11 @@ const appVersion = Application.nativeApplicationVersion;
 const buildNumber = Application.nativeBuildVersion;
 const appVersionDetails = buildNumber ? `${appVersion} (${buildNumber})` : appVersion;
 
-type SettingsPane = 'availability' | 'notifications' | 'language' | 'account' | 'appearance';
+type SettingsPane = 'availability' | 'notifications' | 'language' | 'account';
 
 const SettingsScreen = () => {
   const tailwind = useTailwind();
   const navigation = useNavigation();
-  const appearance = useAppSelector(selectTheme) ?? 'system';
-  const appearanceSheetRef = useRef<SheetRef>(null);
   const isSplit = useIsSplitLayout();
   const { width } = useWindowDimensions();
   const [pane, setPane] = useState<SettingsPane>('availability');
@@ -207,15 +201,6 @@ const SettingsScreen = () => {
   const preferencesList: GenericListType[] = [
     {
       hasChevron: true,
-      title: i18n.t('SETTINGS.APPEARANCE'),
-      icon: <AppearanceIcon />,
-      subtitle: i18n.t(`SETTINGS.APPEARANCE_${(appearance as Theme).toUpperCase()}`),
-      subtitleType: 'light',
-      isSelected: isSplit && pane === 'appearance',
-      onPressListItem: openPane('appearance', () => appearanceSheetRef.current?.present()),
-    },
-    {
-      hasChevron: true,
       title: i18n.t('SETTINGS.NOTIFICATIONS'),
       icon: <NotificationIcon />,
       subtitle: '',
@@ -326,10 +311,6 @@ const SettingsScreen = () => {
           <SettingsHeader />
         </ScrollEdgeHeader>
       ) : null}
-      <Sheet ref={appearanceSheetRef} autoSize>
-        <BottomSheetHeader headerText={i18n.t('SETTINGS.APPEARANCE')} />
-        <AppearancePicker />
-      </Sheet>
       <Sheet ref={userAvailabilityStatusSheetRef} height={190}>
         <BottomSheetHeader headerText={i18n.t('SETTINGS.SET_AVAILABILITY')} />
         <AvailabilityStatusList
@@ -366,7 +347,6 @@ const SettingsScreen = () => {
 
   const titleFor = (p: SettingsPane) =>
     ({
-      appearance: i18n.t('SETTINGS.APPEARANCE'),
       availability: i18n.t('SETTINGS.SET_AVAILABILITY'),
       notifications: i18n.t('SETTINGS.NOTIFICATION_PREFERENCES'),
       language: i18n.t('SETTINGS.SET_LANGUAGE'),
@@ -375,7 +355,6 @@ const SettingsScreen = () => {
 
   const renderPaneCard = (p: SettingsPane) => (
     <View style={tailwind.style('rounded-[13px] bg-white overflow-hidden')}>
-      {p === 'appearance' ? <AppearancePicker /> : null}
       {p === 'availability' ? (
         <AvailabilityStatusList
           changeAvailabilityStatus={changeAvailabilityStatus}

@@ -1,18 +1,31 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
+// This file is compiled on its own by the Expo tooling, so it cannot import from
+// src/. The full validation of the URL lives in src/config/server.ts; here only the
+// host is needed, for the conversation links.
+const getServerUrl = (): URL => {
+  try {
+    return new URL(process.env.EXPO_PUBLIC_INSTALLATION_URL ?? '');
+  } catch {
+    throw new Error('EXPO_PUBLIC_INSTALLATION_URL não está definida ou é inválida.');
+  }
+};
+
 export default ({ config }: ConfigContext): ExpoConfig => {
+  const serverUrl = getServerUrl();
   return {
-    name: 'Chatwoot',
-    slug: process.env.EXPO_PUBLIC_APP_SLUG || 'chatwoot-mobile',
-    version: '4.11.4',
+    name: 'ALLChat',
+    slug: 'allchat',
+    version: '0.1.0',
     orientation: 'portrait',
     icon: './assets/icon.png',
-    userInterfaceStyle: 'automatic',
+    userInterfaceStyle: 'dark',
     platforms: ['android'],
-    scheme: 'chatwootapp',
+    scheme: 'allchat',
     android: {
-      adaptiveIcon: { foregroundImage: './assets/adaptive-icon.png', backgroundColor: '#ffffff' },
-      package: 'com.chatwoot.app',
+      adaptiveIcon: { foregroundImage: './assets/adaptive-icon.png', backgroundColor: '#111113' },
+      package: 'br.com.alltecnologias.allchat',
+      versionCode: 1,
       permissions: [
         'android.permission.CAMERA',
         'android.permission.RECORD_AUDIO',
@@ -20,25 +33,18 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ],
       // Please use the relative path to the google-services.json file
       googleServicesFile: process.env.EXPO_PUBLIC_ANDROID_GOOGLE_SERVICES_FILE,
+      // Links to conversations on the ALLChat server open the app. The server
+      // does not publish an assetlinks.json for this app, so the link is not
+      // auto-verified and Android may ask which app to use.
       intentFilters: [
         {
           action: 'VIEW',
-          autoVerify: true,
           data: [
             {
-              scheme: 'https',
-              host: 'app.chatwoot.com',
+              scheme: serverUrl.protocol.replace(':', ''),
+              host: serverUrl.hostname,
               pathPrefix: '/app/accounts/',
               pathPattern: '/*/conversations/*',
-            },
-          ],
-          category: ['BROWSABLE', 'DEFAULT'],
-        },
-        {
-          action: 'VIEW',
-          data: [
-            {
-              scheme: 'chatwootapp',
             },
           ],
           category: ['BROWSABLE', 'DEFAULT'],
@@ -47,11 +53,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     extra: {
       eas: {
-        projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
         storybookEnabled: process.env.EXPO_STORYBOOK_ENABLED,
       },
     },
-    owner: 'chatwoot',
     plugins: [
       'expo-font',
       'expo-image',
@@ -61,7 +65,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         {
           image: './assets/splash.png',
           resizeMode: 'contain',
-          backgroundColor: '#ffffff',
+          backgroundColor: '#111113',
           enableFullScreenImage_legacy: true,
         },
       ],

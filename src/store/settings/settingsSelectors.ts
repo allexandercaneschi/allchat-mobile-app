@@ -25,8 +25,6 @@ export const selectNotificationSettings = createSelector(
   settings => settings.notificationSettings,
 );
 
-export const selectTheme = createSelector(selectSettings, settings => settings.theme);
-
 export const selectChatwootVersion = createSelector(selectSettings, settings => settings.version);
 
 export const selectPushToken = createSelector(selectSettings, settings => settings.pushToken);

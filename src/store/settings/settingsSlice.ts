@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { settingsActions } from './settingsActions';
 import { NotificationSettings } from './settingsTypes';
-import { Theme } from '@/types/common/Theme';
 
 interface SettingsState {
   uiFlags: {
@@ -10,7 +9,6 @@ interface SettingsState {
   };
   notificationSettings: NotificationSettings;
   localeValue: string;
-  theme: Theme;
   version: string;
   pushToken: string;
 }
@@ -29,7 +27,6 @@ const initialState: SettingsState = {
     selected_push_flags: [],
     user_id: 0,
   },
-  theme: 'system',
   version: '',
   pushToken: '',
 };
@@ -39,9 +36,6 @@ export const settingsSlice = createSlice({
   reducers: {
     resetSettings: state => {
       state.uiFlags.isUpdating = false;
-    },
-    setTheme: (state, action: PayloadAction<Theme>) => {
-      state.theme = action.payload;
     },
     setLocale: (state, action) => {
       state.localeValue = action.payload;
@@ -77,5 +71,5 @@ export const settingsSlice = createSlice({
       });
   },
 });
-export const { resetSettings, setLocale, setTheme } = settingsSlice.actions;
+export const { resetSettings, setLocale } = settingsSlice.actions;
 export default settingsSlice.reducer;
