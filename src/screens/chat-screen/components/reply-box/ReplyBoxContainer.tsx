@@ -525,13 +525,6 @@ const BottomSheetContent = () => {
     return MESSAGE_MAX_LENGTH.GENERAL;
   };
 
-  const audioFormat = (): 'audio/m4a' | 'audio/wav' => {
-    if (isAWhatsAppChannel(inbox) || isATelegramChannel(inbox) || isAnInstagramChannel(inbox)) {
-      return 'audio/m4a';
-    }
-    return 'audio/wav';
-  };
-
   const onSelectCannedResponse = (cannedResponse: CannedResponse) => {
     const updatedContent = replaceMessageVariables({
       message: cannedResponse.content,
@@ -727,9 +720,7 @@ const BottomSheetContent = () => {
           />
         )}
 
-        {isVoiceRecorderOpen ? (
-          <AudioRecorder onRecordingComplete={onRecordingComplete} audioFormat={audioFormat()} />
-        ) : null}
+        {isVoiceRecorderOpen ? <AudioRecorder onRecordingComplete={onRecordingComplete} /> : null}
         {!isVoiceRecorderOpen ? (
           <Animated.View
             layout={

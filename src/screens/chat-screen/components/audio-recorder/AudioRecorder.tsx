@@ -20,7 +20,6 @@ import {
   addNewCachePath,
   selectLocalRecordedAudioCacheFilePaths,
 } from '@/store/conversation/localRecordedAudioCacheSlice';
-import { convertAacToWav } from '@/utils/audioConverter';
 import type { AttachmentFile } from '@/store/conversation/conversationTypes';
 import { usePaneRightInset } from '@/navigation/split/usePaneRightInset';
 
@@ -61,10 +60,8 @@ const millisecondsToTimeString = (milliseconds: number | undefined) => {
 
 export const AudioRecorder = ({
   onRecordingComplete,
-  audioFormat,
 }: {
   onRecordingComplete: (audioFile: AttachmentFile) => void;
-  audioFormat: 'audio/m4a' | 'audio/wav';
 }) => {
   const tailwind = useTailwind();
   const RecorderSegmentWidth = useContainerWidth() - usePaneRightInset() - 8 - 80 - 12;
@@ -148,37 +145,17 @@ export const AudioRecorder = ({
         ios: value.replace('file://', ''),
         android: value.replace(/\/\/+/g, '/'),
       }) || value;
-    let finalPath = cleanPath;
-    const stats = await ReactNativeBlobUtil.fs.stat(finalPath);
+    const stats = await ReactNativeBlobUtil.fs.stat(cleanPath);
+    const fileName = `audio-${localRecordedAudioCacheFilePaths.length}.aac`;
 
-    if (Platform.OS === 'android') {
-      return {
-        uri: finalPath,
-        originalPath: finalPath,
-        type: 'audio/aac',
-        fileName: `audio-${localRecordedAudioCacheFilePaths.length}.aac`,
-        name: `audio-${localRecordedAudioCacheFilePaths.length}.aac`,
-        fileSize: stats.size,
-      };
-    }
-
-    const finalExtension = audioFormat === 'audio/wav' ? 'wav' : 'm4a';
-
-    if (audioFormat === 'audio/wav') {
-      finalPath = await convertAacToWav(cleanPath);
-      finalPath = finalPath.replace('file://', '');
-    }
-
-    const audioFile = {
-      uri: Platform.OS === 'ios' ? `file://${finalPath}` : finalPath,
-      originalPath: finalPath,
-      type: audioFormat,
-      fileName: `audio-${localRecordedAudioCacheFilePaths.length}.${finalExtension}`,
-      name: `audio-${localRecordedAudioCacheFilePaths.length}.${finalExtension}`,
+    return {
+      uri: cleanPath,
+      originalPath: cleanPath,
+      type: 'audio/aac',
+      fileName,
+      name: fileName,
       fileSize: stats.size,
     };
-
-    return audioFile;
   };
 
   const sendRecordedMessage = () => {
