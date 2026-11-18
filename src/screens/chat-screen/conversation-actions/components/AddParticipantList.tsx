@@ -10,8 +10,6 @@ import i18n from '@/i18n';
 import { useAppDispatch } from '@/hooks';
 import { conversationParticipantActions } from '@/store/conversation-participant/conversationParticipantActions';
 import { showToast } from '@/utils/toastUtils';
-import AnalyticsHelper from '@/utils/analyticsUtils';
-import { CONVERSATION_EVENTS } from '@/constants/analyticsEvents';
 import { IOS_DESIGN } from '@/utils';
 import { useIsInDetailPane } from '@/navigation/split/SplitViewContext';
 
@@ -109,7 +107,6 @@ export const AddParticipantList = (props: AddParticipantListProps) => {
     const userIds = remainingParticipants.map(p => p.id);
     try {
       await dispatch(conversationParticipantActions.update({ conversationId, userIds })).unwrap();
-      AnalyticsHelper.track(CONVERSATION_EVENTS.PARTICIPANT_CHANGED);
       showToast({ message: i18n.t('CONVERSATION.PARTICIPANT_CHANGE') });
     } catch {
       showToast({ message: i18n.t('ERRORS.COMMON_ERROR') });

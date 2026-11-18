@@ -198,22 +198,6 @@ export const authSlice = createSlice({
       .addCase(authActions.verifyMfa.rejected, (state, action) => {
         state.uiFlags.isVerifyingMfa = false;
         state.error = action.payload?.errors[0] ?? null;
-      })
-      .addCase(authActions.loginWithSso.pending, state => {
-        state.uiFlags.isLoggingIn = true;
-        state.error = null;
-      })
-      .addCase(authActions.loginWithSso.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.headers = action.payload.headers;
-        state.uiFlags.isLoggingIn = false;
-        state.error = null;
-        state.mfaToken = null;
-        state.verificationChannel = null;
-      })
-      .addCase(authActions.loginWithSso.rejected, (state, action) => {
-        state.uiFlags.isLoggingIn = false;
-        state.error = action.payload?.errors[0] ?? null;
       });
   },
 });

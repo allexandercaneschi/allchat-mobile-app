@@ -13,9 +13,7 @@ import { conversationActions } from '@/store/conversation/conversationActions';
 
 import i18n from '@/i18n';
 import { TickIcon } from '@/svg-icons/common';
-import { CONVERSATION_EVENTS } from '@/constants/analyticsEvents';
 import { showToast } from '@/utils/toastUtils';
-import AnalyticsHelper from '@/utils/analyticsUtils';
 
 type PriorityCellProps = {
   value: {
@@ -76,7 +74,6 @@ export const UpdatePriority = () => {
         priority,
       }),
     );
-    AnalyticsHelper.track(CONVERSATION_EVENTS.PRIORITY_CHANGED);
     showToast({
       message: i18n.t('CONVERSATION.PRIORITY_CHANGE'),
     });

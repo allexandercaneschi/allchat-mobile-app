@@ -10,8 +10,6 @@ import { tailwind } from '@/theme';
 import { authActions } from '@/store/auth/authActions';
 import { useAppDispatch } from '@/hooks';
 import { resetAuth } from '@/store/auth/authSlice';
-import AnalyticsHelper from '@/utils/analyticsUtils';
-import { ACCOUNT_EVENTS } from '@/constants/analyticsEvents';
 import i18n from '@/i18n';
 
 type FormData = {
@@ -35,7 +33,6 @@ const ForgotPassword = () => {
   const onSubmit = async (data: FormData) => {
     const { email } = data;
     dispatch(authActions.resetPassword({ email }));
-    AnalyticsHelper.track(ACCOUNT_EVENTS.FORGOT_PASSWORD);
   };
 
   return (

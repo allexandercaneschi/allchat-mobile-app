@@ -1,22 +1,12 @@
 import { useTailwind } from '@/theme/useTailwind';
 import { useCallback, useEffect, useState, useRef } from 'react';
-import {
-  StatusBar,
-  Text,
-  Platform,
-  Pressable,
-  ScrollView,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import { StatusBar, Text, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated';
 // import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import DeviceInfo from 'react-native-device-info';
-import ChatWootWidget from '@chatwoot/react-native-widget';
 import { useSelector } from 'react-redux';
 import * as Application from 'expo-application';
 import { Account, AvailabilityStatus } from '@/types';
@@ -24,8 +14,6 @@ import { switchAccount } from '@/utils/accountUtils';
 
 import { RecentSearches } from '@/screens/search/utils/recentSearches';
 import i18n from 'i18n';
-import { HELP_URL } from '@/constants/url';
-import { openURL } from '@/utils/urlUtils';
 
 import {
   BottomSheetHeader,
@@ -45,13 +33,7 @@ import { UserAvatar } from './components/UserAvatar';
 
 import { LANGUAGES } from '@/constants';
 import { useRefsContext } from '@/context';
-import {
-  AppearanceIcon,
-  ChatwootIcon,
-  NotificationIcon,
-  SwitchIcon,
-  TranslateIcon,
-} from '@/svg-icons';
+import { AppearanceIcon, NotificationIcon, SwitchIcon, TranslateIcon } from '@/svg-icons';
 import { GenericListType } from '@/types';
 
 import {
@@ -79,8 +61,6 @@ import {
 import { settingsActions } from '@/store/settings/settingsActions';
 import { setLocale } from '@/store/settings/settingsSlice';
 
-import AnalyticsHelper from '@/utils/analyticsUtils';
-import { PROFILE_EVENTS } from '@/constants/analyticsEvents';
 import { getUserPermissions } from '@/utils/permissionUtils';
 import { CONVERSATION_PERMISSIONS } from '@/constants/permissions';
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -131,15 +111,8 @@ const SettingsScreen = () => {
 
   // const { bottom } = useSafeAreaInsets();
 
-  const [showWidget, toggleWidget] = useState(false);
   const user = useSelector(selectUser);
-  const {
-    name,
-    email,
-    avatar_url: avatarUrl,
-    identifier_hash: identifierHash,
-    account_id: activeAccountId,
-  } = user || {};
+  const { name, email, avatar_url: avatarUrl, account_id: activeAccountId } = user || {};
 
   // Refetch when the active account changes; notification settings are account-scoped.
   useEffect(() => {
@@ -153,23 +126,6 @@ const SettingsScreen = () => {
   const hasConversationPermission = CONVERSATION_PERMISSIONS.some(permission =>
     userPermissions.includes(permission),
   );
-
-  const userDetails = {
-    identifier: email,
-    name,
-    avatar_url: avatarUrl,
-    email,
-    identifier_hash: identifierHash,
-  };
-
-  const customAttributes = {
-    originatedFrom: 'mobile-app',
-    appName,
-    appVersion: appVersionDetails,
-    deviceId: DeviceInfo.getDeviceId(),
-    packageName: appName,
-    operatingSystem: Platform.OS, // android/ios
-  };
 
   const isChatwootCloud = useAppSelector(selectIsChatwootCloud);
 
@@ -200,10 +156,6 @@ const SettingsScreen = () => {
   };
 
   const changeAvailabilityStatus = (updatedStatus: string) => {
-    AnalyticsHelper.track(PROFILE_EVENTS.TOGGLE_AVAILABILITY_STATUS, {
-      from: availabilityStatus,
-      to: updatedStatus,
-    });
     const payload = { profile: { availability: updatedStatus, account_id: activeAccountId } };
     setPendingAvailability(updatedStatus as AvailabilityStatus);
     // TODO: Fix this later
@@ -232,10 +184,6 @@ const SettingsScreen = () => {
     languagesModalSheetRef.current?.dismiss();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeLocale]);
-
-  const openHelpCenter = () => {
-    openURL({ URL: HELP_URL });
-  };
 
   // const openSystemSettings = () => {
   //   if (Platform.OS === 'ios') {
@@ -311,25 +259,6 @@ const SettingsScreen = () => {
     },
   ];
 
-  const supportList: GenericListType[] = [
-    {
-      hasChevron: true,
-      title: i18n.t('SETTINGS.READ_DOCS'),
-      icon: <SwitchIcon />,
-      subtitle: '',
-      subtitleType: 'light',
-      onPressListItem: openHelpCenter,
-    },
-    {
-      hasChevron: true,
-      title: i18n.t('SETTINGS.CHAT_WITH_US'),
-      icon: <ChatwootIcon />,
-      subtitle: '',
-      subtitleType: 'light',
-      onPressListItem: () => toggleWidget(true),
-    },
-  ];
-
   const listContent = (
     <SafeAreaView
       edges={
@@ -379,9 +308,6 @@ const SettingsScreen = () => {
         </Animated.View>
         <Animated.View style={tailwind.style('pt-6')}>
           <SettingsList sectionTitle={i18n.t('SETTINGS.PREFERENCES')} list={preferencesList} />
-        </Animated.View>
-        <Animated.View style={tailwind.style('pt-6')}>
-          <SettingsList sectionTitle={i18n.t('SETTINGS.SUPPORT')} list={supportList} />
         </Animated.View>
         <Animated.View style={tailwind.style('pt-6 mx-4')}>
           <Button
@@ -443,19 +369,6 @@ const SettingsScreen = () => {
         <BottomSheetHeader headerText={i18n.t('SETTINGS.DEBUG_ACTIONS')} />
         <DebugActions />
       </Sheet>
-      {!!process.env.EXPO_PUBLIC_CHATWOOT_WEBSITE_TOKEN &&
-        !!process.env.EXPO_PUBLIC_CHATWOOT_BASE_URL &&
-        !!showWidget && (
-          <ChatWootWidget
-            websiteToken={process.env.EXPO_PUBLIC_CHATWOOT_WEBSITE_TOKEN}
-            locale="en"
-            baseUrl={process.env.EXPO_PUBLIC_CHATWOOT_BASE_URL}
-            closeModal={() => toggleWidget(false)}
-            isModalVisible={showWidget}
-            user={userDetails}
-            customAttributes={customAttributes}
-          />
-        )}
     </SafeAreaView>
   );
 

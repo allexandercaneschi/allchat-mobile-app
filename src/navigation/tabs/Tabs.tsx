@@ -30,7 +30,6 @@ import { inboxActions } from '@/store/inbox/inboxActions';
 import { labelActions } from '@/store/label/labelActions';
 import actionCableConnector from '@/utils/actionCable';
 import { setCurrentState } from '@/store/conversation/conversationHeaderSlice';
-import AnalyticsHelper from '@/utils/analyticsUtils';
 import { clearAllDeliveredNotifications } from '@/utils/pushUtils';
 import { dashboardAppActions } from '@/store/dashboard-app/dashboardAppActions';
 import { customAttributeActions } from '@/store/custom-attribute/customAttributeActions';
@@ -67,7 +66,6 @@ export const Tabs = () => {
     dispatch(dashboardAppActions.index());
     dispatch(customAttributeActions.index());
     dispatch(accountActions.show());
-    initAnalytics();
     initSentry();
     initPushNotifications();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,13 +80,6 @@ export const Tabs = () => {
       // Prompt failures must not prevent registration.
     }
     dispatch(settingsActions.saveDeviceDetails());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const initAnalytics = useCallback(async () => {
-    if (user) {
-      AnalyticsHelper.identify(user);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

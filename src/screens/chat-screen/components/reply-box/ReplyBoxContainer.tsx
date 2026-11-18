@@ -70,10 +70,8 @@ import { TypingIndicator } from './TypingIndicator';
 import { getTypingUsersText } from '@/utils';
 import { selectTypingUsersByConversationId } from '@/store/conversation/conversationTypingSlice';
 import { Agent, CannedResponse, Conversation } from '@/types';
-import AnalyticsHelper from '@/utils/analyticsUtils';
 import { showToast } from '@/utils/toastUtils';
 import i18n from '@/i18n';
-import { CONVERSATION_EVENTS } from '@/constants/analyticsEvents';
 import {
   allMessageVariables,
   replaceMessageVariables,
@@ -461,8 +459,6 @@ const BottomSheetContent = () => {
     //   isAWhatsAppCloudChannel(inbox) ||
     //   is360DialogWhatsAppChannel(inbox?.channelType);
 
-    AnalyticsHelper.track(CONVERSATION_EVENTS.SENT_MESSAGE);
-
     const undefinedVariables = getAllUndefinedVariablesInMessage({
       message: messageContent,
       variables: messageVariables,
@@ -530,7 +526,6 @@ const BottomSheetContent = () => {
       message: cannedResponse.content,
       variables: messageVariables,
     });
-    AnalyticsHelper.track(CONVERSATION_EVENTS.INSERTED_A_CANNED_RESPONSE);
     dispatch(setMessageContent(updatedContent));
   };
 

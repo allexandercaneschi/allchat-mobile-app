@@ -23,8 +23,6 @@ import { conversationActions } from '@/store/conversation/conversationActions';
 import { isAssignableAgentFetching } from '@/store/assignable-agent/assignableAgentSelectors';
 import { showToast } from '@/utils/toastUtils';
 import i18n from '@/i18n';
-import { CONVERSATION_EVENTS } from '@/constants/analyticsEvents';
-import AnalyticsHelper from '@/utils/analyticsUtils';
 import { selectUserId } from '@/store/auth/authSelectors';
 
 type AssigneeCellProps = {
@@ -114,7 +112,6 @@ export const UpdateAssignee = () => {
           assigneeId: agent.id === assigneeId ? 0 : agent.id,
         }),
       );
-      AnalyticsHelper.track(CONVERSATION_EVENTS.ASSIGNEE_CHANGED);
       showToast({
         message: i18n.t('CONVERSATION.ASSIGN_CHANGE'),
       });

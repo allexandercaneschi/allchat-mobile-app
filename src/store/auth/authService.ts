@@ -12,8 +12,6 @@ import type {
   AvailabilityPayload,
   ProfileResponse,
   SetActiveAccountPayload,
-  SsoAuthPayload,
-  SsoAuthResponse,
 } from './authTypes';
 
 export class AuthService {
@@ -82,17 +80,5 @@ export class AuthService {
   static async setActiveAccount(payload: SetActiveAccountPayload): Promise<ProfileResponse> {
     const response = await apiService.put<ProfileResponse>('profile/set_active_account', payload);
     return response.data;
-  }
-
-  static async loginWithSso(payload: SsoAuthPayload): Promise<SsoAuthResponse> {
-    const response = await apiService.post<{ data: User }>('auth/sign_in', payload);
-    return {
-      user: response.data.data,
-      headers: {
-        'access-token': response.headers['access-token'],
-        uid: response.headers.uid,
-        client: response.headers.client,
-      },
-    };
   }
 }
