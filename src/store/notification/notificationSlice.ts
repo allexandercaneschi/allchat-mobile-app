@@ -7,7 +7,6 @@ import type {
 } from './notificationTypes';
 import { Notification } from '@/types/Notification';
 import { notificationActions } from './notificationAction';
-import { updateBadgeCount } from '@/utils/pushUtils';
 
 export interface NotificationState {
   unreadCount: number;
@@ -50,13 +49,11 @@ const notificationsSlice = createSlice({
       const { notification, unreadCount } = action.payload;
       notificationsAdapter.addOne(state, notification);
       state.unreadCount = unreadCount;
-      updateBadgeCount({ count: unreadCount });
     },
     removeNotification(state, action: PayloadAction<NotificationRemovedResponse>) {
       const { notification, unreadCount } = action.payload;
       notificationsAdapter.removeOne(state, notification.id);
       state.unreadCount = unreadCount;
-      updateBadgeCount({ count: unreadCount });
     },
   },
   extraReducers: builder => {
@@ -74,7 +71,6 @@ const notificationsSlice = createSlice({
           state.totalCount = meta.count;
           state.currentPage = meta.currentPage;
           state.uiFlags.isLoading = false;
-          updateBadgeCount({ count: meta.unreadCount });
           if (meta.currentPage === '1') {
             notificationsAdapter.setAll(state, payload);
           } else {
@@ -108,7 +104,6 @@ const notificationsSlice = createSlice({
               changes: { readAt: new Date().toISOString() },
             });
             state.unreadCount -= 1;
-            updateBadgeCount({ count: state.unreadCount });
           }
         },
       )
@@ -123,7 +118,6 @@ const notificationsSlice = createSlice({
             });
           }
         });
-        updateBadgeCount({ count: 0 });
       })
       .addCase(
         notificationActions.markAsUnread.fulfilled,
@@ -134,7 +128,6 @@ const notificationsSlice = createSlice({
             changes: { readAt: undefined },
           });
           state.unreadCount += 1;
-          updateBadgeCount({ count: state.unreadCount });
         },
       );
   },

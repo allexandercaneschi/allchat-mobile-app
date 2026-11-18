@@ -30,7 +30,6 @@ import { inboxActions } from '@/store/inbox/inboxActions';
 import { labelActions } from '@/store/label/labelActions';
 import actionCableConnector from '@/utils/actionCable';
 import { setCurrentState } from '@/store/conversation/conversationHeaderSlice';
-import { clearAllDeliveredNotifications } from '@/utils/pushUtils';
 import { dashboardAppActions } from '@/store/dashboard-app/dashboardAppActions';
 import { customAttributeActions } from '@/store/custom-attribute/customAttributeActions';
 import { accountActions } from '@/store/account/accountActions';
@@ -83,9 +82,7 @@ export const Tabs = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const initPushNotifications = useCallback(async () => {
-    clearAllDeliveredNotifications();
-  }, []);
+  const initPushNotifications = useCallback(async () => {}, []);
 
   const initSentry = useCallback(async () => {
     setSentryUser(user, installationUrl);

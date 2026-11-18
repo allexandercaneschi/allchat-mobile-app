@@ -8,27 +8,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     orientation: 'portrait',
     icon: './assets/icon.png',
     userInterfaceStyle: 'automatic',
+    platforms: ['android'],
     scheme: 'chatwootapp',
-    ios: {
-      supportsTablet: true,
-      bundleIdentifier: 'com.chatwoot.app',
-      infoPlist: {
-        NSCameraUsageDescription:
-          'This app requires access to the camera to upload images and videos.',
-        NSPhotoLibraryUsageDescription:
-          'This app requires access to the photo library to upload images.',
-        NSMicrophoneUsageDescription:
-          'This app requires access to the microphone for voice calls and voice notes.',
-        NSAppleMusicUsageDescription:
-          'This app does not use Apple Music, but a system API may require this permission.',
-        UIBackgroundModes: ['fetch', 'remote-notification', 'audio', 'voip'],
-        ITSAppUsesNonExemptEncryption: false,
-      },
-      // Please use the relative path to the google-services.json file
-      googleServicesFile: process.env.EXPO_PUBLIC_IOS_GOOGLE_SERVICES_FILE,
-      entitlements: { 'aps-environment': 'production' },
-      associatedDomains: ['applinks:app.chatwoot.com'],
-    },
     android: {
       adaptiveIcon: { foregroundImage: './assets/adaptive-icon.png', backgroundColor: '#ffffff' },
       package: 'com.chatwoot.app',
@@ -84,12 +65,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           enableFullScreenImage_legacy: true,
         },
       ],
-      [
-        'react-native-permissions',
-        {
-          iosPermissions: ['Camera', 'PhotoLibrary', 'MediaLibrary', 'Notifications', 'Microphone'],
-        },
-      ],
+      ['react-native-permissions', {}],
       [
         '@sentry/react-native',
         {
@@ -116,9 +92,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         },
       ],
       './with-android-notification-channel.js',
-      './with-notifee-maven-repo.js',
-      './with-ios-modular-headers.js',
-      './with-ios-scene-lifecycle.js',
     ],
   };
 };
