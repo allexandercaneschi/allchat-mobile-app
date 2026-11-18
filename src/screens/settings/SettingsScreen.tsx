@@ -53,11 +53,7 @@ import {
 } from '@/store/auth/authSelectors';
 import { logout } from '@/store/auth/authSlice';
 import { authActions } from '@/store/auth/authActions';
-import {
-  selectLocale,
-  selectIsChatwootCloud,
-  selectPushToken,
-} from '@/store/settings/settingsSelectors';
+import { selectLocale, selectPushToken } from '@/store/settings/settingsSelectors';
 import { settingsActions } from '@/store/settings/settingsActions';
 import { setLocale } from '@/store/settings/settingsSlice';
 
@@ -126,10 +122,6 @@ const SettingsScreen = () => {
   const hasConversationPermission = CONVERSATION_PERMISSIONS.some(permission =>
     userPermissions.includes(permission),
   );
-
-  const isChatwootCloud = useAppSelector(selectIsChatwootCloud);
-
-  const chatwootInstance = isChatwootCloud ? `${appName} cloud` : `${appName} self-hosted`;
 
   const accounts = useSelector(selectAccounts) || [];
 
@@ -321,7 +313,7 @@ const SettingsScreen = () => {
           style={tailwind.style('p-4 items-center')}
           onLongPress={() => debugActionsSheetRef.current?.present()}>
           <Text style={tailwind.style('text-sm text-gray-700 ')}>
-            {`${chatwootInstance} ${appVersionDetails}`}
+            {`${appName} ${appVersionDetails}`}
           </Text>
         </Pressable>
       </Animated.ScrollView>

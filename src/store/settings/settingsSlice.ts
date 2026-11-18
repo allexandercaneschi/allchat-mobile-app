@@ -1,29 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { settingsActions } from './settingsActions';
-import * as RootNavigation from '@/utils/navigationUtils';
 import { NotificationSettings } from './settingsTypes';
 import { Theme } from '@/types/common/Theme';
 
 interface SettingsState {
-  baseUrl: string;
-  installationUrl: string;
   uiFlags: {
-    isSettingUrl: boolean;
     isUpdating: boolean;
     isLocaleSet: boolean;
   };
   notificationSettings: NotificationSettings;
   localeValue: string;
-  webSocketUrl: string;
   theme: Theme;
   version: string;
   pushToken: string;
 }
 const initialState: SettingsState = {
-  baseUrl: 'app.chatwoot.com',
-  installationUrl: 'https://app.chatwoot.com/',
   uiFlags: {
-    isSettingUrl: false,
     isUpdating: false,
     isLocaleSet: false,
   },
@@ -37,7 +29,6 @@ const initialState: SettingsState = {
     selected_push_flags: [],
     user_id: 0,
   },
-  webSocketUrl: 'wss://app.chatwoot.com/cable',
   theme: 'system',
   version: '',
   pushToken: '',
@@ -47,7 +38,6 @@ export const settingsSlice = createSlice({
   initialState,
   reducers: {
     resetSettings: state => {
-      state.uiFlags.isSettingUrl = false;
       state.uiFlags.isUpdating = false;
     },
     setTheme: (state, action: PayloadAction<Theme>) => {
@@ -60,21 +50,6 @@ export const settingsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(settingsActions.setInstallationUrl.pending, state => {
-        state.uiFlags.isSettingUrl = true;
-      })
-      .addCase(settingsActions.setInstallationUrl.fulfilled, (state, action) => {
-        state.uiFlags.isSettingUrl = false;
-        state.installationUrl = action.payload.installationUrl;
-        state.baseUrl = action.payload.baseUrl;
-        state.webSocketUrl = action.payload.webSocketUrl;
-        RootNavigation.navigate('Login');
-      })
-      .addCase(settingsActions.setInstallationUrl.rejected, state => {
-        state.uiFlags.isSettingUrl = false;
-        state.installationUrl = '';
-        state.baseUrl = '';
-      })
       .addCase(settingsActions.getNotificationSettings.fulfilled, (state, action) => {
         state.notificationSettings = action.payload;
       })

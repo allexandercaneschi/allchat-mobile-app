@@ -13,9 +13,9 @@ import {
 import { appReducer } from '@/store/reducers';
 import { setStore } from './storeAccessor';
 import { contactListenerMiddleware } from './contact/contactListener';
-import { repairPersistedWebSocketUrl } from './settings/settingsUtils';
 import { repairPersistedConversations } from './conversation/conversationPersistUtils';
 import { setSentryUser } from '@/utils/sentryUtils';
+import { SERVER } from '@/config/server';
 
 // Disable this in testing environment
 const shouldLoadDebugger = __DEV__ && !process.env.JEST_WORKER_ID;
@@ -37,7 +37,7 @@ const persistConfig = {
         ...initialState,
       };
     }
-    return repairPersistedConversations(repairPersistedWebSocketUrl(state));
+    return repairPersistedConversations(state);
   },
 };
 
@@ -85,8 +85,8 @@ export const store = configureStore({
 setStore(store);
 
 export const persistor = persistStore(store, null, () => {
-  const { auth, settings } = store.getState();
-  setSentryUser(auth.user, settings.installationUrl);
+  const { auth } = store.getState();
+  setSentryUser(auth.user, SERVER.installationUrl);
 });
 
 export type AppDispatch = typeof store.dispatch;

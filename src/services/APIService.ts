@@ -9,6 +9,7 @@ import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 
 import { getStore } from '@/store/storeAccessor';
+import { SERVER } from '@/config/server';
 import I18n from '@/i18n';
 import { showToast } from '@/utils/toastUtils';
 
@@ -89,7 +90,7 @@ class APIService {
         const headers = this.getHeaders();
         const store = getStore();
         const state = store.getState();
-        config.baseURL = state.settings?.installationUrl;
+        config.baseURL = SERVER.installationUrl;
         const accountId =
           (config as AccountScopedRequestConfig).accountId ?? state.auth.user?.account_id;
         if (accountId && config.url !== undefined && !nonAccountRoutes.includes(config.url)) {
