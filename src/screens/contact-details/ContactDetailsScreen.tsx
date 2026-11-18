@@ -245,9 +245,6 @@ const ContactDetailsScreen = (props: ContactDetailsScreenProps) => {
           style={tailwind.style('mt-[23px] px-4')}
           phoneNumber={phoneNumber || ''}
           email={email || ''}
-          contactId={contactId}
-          conversation={conversation}
-          caller={{ name, phone: phoneNumber, avatar: thumbnail }}
         />
         <Animated.View style={tailwind.style(isInContactPane || IOS_DESIGN ? 'pt-8' : 'pt-10')}>
           <AttributeList list={allDetails as AttributeListType[]} />

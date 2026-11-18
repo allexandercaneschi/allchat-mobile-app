@@ -19,9 +19,6 @@ import { resetSentMessage } from '@/store/conversation/sendMessageSlice';
 import { selectAllDashboardApps } from '@/store/dashboard-app/dashboardAppSlice';
 import { selectUser } from '@/store/auth/authSelectors';
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
-import { selectHasActiveCall, selectHasIncomingCall } from '@/store/call/callSelectors';
-import { getVoiceCallProvider } from '@/utils/inboxUtils';
-import { placeOutboundCall } from '@/utils/placeOutboundCall';
 import { IOS_DESIGN, getChannelIcon } from '@/utils';
 import { Channel } from '@/types';
 import { useRequiredAttributes } from '@/screens/resolve-attributes/useRequiredAttributes';
@@ -52,11 +49,7 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
         conversation?.additionalAttributes?.type || '',
       )
     : null;
-  const hasActiveCall = useAppSelector(selectHasActiveCall);
-  const hasIncomingCall = useAppSelector(selectHasIncomingCall);
-  const [isStartingCall, setIsStartingCall] = useState(false);
   const { hasMissingAttributes, openResolveForm } = useRequiredAttributes();
-  const voiceCallProvider = getVoiceCallProvider(inbox);
 
   const appliedSla = conversation?.appliedSla;
 
@@ -195,20 +188,6 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
     });
   };
 
-  const canCallContact = voiceCallProvider !== null && !conversation?.anonymousCaller;
-
-  const startCall = async () => {
-    if (!voiceCallProvider || !inbox || isStartingCall) return;
-    setIsStartingCall(true);
-    await placeOutboundCall(dispatch, {
-      provider: voiceCallProvider,
-      conversationId,
-      inboxId: inbox.id,
-      contactId: conversation?.meta?.sender?.id,
-    });
-    setIsStartingCall(false);
-  };
-
   const dashboardRoutes = dashboardApps.map(dashboardApp => ({
     title: dashboardApp.title,
     url: dashboardApp.content[0].url,
@@ -254,9 +233,6 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
       slaEvents={slaEvents}
       statusText={slaStatusText()}
       slaTime={slaStatus?.threshold}
-      showCallButton={canCallContact}
-      isCallDisabled={hasActiveCall || hasIncomingCall || isStartingCall}
-      onCallPress={startCall}
       onBackPress={isInDetailPane && splitView ? splitView.closeConversation : handleBackPress}
       onContactDetailsPress={handleNavigationToContactDetails}
       onToggleChatStatus={toggleChatStatus}

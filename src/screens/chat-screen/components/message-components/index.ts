@@ -9,7 +9,6 @@ export * from './LocationBubble';
 export * from './ImageBubble';
 export * from './VideoBubble';
 export * from './EmailBubble';
-export * from './CallBubble';
 export * from './UnsupportedBubble';
 export * from './DeliveryStatus';
 export * from './MessageError';

@@ -47,10 +47,8 @@ import { LANGUAGES } from '@/constants';
 import { useRefsContext } from '@/context';
 import {
   AppearanceIcon,
-  ChatIcon,
   ChatwootIcon,
   NotificationIcon,
-  PhoneOutlineIcon,
   SwitchIcon,
   TranslateIcon,
 } from '@/svg-icons';
@@ -66,11 +64,8 @@ import {
 import { HeaderSpacer, ScrollEdgeHeader, useScrollEdge } from '@/components-next/side-toolbar';
 import { SettingsHeader } from './SettingsHeader';
 import { DebugActions } from './components/DebugActions';
-import { WorkPausedNote } from './components/WorkPausedNote';
-import { useWorkPreferences } from './hooks/useWorkPreferences';
 import {
   selectCurrentUserAvailability,
-  selectSupportsWorkPreferences,
   selectUser,
   selectAccounts,
 } from '@/store/auth/authSelectors';
@@ -88,15 +83,11 @@ import AnalyticsHelper from '@/utils/analyticsUtils';
 import { PROFILE_EVENTS } from '@/constants/analyticsEvents';
 import { getUserPermissions } from '@/utils/permissionUtils';
 import { CONVERSATION_PERMISSIONS } from '@/constants/permissions';
-import { selectAllInboxes } from '@/store/inbox/inboxSelectors';
-import { isVoiceCallEnabled } from '@/utils/inboxUtils';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { showToast } from '@/utils/toastUtils';
 import { PaneHeader } from '@/navigation/split/PaneHeader';
 import { PageHeader } from '@/navigation/split/PageHeader';
 import { SwipeBackPage } from '@/navigation/split/SwipeBackPage';
-import { getVoipToken } from '@/services/voice/chatwootCalls';
-import { callActions } from '@/store/call/callActions';
 
 const appName = Application.applicationName;
 const appVersion = Application.nativeApplicationVersion;
@@ -181,15 +172,6 @@ const SettingsScreen = () => {
   };
 
   const isChatwootCloud = useAppSelector(selectIsChatwootCloud);
-  const hasVoiceInbox = useAppSelector(state => selectAllInboxes(state).some(isVoiceCallEnabled));
-  const supportsWorkPreferences = useAppSelector(selectSupportsWorkPreferences);
-  const showWorkPreferences = hasVoiceInbox && supportsWorkPreferences;
-  const isOnline = availabilityStatus === 'online';
-  const {
-    preferences: workPreferences,
-    isLocked: isWorkPreferenceLocked,
-    toggle: toggleWorkPreference,
-  } = useWorkPreferences();
 
   const chatwootInstance = isChatwootCloud ? `${appName} cloud` : `${appName} self-hosted`;
 
@@ -237,7 +219,7 @@ const SettingsScreen = () => {
   };
 
   const changeAccount = (accountId: number) => {
-    if (!switchAccount(dispatch, accountId)) return;
+    switchAccount(dispatch, accountId);
     navigation.dispatch(StackActions.replace('Tab'));
   };
 
@@ -264,13 +246,9 @@ const SettingsScreen = () => {
   // };
 
   const onClickLogout = useCallback(async () => {
-    // Server hangup requires the current session.
-    await dispatch(callActions.endLocalCalls()).catch(() => {});
     await AsyncStorage.removeItem('cwCookie');
     await RecentSearches.clearAll();
     await dispatch(settingsActions.removeDevice({ pushToken }));
-    const voipToken = getVoipToken();
-    if (voipToken) await dispatch(settingsActions.removeDevice({ pushToken: voipToken }));
     dispatch(logout());
   }, [dispatch, pushToken]);
 
@@ -283,24 +261,6 @@ const SettingsScreen = () => {
       subtitleType: 'light',
       isSelected: isSplit && pane === 'availability',
       onPressListItem: openPane('availability', openSheet),
-    },
-    {
-      title: i18n.t('SETTINGS.RECEIVE_CONVERSATIONS'),
-      icon: <ChatIcon />,
-      checked: workPreferences.accepts_conversations,
-      disabled: !showWorkPreferences,
-      inactive: !isOnline,
-      locked: isWorkPreferenceLocked('accepts_conversations'),
-      onPressListItem: () => toggleWorkPreference('accepts_conversations'),
-    },
-    {
-      title: i18n.t('SETTINGS.RECEIVE_VOICE_CALLS'),
-      icon: <PhoneOutlineIcon stroke="#858585" />,
-      checked: workPreferences.accepts_calls,
-      disabled: !showWorkPreferences,
-      inactive: !isOnline,
-      locked: isWorkPreferenceLocked('accepts_calls'),
-      onPressListItem: () => toggleWorkPreference('accepts_calls'),
     },
   ];
 
@@ -416,7 +376,6 @@ const SettingsScreen = () => {
         </Animated.View>
         <Animated.View style={tailwind.style('pt-6')}>
           <SettingsList sectionTitle={i18n.t('SETTINGS.AVAILABILITY')} list={availabilityList} />
-          {showWorkPreferences && !isOnline && <WorkPausedNote />}
         </Animated.View>
         <Animated.View style={tailwind.style('pt-6')}>
           <SettingsList sectionTitle={i18n.t('SETTINGS.PREFERENCES')} list={preferencesList} />

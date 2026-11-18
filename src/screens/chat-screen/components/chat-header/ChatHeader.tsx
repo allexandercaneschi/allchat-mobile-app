@@ -11,7 +11,6 @@ import {
   InfoCircleIcon,
   ReopenCircleIcon,
   Overflow,
-  PhoneOutlineIcon,
   SLAIcon,
   StatusOpenIcon,
   StatusResolvedIcon,
@@ -46,9 +45,6 @@ type ChatHeaderProps = {
   dashboardsList: DashboardList[];
   statusText?: string;
   slaTime?: string;
-  showCallButton?: boolean;
-  isCallDisabled?: boolean;
-  onCallPress?: () => void;
   onBackPress: () => void;
   onContactDetailsPress: () => void;
   onToggleChatStatus: () => void;
@@ -76,9 +72,6 @@ export const ChatHeader = ({
   statusText,
   slaTime,
   dashboardsList,
-  showCallButton = false,
-  isCallDisabled = false,
-  onCallPress,
   onBackPress,
   onContactDetailsPress,
   onToggleChatStatus,
@@ -145,20 +138,6 @@ export const ChatHeader = ({
               accessibilityLabel={i18n.t('CONVERSATION.HEADER.BACK')}
             />
           )}
-          {showCallButton ? (
-            <SideToolbarButton
-              icon={
-                <PhoneOutlineIcon
-                  stroke={tailwind.color('text-gray-950')}
-                  strokeWidth={TOOLBAR_STROKE}
-                />
-              }
-              iconSize={24}
-              onPress={onCallPress}
-              disabled={isCallDisabled}
-              accessibilityLabel={i18n.t('CONTACT_DETAILS.CALL')}
-            />
-          ) : null}
           <SideToolbarButton
             icon={
               isOpen ? (
@@ -208,9 +187,6 @@ export const ChatHeader = ({
       chatPagerView,
       isInPane,
       onBackPress,
-      showCallButton,
-      onCallPress,
-      isCallDisabled,
       isOpen,
       onToggleChatStatus,
       statusLabel,
@@ -333,20 +309,6 @@ export const ChatHeader = ({
           </Pressable>
           {isOnActionsPage ? null : (
             <>
-              {showCallButton ? (
-                <GlassCircleButton
-                  icon={
-                    <PhoneOutlineIcon
-                      stroke={tailwind.color('text-gray-950')}
-                      strokeWidth={TOOLBAR_STROKE}
-                    />
-                  }
-                  iconSize={22}
-                  onPress={onCallPress}
-                  disabled={isCallDisabled}
-                  accessibilityLabel={i18n.t('CONTACT_DETAILS.CALL')}
-                />
-              ) : null}
               <GlassCircleButton
                 icon={
                   isOpen ? (
@@ -432,27 +394,6 @@ export const ChatHeader = ({
             {name}
           </Animated.Text>
         </Pressable>
-        {showCallButton && (
-          <Pressable
-            hitSlop={8}
-            disabled={isCallDisabled}
-            accessibilityRole="button"
-            onPress={onCallPress}
-            style={tailwind.style(
-              'h-8 w-8 items-center justify-center',
-              isCallDisabled ? 'opacity-40' : '',
-            )}>
-            <Icon
-              icon={
-                <PhoneOutlineIcon
-                  stroke={tailwind.color('text-gray-950')}
-                  strokeWidth={TOOLBAR_STROKE}
-                />
-              }
-              size={24}
-            />
-          </Pressable>
-        )}
         {!actionsInToolbar && dashboardsList.length > 0 && (
           <Animated.View style={tailwind.style('h-8 w-8 items-center justify-center')}>
             <ChatDropdownMenu dropdownMenuList={dashboardsList}>

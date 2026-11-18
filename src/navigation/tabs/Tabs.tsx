@@ -36,7 +36,6 @@ import { dashboardAppActions } from '@/store/dashboard-app/dashboardAppActions';
 import { customAttributeActions } from '@/store/custom-attribute/customAttributeActions';
 import { accountActions } from '@/store/account/accountActions';
 import { clearSelection } from '@/store/conversation/conversationSelectedSlice';
-import { runCallReadiness } from '@/screens/call/utils/callReadiness';
 import { RESULTS, checkNotifications, requestNotifications } from 'react-native-permissions';
 import { CustomTabBar } from './CustomTabBar';
 
@@ -79,7 +78,6 @@ export const Tabs = () => {
       const { status } = await checkNotifications();
       if (status !== RESULTS.GRANTED) await requestNotifications(['alert', 'sound', 'badge']);
       await inboxesLoaded;
-      await runCallReadiness();
     } catch {
       // Prompt failures must not prevent registration.
     }

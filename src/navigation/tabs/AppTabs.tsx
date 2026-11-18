@@ -21,7 +21,6 @@ import type { ResolveAttributesParams } from '@/screens/resolve-attributes/useRe
 import { SideColumnDivider } from './SideColumnDivider';
 import { LayoutChangeCover } from './LayoutChangeCover';
 import { GlassToastHost } from '@/components-next/toast';
-import { InAppCallScreen } from '@/screens/call';
 import { Tabs } from './Tabs';
 
 export type TabParamList = {
@@ -118,7 +117,6 @@ export const AppTabs = () => {
         </Stack.Navigator>
         <SideColumnDivider />
         <LayoutChangeCover />
-        <InAppCallScreen />
         <GlassToastHost />
       </View>
     );

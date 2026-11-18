@@ -14,8 +14,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useTailwind } from '@/theme/useTailwind';
 import { DefaultTheme, DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { AppTabs } from './tabs/AppTabs';
-import { OngoingCallBar } from '@/screens/call';
-import { isCallPush } from '@/utils/callNotifications';
 import i18n from 'i18n';
 import { navigationRef } from '@/utils/navigationUtils';
 import { findConversationLinkFromPush, findNotificationFromFCM } from '@/utils/pushUtils';
@@ -34,8 +32,6 @@ import { useAppDispatch } from '@/hooks';
 import { APP_FONTS } from '@/theme/fonts';
 
 setBackgroundMessageHandler(getMessaging(), async remoteMessage => {
-  // Native code already handles call pushes.
-  if (isCallPush(remoteMessage.data)) return;
   console.log('Message handled in the background!', remoteMessage);
 });
 
@@ -99,7 +95,7 @@ export const AppNavigationContainer = () => {
       }
 
       const targetAccountId = resolveAccountSwitch(accountId);
-      if (targetAccountId && !switchAccount(dispatch, targetAccountId)) return undefined;
+      if (targetAccountId) switchAccount(dispatch, targetAccountId);
 
       return {
         routes: [
@@ -235,9 +231,7 @@ export const AppNavigator = () => {
       <KeyboardProvider>
         <RefsProvider>
           <SafeAreaProvider>
-            <OngoingCallBar>
-              <AppNavigationContainer />
-            </OngoingCallBar>
+            <AppNavigationContainer />
           </SafeAreaProvider>
         </RefsProvider>
       </KeyboardProvider>
