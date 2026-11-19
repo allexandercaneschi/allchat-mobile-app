@@ -15,12 +15,23 @@ const getServerUrl = (): URL => {
   }
 };
 
+// The CI sets the version of each build. Android only installs an APK over another one when its
+// versionCode is higher, so every build that goes to the team needs a new, greater number.
+const getVersion = (): { name: string; code: number } => {
+  const code = Number(process.env.ALLCHAT_VERSION_CODE ?? 1);
+  if (!Number.isInteger(code) || code < 1) {
+    throw new Error('ALLCHAT_VERSION_CODE deve ser um número inteiro maior que zero.');
+  }
+  return { name: process.env.ALLCHAT_VERSION_NAME || '0.1.0', code };
+};
+
 export default ({ config }: ConfigContext): ExpoConfig => {
   const serverUrl = getServerUrl();
+  const version = getVersion();
   return {
     name: 'ALLChat',
     slug: 'allchat',
-    version: '0.1.0',
+    version: version.name,
     orientation: 'portrait',
     icon: './assets/icon.png',
     userInterfaceStyle: 'dark',
@@ -29,7 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     android: {
       adaptiveIcon: { foregroundImage: './assets/adaptive-icon.png', backgroundColor: '#111113' },
       package: 'br.com.alltecnologias.allchat',
-      versionCode: 1,
+      versionCode: version.code,
       permissions: [
         'android.permission.CAMERA',
         'android.permission.RECORD_AUDIO',
@@ -103,6 +114,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ],
       './with-android-notification-channel.js',
       './with-android-notification-icon.js',
+      './with-android-release-signing.js',
     ],
   };
 };

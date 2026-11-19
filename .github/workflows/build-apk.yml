@@ -1,0 +1,148 @@
+name: Build APK
+
+# Gera o APK assinado do ALLChat. Roda quando uma tag "v*" é criada (ex.: v0.1.0) ou a mão,
+# em Actions > Build APK > Run workflow. O APK fica como artefato da execução (30 dias) e só quem
+# tem acesso ao repositório consegue baixar. Os secrets usados estão descritos em docs/build-apk.md.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      # Sem token do Sentry não há envio de sourcemaps; o plugin não deve tentar.
+      SENTRY_DISABLE_AUTO_UPLOAD: 'true'
+    steps:
+      - name: Conferir os secrets
+        env:
+          ALLCHAT_KEYSTORE_BASE64: ${{ secrets.ALLCHAT_KEYSTORE_BASE64 }}
+          ALLCHAT_KEYSTORE_PASSWORD: ${{ secrets.ALLCHAT_KEYSTORE_PASSWORD }}
+          ALLCHAT_KEY_ALIAS: ${{ secrets.ALLCHAT_KEY_ALIAS }}
+          ALLCHAT_KEY_PASSWORD: ${{ secrets.ALLCHAT_KEY_PASSWORD }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          missing=0
+          for name in ALLCHAT_KEYSTORE_BASE64 ALLCHAT_KEYSTORE_PASSWORD ALLCHAT_KEY_ALIAS ALLCHAT_KEY_PASSWORD GOOGLE_SERVICES_JSON_BASE64; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name não está configurado. Veja docs/build-apk.md."
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Tipos
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Testes
+        run: pnpm test --ci
+
+      - name: Preparar google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > google-services.json
+          jq -e '[.client[].client_info.android_client_info.package_name] | index("br.com.alltecnologias.allchat")' google-services.json > /dev/null \
+            || { echo "::error::O google-services.json não tem o app br.com.alltecnologias.allchat."; exit 1; }
+
+      - name: Preparar o keystore
+        env:
+          ALLCHAT_KEYSTORE_BASE64: ${{ secrets.ALLCHAT_KEYSTORE_BASE64 }}
+        run: |
+          echo "$ALLCHAT_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/allchat.jks"
+          echo "ALLCHAT_KEYSTORE_FILE=$RUNNER_TEMP/allchat.jks" >> "$GITHUB_ENV"
+
+      - name: Definir a versão
+        env:
+          VERSION_CODE_BASE: ${{ vars.ALLCHAT_VERSION_CODE_BASE }}
+        run: |
+          # O Android só instala um APK por cima de outro com versionCode maior.
+          echo "ALLCHAT_VERSION_CODE=$(( GITHUB_RUN_NUMBER + ${VERSION_CODE_BASE:-0} ))" >> "$GITHUB_ENV"
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            echo "ALLCHAT_VERSION_NAME=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+          else
+            echo "ALLCHAT_VERSION_NAME=0.1.0-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+          fi
+
+      - name: Gerar o projeto Android
+        run: npx expo prebuild --platform android --no-install --clean
+        env:
+          # Faz o Expo carregar o .env.production (URL do servidor). Só aqui e no Gradle:
+          # nos testes o NODE_ENV tem que continuar "test".
+          NODE_ENV: production
+
+      - name: Aceitar as licenças do Android SDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Compilar o APK
+        working-directory: android
+        env:
+          NODE_ENV: production
+          ALLCHAT_KEYSTORE_PASSWORD: ${{ secrets.ALLCHAT_KEYSTORE_PASSWORD }}
+          ALLCHAT_KEY_ALIAS: ${{ secrets.ALLCHAT_KEY_ALIAS }}
+          ALLCHAT_KEY_PASSWORD: ${{ secrets.ALLCHAT_KEY_PASSWORD }}
+        # Só celulares (arm64 e arm32); o x86 é de emulador e engordaria o APK.
+        run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
+
+      - name: Conferir a assinatura
+        id: apk
+        run: |
+          apk=android/app/build/outputs/apk/release/app-release.apk
+          apksigner="$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)"
+          certs="$("$apksigner" verify --print-certs "$apk")"
+          echo "$certs"
+          if echo "$certs" | grep -qi "Android Debug"; then
+            echo "::error::O APK foi assinado com a chave de debug, não com o keystore do ALLChat."
+            exit 1
+          fi
+          name="allchat-${ALLCHAT_VERSION_NAME}-${ALLCHAT_VERSION_CODE}.apk"
+          mv "$apk" "$name"
+          echo "file=$name" >> "$GITHUB_OUTPUT"
+          {
+            echo "### APK $name"
+            echo ""
+            echo "$certs" | grep -i "SHA-256" | sed 's/^/- /'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: allchat-apk-${{ env.ALLCHAT_VERSION_NAME }}-${{ env.ALLCHAT_VERSION_CODE }}
+          path: ${{ steps.apk.outputs.file }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Apagar o keystore do runner
+        if: always()
+        run: rm -f "$RUNNER_TEMP/allchat.jks" google-services.json
