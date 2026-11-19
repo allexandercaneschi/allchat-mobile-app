@@ -25,6 +25,7 @@ import {
 import { selectCurrentState, setCurrentState } from '@/store/conversation/conversationHeaderSlice';
 import { ConversationFilterBar } from '../conversation-filters';
 import { AssigneeTabs } from '../AssigneeTabs';
+import { RequestsBanner } from '@/screens/requests/RequestsBanner';
 import { ConversationHeaderPresenter } from './ConversationHeaderPresenter';
 
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -142,6 +143,7 @@ export const ConversationHeader = () => {
         onRightIconPress={handleRightIconPress}
         onClearFilter={handleClearFilter}
       />
+      {currentState === 'Select' ? null : <RequestsBanner />}
       {currentState === 'Select' ? null : <AssigneeTabs />}
       {currentState === 'Filter' ? <ConversationFilterBar /> : null}
     </Animated.View>

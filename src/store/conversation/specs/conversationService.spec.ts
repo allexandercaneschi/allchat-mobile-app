@@ -72,6 +72,64 @@ describe('ConversationService', () => {
     expect(displayId).toBe(42);
   });
 
+  describe('assignConversation', () => {
+    it('reports an immediate assignment', async () => {
+      (apiService.post as jest.Mock).mockResolvedValueOnce({ status: 200, data: { id: 9 } });
+
+      const result = await ConversationService.assignConversation({
+        conversationId: 4,
+        assigneeId: 9,
+      });
+
+      expect(apiService.post).toHaveBeenCalledWith('conversations/4/assignments', {
+        assignee_id: 9,
+        team_id: undefined,
+      });
+      expect(result).toEqual({ kind: 'assigned' });
+    });
+
+    it('releases the conversation with a null assignee', async () => {
+      (apiService.post as jest.Mock).mockResolvedValueOnce({ status: 200, data: null });
+
+      await ConversationService.assignConversation({ conversationId: 4, assigneeId: null });
+
+      expect(apiService.post).toHaveBeenCalledWith('conversations/4/assignments', {
+        assignee_id: null,
+        team_id: undefined,
+      });
+    });
+
+    it('reports the transfer request the server created instead of a transfer', async () => {
+      (apiService.post as jest.Mock).mockResolvedValueOnce({
+        status: 202,
+        data: {
+          conversation_request: {
+            id: 3,
+            request_type: 'transfer',
+            status: 'pending',
+            expires_at: 2_000_000_000,
+            created_at: 1_900_000_000,
+            conversation_id: 4,
+            inbox_id: 1,
+            contact_name: 'Ana',
+            requester: { id: 1, name: 'A' },
+            target: { id: 9, name: 'B' },
+          },
+        },
+      });
+
+      const result = await ConversationService.assignConversation({
+        conversationId: 4,
+        assigneeId: 9,
+      });
+
+      expect(result).toMatchObject({
+        kind: 'transferRequested',
+        request: { id: 3, requestType: 'transfer', conversationId: 4 },
+      });
+    });
+  });
+
   it('should fetch conversation', async () => {
     (apiService.get as jest.Mock).mockResolvedValueOnce({
       data: conversation,

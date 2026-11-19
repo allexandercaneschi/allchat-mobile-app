@@ -1,3 +1,4 @@
+import type { ConversationRequest } from '@/store/conversation-request/conversationRequestTypes';
 import type { Conversation, ConversationListMeta, ConversationMeta } from '@/types/Conversation';
 import type {
   AssigneeTypes,
@@ -6,7 +7,7 @@ import type {
 } from '@/types/common/ConversationStatus';
 import type { Message } from '@/types/Message';
 import { MESSAGE_STATUS, MESSAGE_TYPES } from '@/constants';
-import { Agent, ConversationPriority, Team } from '@/types';
+import { ConversationPriority, Team } from '@/types';
 import type { TemplateSendParams } from '@/types/MessageTemplate';
 
 export interface ConversationListAPIResponse {
@@ -193,7 +194,8 @@ export interface BulkActionLabels {
 
 export interface AssigneePayload {
   conversationId: number;
-  assigneeId?: number;
+  /** `null` releases the conversation. */
+  assigneeId?: number | null;
   teamId?: number;
 }
 
@@ -208,11 +210,13 @@ export interface AssignTeamAPIResponse {
   };
 }
 
-export interface AssigneeAPIResponse {
-  data: {
-    payload: Agent;
-  };
-}
+/**
+ * Assigning is immediate, except when the owner hands the conversation to someone else: the
+ * server then creates a transfer request (HTTP 202) that the other agent must accept.
+ */
+export type AssignmentResult =
+  | { kind: 'assigned' }
+  | { kind: 'transferRequested'; request: ConversationRequest };
 
 export interface MarkMessagesUnreadPayload {
   conversationId: number;

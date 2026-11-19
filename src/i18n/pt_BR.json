@@ -555,6 +555,22 @@
     "ASK_ERROR": "Não foi possível enviar o pedido",
     "ASKED": "Pedido enviado. Aguardando {{name}}.",
     "CANCEL_REQUEST": "Cancelar pedido",
-    "CANCEL_ERROR": "Não foi possível cancelar o pedido"
+    "CANCEL_ERROR": "Não foi possível cancelar o pedido",
+    "TRANSFER_SENT": "Pedido de transferência enviado a {{name}}",
+    "TRANSFER_SENT_FALLBACK": "Pedido de transferência enviado"
+  },
+  "REQUESTS": {
+    "TITLE": "Pedidos",
+    "BANNER_ONE": "1 pedido aguardando sua resposta",
+    "BANNER_MANY": "{{count}} pedidos aguardando sua resposta",
+    "EMPTY": "Nenhum pedido pendente",
+    "PARTICIPATION": "{{name}} pede para participar da conversa com {{contact}}",
+    "TRANSFER": "{{name}} quer transferir a conversa com {{contact}} para você",
+    "ACCEPT": "Aceitar",
+    "DECLINE": "Recusar",
+    "ACCEPTED": "Pedido aceito",
+    "DECLINED": "Pedido recusado",
+    "ANSWER_ERROR": "Não foi possível responder ao pedido",
+    "NO_CONTACT": "um contato"
   }
 }

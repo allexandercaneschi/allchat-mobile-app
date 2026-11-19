@@ -829,6 +829,22 @@
     "ASK_ERROR": "Could not send the request",
     "ASKED": "Request sent. Waiting for {{name}}.",
     "CANCEL_REQUEST": "Cancel request",
-    "CANCEL_ERROR": "Could not cancel the request"
+    "CANCEL_ERROR": "Could not cancel the request",
+    "TRANSFER_SENT": "Transfer request sent to {{name}}",
+    "TRANSFER_SENT_FALLBACK": "Transfer request sent"
+  },
+  "REQUESTS": {
+    "TITLE": "Requests",
+    "BANNER_ONE": "1 request waiting for your answer",
+    "BANNER_MANY": "{{count}} requests waiting for your answer",
+    "EMPTY": "No pending requests",
+    "PARTICIPATION": "{{name}} asks to join the conversation with {{contact}}",
+    "TRANSFER": "{{name}} wants to transfer the conversation with {{contact}} to you",
+    "ACCEPT": "Accept",
+    "DECLINE": "Decline",
+    "ACCEPTED": "Request accepted",
+    "DECLINED": "Request declined",
+    "ANSWER_ERROR": "Could not answer the request",
+    "NO_CONTACT": "a contact"
   }
 }

@@ -36,6 +36,7 @@ import { accountActions } from '@/store/account/accountActions';
 import { clearSelection } from '@/store/conversation/conversationSelectedSlice';
 import { RESULTS, checkNotifications, requestNotifications } from 'react-native-permissions';
 import { CustomTabBar } from './CustomTabBar';
+import { useLoadMyRequests } from '@/screens/requests/useIncomingRequests';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +53,7 @@ export const Tabs = () => {
   const userId = useAppSelector(selectUserId);
   const accountId = useAppSelector(selectCurrentUserAccountId);
   const webSocketUrl = useAppSelector(selectWebSocketUrl);
+  useLoadMyRequests(accountId);
 
   useEffect(() => {
     // Here is the place we are loading all the data for the app first time first time or user switches account

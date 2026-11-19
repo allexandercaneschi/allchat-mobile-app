@@ -1,4 +1,5 @@
 import { apiService } from '@/services/APIService';
+import { transformConversationRequest } from '@/store/conversation-request/conversationRequestService';
 import type {
   ConversationPayload,
   MessagesPayload,
@@ -11,7 +12,6 @@ import type {
   ToggleConversationStatusResponse,
   BulkActionPayload,
   AssigneePayload,
-  AssigneeAPIResponse,
   MarkMessagesUnreadPayload,
   MarkMessagesUnreadAPIResponse,
   MarkMessageReadPayload,
@@ -36,6 +36,7 @@ import type {
   UpdateCustomAttributesResponse,
   CustomAttributesAPIResponse,
   CreateConversationPayload,
+  AssignmentResult,
 } from './conversationTypes';
 
 import {
@@ -181,17 +182,23 @@ export class ConversationService {
   static async bulkAction(payload: BulkActionPayload): Promise<void> {
     await apiService.post('bulk_actions', payload);
   }
-  static async assignConversation(payload: AssigneePayload): Promise<AssigneeAPIResponse> {
+  static async assignConversation(payload: AssigneePayload): Promise<AssignmentResult> {
     const { conversationId, assigneeId, teamId } = payload;
     const params = {
       assignee_id: assigneeId,
       team_id: teamId,
     };
-    const response = await apiService.post<AssigneeAPIResponse>(
+    const response = await apiService.post<{ conversation_request?: unknown }>(
       `conversations/${conversationId}/assignments`,
       params,
     );
-    return response.data;
+    if (response.status === 202 && response.data.conversation_request) {
+      return {
+        kind: 'transferRequested',
+        request: transformConversationRequest(response.data.conversation_request),
+      };
+    }
+    return { kind: 'assigned' };
   }
 
   static async assignTeam(payload: AssignTeamPayload): Promise<AssignTeamAPIResponse> {

@@ -15,6 +15,7 @@ import ConversationActionsScreen from '@/screens/chat-screen/ConversationActions
 import ContactDetailsScreen from '@/screens/contact-details/ContactDetailsScreen';
 import DashboardScreen from '@/screens/dashboard/DashboardScreen';
 import SearchScreen from '@/screens/search/SearchScreen';
+import ConversationRequestsScreen from '@/screens/requests/ConversationRequestsScreen';
 import ContactFormScreen from '@/screens/contacts/ContactFormScreen';
 import NewConversationScreen from '@/screens/new-conversation/NewConversationScreen';
 import ResolveAttributesScreen from '@/screens/resolve-attributes/ResolveAttributesScreen';
@@ -51,6 +52,7 @@ export type TabBarExcludedScreenParamList = {
   ContactForm: { contactId?: number };
   /** Without `contactId` the screen first asks who the conversation is for. */
   NewConversation: { contactId?: number };
+  ConversationRequests: undefined;
   ComposeScreen: { conversationId: number };
   MacrosScreen: { conversationId: number };
   ConversationActionsScreen: { conversationId: number };
@@ -99,6 +101,11 @@ export const AppTabs = () => {
             options={{ animation: 'slide_from_right' }}
             name="NewConversation"
             component={NewConversationScreen}
+          />
+          <Stack.Screen
+            options={{ animation: 'slide_from_right' }}
+            name="ConversationRequests"
+            component={ConversationRequestsScreen}
           />
           <Stack.Screen options={sidePageOptions} name="Dashboard" component={DashboardScreen} />
           <Stack.Screen

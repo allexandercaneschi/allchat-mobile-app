@@ -12,7 +12,7 @@ import type {
   AssigneePayload,
   AssignTeamPayload,
   AssignTeamAPIResponse,
-  AssigneeAPIResponse,
+  AssignmentResult,
   MarkMessagesUnreadPayload,
   MarkMessageReadPayload,
   MarkMessageReadOrUnreadResponse,
@@ -237,7 +237,7 @@ export const conversationActions = {
       await ConversationService.bulkAction(payload);
     },
   ),
-  assignConversation: createAsyncThunk<AssigneeAPIResponse, AssigneePayload>(
+  assignConversation: createAsyncThunk<AssignmentResult, AssigneePayload>(
     'conversations/assignConversation',
     async (payload, { rejectWithValue }) => {
       try {
