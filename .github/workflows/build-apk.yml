@@ -114,7 +114,12 @@ jobs:
           ALLCHAT_KEY_ALIAS: ${{ secrets.ALLCHAT_KEY_ALIAS }}
           ALLCHAT_KEY_PASSWORD: ${{ secrets.ALLCHAT_KEY_PASSWORD }}
         # Só celulares (arm64 e arm32); o x86 é de emulador e engordaria o APK.
-        run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
+        # O gradle.properties gerado limita o Metaspace a 512 MiB, que o R8 estoura no release
+        # ("Could not receive a message from the daemon"); o runner tem 16 GB, então sobra.
+        run: >
+          ./gradlew assembleRelease
+          -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
+          -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
 
       - name: Conferir a assinatura
         id: apk
