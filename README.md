@@ -29,8 +29,11 @@ pnpm test              # testes
 
 ## Recursos próprios do ALLChat
 
-- Bloqueio por biometria (Configurações > Bloqueio por biometria): pede a digital/rosto
-  (ou o PIN do aparelho) ao abrir o app e ao voltar do segundo plano após 30 segundos.
+- Bloqueio por biometria (ligado por padrão; Configurações > Bloqueio por biometria): pede
+  a digital/rosto (ou o PIN do aparelho) ao abrir o app e ao voltar do segundo plano após
+  30 segundos.
+- Tela protegida: o app não aparece em capturas de tela, gravações nem na prévia de apps
+  recentes (a conversa tem dados de clientes).
 
 ## Licença
 

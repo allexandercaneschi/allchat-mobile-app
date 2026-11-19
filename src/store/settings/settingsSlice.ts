@@ -19,7 +19,7 @@ const initialState: SettingsState = {
     isLocaleSet: false,
   },
   localeValue: 'pt_BR',
-  biometricLockEnabled: false,
+  biometricLockEnabled: true,
   notificationSettings: {
     account_id: 0,
     all_email_flags: [],

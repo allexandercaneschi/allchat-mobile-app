@@ -9,8 +9,11 @@ import { AppErrorBoundary } from '@/components-next/error-boundary';
 import i18n from '@/i18n';
 import { AppearanceProvider } from '@/theme/appearance';
 import { AppLockGate } from '@/components-next/app-lock';
+import { useScreenProtection } from '@/security/useScreenProtection';
 
 const Chatwoot = () => {
+  useScreenProtection();
+
   useEffect(() => {
     const subscription = BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     return () => subscription.remove();
