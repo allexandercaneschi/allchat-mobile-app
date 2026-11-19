@@ -35,8 +35,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         'android.permission.RECORD_AUDIO',
         'android.permission.POST_NOTIFICATIONS',
       ],
-      // Please use the relative path to the google-services.json file
-      googleServicesFile: process.env.EXPO_PUBLIC_ANDROID_GOOGLE_SERVICES_FILE,
+      // Not versioned: it sits at the project root locally and comes from a secret in CI.
+      googleServicesFile:
+        process.env.EXPO_PUBLIC_ANDROID_GOOGLE_SERVICES_FILE ?? './google-services.json',
       // Links to conversations on the ALLChat server open the app. The server
       // does not publish an assetlinks.json for this app, so the link is not
       // auto-verified and Android may ask which app to use.
@@ -101,6 +102,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         },
       ],
       './with-android-notification-channel.js',
+      './with-android-notification-icon.js',
     ],
   };
 };
