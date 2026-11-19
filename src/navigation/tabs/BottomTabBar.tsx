@@ -15,6 +15,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { selectCurrentState } from '@/store/conversation/conversationHeaderSlice';
 
 import {
+  ContactsIconFilled,
+  ContactsIconOutline,
   ConversationIconFilled,
   ConversationIconOutline,
   InboxIconFilled,
@@ -57,6 +59,12 @@ const TabBarIcons = ({ focused, route, compact }: TabBarIconsProps) => {
         <InboxIconFilled compact={compact} />
       ) : (
         <InboxIconOutline compact={compact} />
+      );
+    case 'Contacts':
+      return focused ? (
+        <ContactsIconFilled compact={compact} />
+      ) : (
+        <ContactsIconOutline compact={compact} />
       );
     case 'Settings':
       return focused ? (
@@ -284,7 +292,7 @@ export const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarPro
                 ],
           android: [
             tailwind.style(
-              'flex flex-row absolute w-full bottom-0 pl-[72px] pr-[71px] pt-[11px] bg-white',
+              'flex flex-row absolute w-full bottom-0 px-6 pt-[11px] bg-white',
               `h-[${tabBarHeight}px] pb-[${bottom + 11}px]`,
             ),
           ],

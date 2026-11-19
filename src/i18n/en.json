@@ -768,5 +768,49 @@
     "SETTING_ON": "On",
     "SETTING_OFF": "Off",
     "NOT_AVAILABLE": "This device has no biometrics or PIN/pattern set up. Set a screen lock in Android settings to use this option."
+  },
+  "CONTACTS": {
+    "TITLE": "Contacts",
+    "SEARCH": "Search by name, phone or e-mail",
+    "EMPTY": "No contacts found",
+    "EMPTY_HINT": "Tap + to add a contact.",
+    "LOAD_ERROR": "Could not load contacts",
+    "RETRY": "Try again",
+    "NEW": "New contact",
+    "CHAT": "Start conversation",
+    "NO_PHONE": "No phone",
+    "FORM": {
+      "TITLE_NEW": "New contact",
+      "TITLE_EDIT": "Edit contact",
+      "NAME": "Name",
+      "PHONE": "Phone (WhatsApp)",
+      "PHONE_HINT": "With area code, e.g. (31) 99999-8888. The extra 9 is removed automatically.",
+      "EMAIL": "E-mail (optional)",
+      "SAVE": "Save",
+      "SAVED_NEW": "Contact created",
+      "SAVED_EDIT": "Contact updated",
+      "SAVE_ERROR": "Could not save the contact",
+      "LOAD_ERROR": "Could not open the contact",
+      "START_CONVERSATION": "Start conversation",
+      "ERRORS": {
+        "NAME_REQUIRED": "Enter a name",
+        "PHONE_REQUIRED": "Enter a phone number",
+        "PHONE_INVALID": "Invalid phone number. Use the area code and number.",
+        "EMAIL_INVALID": "Invalid e-mail"
+      }
+    }
+  },
+  "NEW_CONVERSATION": {
+    "TITLE": "New conversation",
+    "ACCESSIBILITY": "New conversation",
+    "CHOOSE_CONTACT": "Choose a contact",
+    "CHANGE_CONTACT": "Change",
+    "INBOX": "Send through",
+    "NO_INBOX": "This contact can't receive messages through any inbox.",
+    "MESSAGE": "Message",
+    "MESSAGE_PLACEHOLDER": "Write the first message",
+    "SEND": "Send",
+    "SEND_ERROR": "Could not start the conversation",
+    "INBOXES_ERROR": "Could not load the inboxes"
   }
 }

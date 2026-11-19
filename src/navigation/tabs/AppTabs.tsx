@@ -15,6 +15,8 @@ import ConversationActionsScreen from '@/screens/chat-screen/ConversationActions
 import ContactDetailsScreen from '@/screens/contact-details/ContactDetailsScreen';
 import DashboardScreen from '@/screens/dashboard/DashboardScreen';
 import SearchScreen from '@/screens/search/SearchScreen';
+import ContactFormScreen from '@/screens/contacts/ContactFormScreen';
+import NewConversationScreen from '@/screens/new-conversation/NewConversationScreen';
 import ResolveAttributesScreen from '@/screens/resolve-attributes/ResolveAttributesScreen';
 import type { ResolveAttributesParams } from '@/screens/resolve-attributes/useRequiredAttributes';
 
@@ -25,6 +27,7 @@ import { Tabs } from './Tabs';
 
 export type TabParamList = {
   Conversations: undefined;
+  Contacts: undefined;
   Inbox: undefined;
   Settings: undefined;
   Login: undefined;
@@ -44,6 +47,10 @@ export type TabBarExcludedScreenParamList = {
     instant?: boolean;
   };
   ContactDetails: { conversationId?: number; contactId?: number };
+  /** Without `contactId` the form creates a contact; with it, edits that contact. */
+  ContactForm: { contactId?: number };
+  /** Without `contactId` the screen first asks who the conversation is for. */
+  NewConversation: { contactId?: number };
   ComposeScreen: { conversationId: number };
   MacrosScreen: { conversationId: number };
   ConversationActionsScreen: { conversationId: number };
@@ -82,6 +89,16 @@ export const AppTabs = () => {
             options={sidePageOptions}
             name="ContactDetails"
             component={ContactDetailsScreen}
+          />
+          <Stack.Screen
+            options={{ animation: 'slide_from_right' }}
+            name="ContactForm"
+            component={ContactFormScreen}
+          />
+          <Stack.Screen
+            options={{ animation: 'slide_from_right' }}
+            name="NewConversation"
+            component={NewConversationScreen}
           />
           <Stack.Screen options={sidePageOptions} name="Dashboard" component={DashboardScreen} />
           <Stack.Screen

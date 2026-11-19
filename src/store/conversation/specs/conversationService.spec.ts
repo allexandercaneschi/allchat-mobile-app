@@ -51,6 +51,27 @@ describe('ConversationService', () => {
     });
   });
 
+  it('creates a conversation assigned to the creator with the first message', async () => {
+    (apiService.post as jest.Mock).mockResolvedValueOnce({ data: { id: 42 } });
+
+    const displayId = await ConversationService.createConversation({
+      contactId: 7,
+      inboxId: 3,
+      sourceId: '553199998888',
+      message: 'Olá!',
+      assigneeId: 9,
+    });
+
+    expect(apiService.post).toHaveBeenCalledWith('conversations', {
+      contact_id: 7,
+      inbox_id: 3,
+      source_id: '553199998888',
+      assignee_id: 9,
+      message: { content: 'Olá!' },
+    });
+    expect(displayId).toBe(42);
+  });
+
   it('should fetch conversation', async () => {
     (apiService.get as jest.Mock).mockResolvedValueOnce({
       data: conversation,

@@ -54,3 +54,4 @@ export * from './TagGlyph';
 export * from './PhoneOutline';
 export * from './Calendar';
 export * from './ChevronUpDown';
+export * from './Plus';

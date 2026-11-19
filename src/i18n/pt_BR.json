@@ -494,5 +494,49 @@
     "SETTING_ON": "Ativado",
     "SETTING_OFF": "Desativado",
     "NOT_AVAILABLE": "Este aparelho não tem biometria nem PIN/padrão configurado. Configure um bloqueio de tela nas configurações do Android para usar esta opção."
+  },
+  "CONTACTS": {
+    "TITLE": "Contatos",
+    "SEARCH": "Buscar por nome, telefone ou e-mail",
+    "EMPTY": "Nenhum contato encontrado",
+    "EMPTY_HINT": "Toque em + para cadastrar um contato.",
+    "LOAD_ERROR": "Não foi possível carregar os contatos",
+    "RETRY": "Tentar de novo",
+    "NEW": "Novo contato",
+    "CHAT": "Iniciar conversa",
+    "NO_PHONE": "Sem telefone",
+    "FORM": {
+      "TITLE_NEW": "Novo contato",
+      "TITLE_EDIT": "Editar contato",
+      "NAME": "Nome",
+      "PHONE": "Telefone (WhatsApp)",
+      "PHONE_HINT": "Com DDD, por exemplo (31) 99999-8888. O 9 extra é removido automaticamente.",
+      "EMAIL": "E-mail (opcional)",
+      "SAVE": "Salvar",
+      "SAVED_NEW": "Contato criado",
+      "SAVED_EDIT": "Contato atualizado",
+      "SAVE_ERROR": "Não foi possível salvar o contato",
+      "LOAD_ERROR": "Não foi possível abrir o contato",
+      "START_CONVERSATION": "Iniciar conversa",
+      "ERRORS": {
+        "NAME_REQUIRED": "Informe o nome",
+        "PHONE_REQUIRED": "Informe o telefone",
+        "PHONE_INVALID": "Telefone inválido. Use o DDD e o número.",
+        "EMAIL_INVALID": "E-mail inválido"
+      }
+    }
+  },
+  "NEW_CONVERSATION": {
+    "TITLE": "Nova conversa",
+    "ACCESSIBILITY": "Nova conversa",
+    "CHOOSE_CONTACT": "Escolha o contato",
+    "CHANGE_CONTACT": "Trocar",
+    "INBOX": "Enviar por",
+    "NO_INBOX": "Este contato não pode receber mensagens por nenhuma caixa de entrada.",
+    "MESSAGE": "Mensagem",
+    "MESSAGE_PLACEHOLDER": "Escreva a primeira mensagem",
+    "SEND": "Enviar",
+    "SEND_ERROR": "Não foi possível iniciar a conversa",
+    "INBOXES_ERROR": "Não foi possível carregar as caixas de entrada"
   }
 }

@@ -283,3 +283,13 @@ export interface TranslateMessagePayload {
 export interface TranslateMessageAPIResponse {
   content: string;
 }
+
+export interface CreateConversationPayload {
+  contactId: number;
+  inboxId: number;
+  sourceId: string;
+  /** First message. It is sent together with the creation, so a failure leaves nothing behind. */
+  message: string;
+  /** The person starting the conversation; the server only accepts yourself unless you manage the account. */
+  assigneeId: number;
+}

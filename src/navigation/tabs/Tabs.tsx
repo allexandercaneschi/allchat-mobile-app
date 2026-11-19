@@ -20,7 +20,7 @@ import { useSideTabBarLayout } from '@/utils';
 import { SideToolbarProvider } from '@/context';
 import { CONVERSATION_PERMISSIONS } from 'constants/permissions';
 
-import { ConversationStack, SettingsStack, InboxStack } from '../stack';
+import { ContactsStack, ConversationStack, SettingsStack, InboxStack } from '../stack';
 
 import { selectInstallationUrl } from '@/store/settings/settingsSelectors';
 import { settingsActions } from '@/store/settings/settingsActions';
@@ -161,6 +161,9 @@ export const Tabs = () => {
             options={{ headerShown: false }}
             component={ConversationStack}
           />
+        )}
+        {hasConversationPermission && (
+          <Tab.Screen name="Contacts" options={{ headerShown: false }} component={ContactsStack} />
         )}
         <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsStack} />
       </Tab.Navigator>

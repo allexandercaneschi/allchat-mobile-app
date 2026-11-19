@@ -21,6 +21,7 @@ import {
   InboxFilters,
   AssigneeTypeFilters,
 } from './components';
+import { NewConversationFab } from './components/NewConversationFab';
 
 import { ActionTabs } from '@/components-next';
 import { Sheet } from '@/components-next/common/sheet/Sheet';
@@ -37,6 +38,7 @@ import { Conversation } from '@/types';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import {
   selectBottomSheetState,
+  selectCurrentState,
   setBottomSheetState,
 } from '@/store/conversation/conversationHeaderSlice';
 import { resetActionState } from '@/store/conversation/conversationActionSlice';
@@ -339,6 +341,7 @@ const ConversationScreen = () => {
     dispatch(resetActionState());
   };
 
+  const headerState = useAppSelector(selectCurrentState);
   const isInbox = currentBottomSheet === 'inbox_id';
 
   const filterHeight = (() => {
@@ -421,6 +424,7 @@ const ConversationScreen = () => {
           </Sheet>
           <ActionBottomSheet />
           <ActionTabs />
+          {headerState === 'Select' ? null : <NewConversationFab />}
         </ConversationListStateProvider>
       </SafeAreaView>
     </SplitView>

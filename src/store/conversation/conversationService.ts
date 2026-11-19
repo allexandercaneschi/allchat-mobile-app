@@ -35,6 +35,7 @@ import type {
   UpdateCustomAttributesPayload,
   UpdateCustomAttributesResponse,
   CustomAttributesAPIResponse,
+  CreateConversationPayload,
 } from './conversationTypes';
 
 import {
@@ -68,6 +69,19 @@ export class ConversationService {
       meta: transformConversationListMeta(meta),
     };
     return transformedResponse;
+  }
+
+  static async createConversation(payload: CreateConversationPayload): Promise<number> {
+    const { contactId, inboxId, sourceId, message, assigneeId } = payload;
+    const response = await apiService.post<{ id: number }>('conversations', {
+      contact_id: contactId,
+      inbox_id: inboxId,
+      source_id: sourceId,
+      assignee_id: assigneeId,
+      message: { content: message },
+    });
+    // The payload's `id` is the display id the rest of the app uses for conversations.
+    return response.data.id;
   }
 
   static async fetchConversation(conversationId: number): Promise<ConversationResponse> {
