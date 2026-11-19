@@ -28,3 +28,8 @@ export const selectNotificationSettings = createSelector(
 export const selectChatwootVersion = createSelector(selectSettings, settings => settings.version);
 
 export const selectPushToken = createSelector(selectSettings, settings => settings.pushToken);
+
+export const selectBiometricLockEnabled = createSelector(
+  selectSettings,
+  settings => settings.biometricLockEnabled === true,
+);

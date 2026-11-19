@@ -755,5 +755,18 @@
     "TONE_CONFIDENT": "Confident",
     "GENERATION_FAILED": "Failed to generate content. Please try again.",
     "FOLLOW_UP_FAILED": "Failed to send follow-up. Please try again."
+  },
+  "APP_LOCK": {
+    "TITLE": "ALLChat is locked",
+    "SUBTITLE": "Confirm your identity to continue.",
+    "UNLOCK": "Unlock",
+    "LOGOUT": "Sign out",
+    "PROMPT": "Unlock ALLChat",
+    "ENABLE_PROMPT": "Confirm to turn on the lock",
+    "CANCEL": "Cancel",
+    "SETTING": "Biometric lock",
+    "SETTING_ON": "On",
+    "SETTING_OFF": "Off",
+    "NOT_AVAILABLE": "This device has no biometrics or PIN/pattern set up. Set a screen lock in Android settings to use this option."
   }
 }

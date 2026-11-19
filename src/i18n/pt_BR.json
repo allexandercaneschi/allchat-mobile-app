@@ -481,5 +481,18 @@
     "EXECUTION_SUCCESS": "Macro executada com sucesso",
     "EXECUTION_ERROR": "Falha ao executar macro",
     "NO_MACROS": "Nenhuma macro encontrada"
+  },
+  "APP_LOCK": {
+    "TITLE": "ALLChat bloqueado",
+    "SUBTITLE": "Confirme sua identidade para continuar.",
+    "UNLOCK": "Desbloquear",
+    "LOGOUT": "Sair da conta",
+    "PROMPT": "Desbloqueie o ALLChat",
+    "ENABLE_PROMPT": "Confirme para ativar o bloqueio",
+    "CANCEL": "Cancelar",
+    "SETTING": "Bloqueio por biometria",
+    "SETTING_ON": "Ativado",
+    "SETTING_OFF": "Desativado",
+    "NOT_AVAILABLE": "Este aparelho não tem biometria nem PIN/padrão configurado. Configure um bloqueio de tela nas configurações do Android para usar esta opção."
   }
 }

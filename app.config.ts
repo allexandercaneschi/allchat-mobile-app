@@ -1,9 +1,13 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
+import { load as loadEnv } from '@expo/env';
 
 // This file is compiled on its own by the Expo tooling, so it cannot import from
 // src/. The full validation of the URL lives in src/config/server.ts; here only the
 // host is needed, for the conversation links.
+// Some commands (expo export, for one) read this file before loading the .env files,
+// so they are loaded here too. Variables already set in the shell are kept.
 const getServerUrl = (): URL => {
+  loadEnv(__dirname, { silent: true });
   try {
     return new URL(process.env.EXPO_PUBLIC_INSTALLATION_URL ?? '');
   } catch {
@@ -79,6 +83,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         },
       ],
       'expo-web-browser',
+      'expo-local-authentication',
       '@react-native-community/datetimepicker',
       '@react-native-firebase/app',
       '@react-native-firebase/messaging',

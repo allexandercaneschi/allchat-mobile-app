@@ -1,18 +1,24 @@
 import { useTailwind } from '@/theme/useTailwind';
 import { useCallback, useEffect, useState } from 'react';
-import { StatusBar, Text, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import {
+  Alert,
+  StatusBar,
+  Text,
+  Pressable,
+  ScrollView,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated';
 // import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackActions, useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useSelector } from 'react-redux';
 import * as Application from 'expo-application';
 import { Account, AvailabilityStatus } from '@/types';
 import { switchAccount } from '@/utils/accountUtils';
 
-import { RecentSearches } from '@/screens/search/utils/recentSearches';
 import i18n from 'i18n';
 
 import {
@@ -29,7 +35,7 @@ import { UserAvatar } from './components/UserAvatar';
 
 import { LANGUAGES } from '@/constants';
 import { useRefsContext } from '@/context';
-import { NotificationIcon, SwitchIcon, TranslateIcon } from '@/svg-icons';
+import { LockIcon, NotificationIcon, SwitchIcon, TranslateIcon } from '@/svg-icons';
 import { GenericListType } from '@/types';
 
 import {
@@ -47,11 +53,12 @@ import {
   selectUser,
   selectAccounts,
 } from '@/store/auth/authSelectors';
-import { logout } from '@/store/auth/authSlice';
 import { authActions } from '@/store/auth/authActions';
-import { selectLocale, selectPushToken } from '@/store/settings/settingsSelectors';
+import { selectBiometricLockEnabled, selectLocale } from '@/store/settings/settingsSelectors';
 import { settingsActions } from '@/store/settings/settingsActions';
-import { setLocale } from '@/store/settings/settingsSlice';
+import { setBiometricLock, setLocale } from '@/store/settings/settingsSlice';
+import { useLogout } from '@/hooks/useLogout';
+import { authenticateUser, isDeviceSecured } from '@/security/biometricAuth';
 
 import { getUserPermissions } from '@/utils/permissionUtils';
 import { CONVERSATION_PERMISSIONS } from '@/constants/permissions';
@@ -108,8 +115,6 @@ const SettingsScreen = () => {
   useEffect(() => {
     dispatch(settingsActions.getNotificationSettings());
   }, [dispatch, activeAccountId]);
-
-  const pushToken = useAppSelector(selectPushToken);
 
   const userPermissions = getUserPermissions(user, activeAccountId);
 
@@ -179,12 +184,24 @@ const SettingsScreen = () => {
   //   }
   // };
 
-  const onClickLogout = useCallback(async () => {
-    await AsyncStorage.removeItem('cwCookie');
-    await RecentSearches.clearAll();
-    await dispatch(settingsActions.removeDevice({ pushToken }));
-    dispatch(logout());
-  }, [dispatch, pushToken]);
+  const onClickLogout = useLogout();
+
+  const biometricLockEnabled = useAppSelector(selectBiometricLockEnabled);
+
+  const toggleBiometricLock = useCallback(async () => {
+    if (biometricLockEnabled) {
+      dispatch(setBiometricLock(false));
+      return;
+    }
+    if (!(await isDeviceSecured())) {
+      Alert.alert(i18n.t('APP_LOCK.SETTING'), i18n.t('APP_LOCK.NOT_AVAILABLE'));
+      return;
+    }
+    // Proving it works before turning it on avoids locking the user out.
+    if (await authenticateUser(i18n.t('APP_LOCK.ENABLE_PROMPT'))) {
+      dispatch(setBiometricLock(true));
+    }
+  }, [biometricLockEnabled, dispatch]);
 
   const availabilityList: GenericListType[] = [
     {
@@ -199,6 +216,14 @@ const SettingsScreen = () => {
   ];
 
   const preferencesList: GenericListType[] = [
+    {
+      hasChevron: false,
+      title: i18n.t('APP_LOCK.SETTING'),
+      icon: <LockIcon />,
+      subtitle: i18n.t(biometricLockEnabled ? 'APP_LOCK.SETTING_ON' : 'APP_LOCK.SETTING_OFF'),
+      subtitleType: 'light',
+      onPressListItem: toggleBiometricLock,
+    },
     {
       hasChevron: true,
       title: i18n.t('SETTINGS.NOTIFICATIONS'),

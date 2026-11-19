@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { settingsActions } from './settingsActions';
 import { NotificationSettings } from './settingsTypes';
 
@@ -9,6 +9,7 @@ interface SettingsState {
   };
   notificationSettings: NotificationSettings;
   localeValue: string;
+  biometricLockEnabled: boolean;
   version: string;
   pushToken: string;
 }
@@ -18,6 +19,7 @@ const initialState: SettingsState = {
     isLocaleSet: false,
   },
   localeValue: 'pt_BR',
+  biometricLockEnabled: false,
   notificationSettings: {
     account_id: 0,
     all_email_flags: [],
@@ -36,6 +38,9 @@ export const settingsSlice = createSlice({
   reducers: {
     resetSettings: state => {
       state.uiFlags.isUpdating = false;
+    },
+    setBiometricLock: (state, action: PayloadAction<boolean>) => {
+      state.biometricLockEnabled = action.payload;
     },
     setLocale: (state, action) => {
       state.localeValue = action.payload;
@@ -71,5 +76,5 @@ export const settingsSlice = createSlice({
       });
   },
 });
-export const { resetSettings, setLocale } = settingsSlice.actions;
+export const { resetSettings, setLocale, setBiometricLock } = settingsSlice.actions;
 export default settingsSlice.reducer;
