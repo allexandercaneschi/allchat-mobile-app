@@ -43,13 +43,25 @@ import { handOffToSplitView } from '@/navigation/split/splitHandoff';
 import { SideToolbarProvider } from '@/context';
 import { SideToolbarSlot } from '@/navigation/tabs/SideToolbarSlot';
 import { PaneErrorState } from './PaneErrorState';
+import { OwnershipBar } from './ownership/OwnershipBar';
+import { useConversationOwnership } from './ownership/useConversationOwnership';
 
 export const ChatWindow = (props: ChatScreenProps) => {
   const tailwind = useTailwind();
+  const ownership = useConversationOwnership(props.route.params.conversationId);
   return (
     <Animated.View style={tailwind.style('flex-1')}>
       <MessagesListContainer />
-      <ReplyBoxContainer />
+      {ownership.canReply ? (
+        <ReplyBoxContainer />
+      ) : (
+        <OwnershipBar
+          conversationId={props.route.params.conversationId}
+          state={ownership.state}
+          ownerName={ownership.ownerName}
+          pendingParticipation={ownership.pendingParticipation}
+        />
+      )}
       <MacrosList conversationId={props.route.params.conversationId} />
       <WhatsAppTemplatesList conversationId={props.route.params.conversationId} />
     </Animated.View>

@@ -817,5 +817,18 @@
     "SEND": "Send",
     "SEND_ERROR": "Could not start the conversation",
     "INBOXES_ERROR": "Could not load the inboxes"
+  },
+  "OWNERSHIP": {
+    "UNASSIGNED_TITLE": "Conversation without an owner",
+    "UNASSIGNED_HINT": "Take the conversation to reply.",
+    "TAKE": "Take conversation",
+    "TAKE_ERROR": "Could not take the conversation",
+    "OTHER_TITLE": "Handled by {{name}}",
+    "OTHER_HINT": "Ask the owner to let you in so you can reply.",
+    "ASK": "Ask to join",
+    "ASK_ERROR": "Could not send the request",
+    "ASKED": "Request sent. Waiting for {{name}}.",
+    "CANCEL_REQUEST": "Cancel request",
+    "CANCEL_ERROR": "Could not cancel the request"
   }
 }

@@ -17,6 +17,8 @@ import {
   transformNotificationCreatedResponse,
   transformNotificationRemovedResponse,
 } from './camelCaseKeys';
+import { upsertConversationRequest } from '@/store/conversation-request/conversationRequestSlice';
+import { transformConversationRequest } from '@/store/conversation-request/conversationRequestService';
 import { addNotification } from '@/store/notification/notificationSlice';
 import { setCurrentUserAvailability } from '@/store/auth/authSlice';
 import { removeNotification } from '@/store/notification/notificationSlice';
@@ -54,6 +56,7 @@ class ActionCableConnector extends BaseActionCableConnector {
       'notification.created': this.onNotificationCreated,
       'notification.deleted': this.onNotificationRemoved,
       'presence.update': this.onPresenceUpdate,
+      'conversation_request.updated': this.onConversationRequestUpdated,
 
       // TODO: Handle all these events later
       // 'conversation.contact_changed': this.onConversationContactChange,
@@ -86,6 +89,11 @@ class ActionCableConnector extends BaseActionCableConnector {
     const conversation = transformConversation(data);
     store.dispatch(updateConversation(conversation));
     store.dispatch(addContact(conversation));
+  };
+
+  // ALLChat: a transfer or participation request was created or answered.
+  onConversationRequestUpdated = (data: unknown) => {
+    store.dispatch(upsertConversationRequest(transformConversationRequest(data)));
   };
 
   onAssigneeChanged = (data: Conversation) => {

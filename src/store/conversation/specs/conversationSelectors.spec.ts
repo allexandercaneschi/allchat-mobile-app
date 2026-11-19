@@ -27,6 +27,17 @@ describe('getFilteredConversations', () => {
     expect(getFilteredConversations(state, defaultFilterState, userId)).toEqual([assignedToMe]);
   });
 
+  it('does not list a conversation held by a bot with the same id as the agent as "mine"', () => {
+    const heldByBot = {
+      ...conversation,
+      id: 4,
+      meta: { ...conversation.meta, assigneeType: 'AgentBot' },
+    } as unknown as Conversation;
+    const state = buildState({ 1: assignedToMe, 4: heldByBot });
+
+    expect(getFilteredConversations(state, defaultFilterState, userId)).toEqual([assignedToMe]);
+  });
+
   it('skips records without meta', () => {
     const withoutMeta = { ...conversation, id: 3, meta: undefined } as unknown as Conversation;
     const state = buildState({ 1: assignedToMe, 3: withoutMeta });
