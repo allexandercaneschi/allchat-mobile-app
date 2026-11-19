@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useConversationListStateContext } from '@/context';
-import { IOS_DESIGN, useHaptic, useSideTabBarLayout } from '@/utils';
+import { useHaptic, useSideTabBarLayout } from '@/utils';
 import { getFilteredConversations } from '@/store/conversation/conversationSelectors';
 import { selectUserId } from '@/store/auth/authSelectors';
 import {
@@ -129,7 +129,7 @@ export const ConversationHeader = () => {
   return (
     <Animated.View
       style={[
-        IOS_DESIGN || sideTabBar
+        sideTabBar
           ? tailwind.style('z-10')
           : [tailwind.style('border-b-[1px] bg-white z-10'), headerBorderAnimation],
         { paddingTop: sideTabBar?.contentTopPadding ?? 0 },

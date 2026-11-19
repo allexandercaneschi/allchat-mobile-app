@@ -18,7 +18,6 @@ import { ConversationAvatar } from './ConversationAvatar';
 import { ConversationItemDetail } from './ConversationItemDetail';
 import { ConversationSelect } from './ConversationSelect';
 import { SLA } from '@/types/common/SLA';
-import { useIOSListText } from '@/utils';
 
 export type ConversationItemProps = {
   // Basic info
@@ -85,10 +84,8 @@ export const ConversationItem = memo(
     typingText,
   }: ConversationItemProps) => {
     const tailwind = useTailwind();
-    const iosList = useIOSListText();
     return (
-      <NativeView
-        style={tailwind.style('gap-3 flex-row justify-between', iosList ? 'pl-4 pr-1.5' : 'px-3')}>
+      <NativeView style={tailwind.style('gap-3 flex-row justify-between', 'px-3')}>
         <NativeView style={tailwind.style('py-3 flex flex-row')}>
           <ConversationSelect {...{ isSelected, currentState }} />
           <ConversationAvatar

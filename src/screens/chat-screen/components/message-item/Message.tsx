@@ -7,7 +7,7 @@ import { selectConversationById } from '@/store/conversation/conversationSelecto
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
 import { useChatWindowContext } from '@/context';
 import { conversationActions } from '@/store/conversation/conversationActions';
-import { IOS_DESIGN, isPhoneNumberName, unixTimestampToReadableTime, useHaptic } from '@/utils';
+import { isPhoneNumberName, unixTimestampToReadableTime, useHaptic } from '@/utils';
 import {
   ComposedBubble,
   DeliveryStatus,
@@ -187,12 +187,8 @@ const MessageWrapper = ({
   // Only the search-target row animates, so only it needs an Animated.View.
   const BubbleContainer = isTargetMessage ? Animated.View : View;
 
-  const hasAvatar = IOS_DESIGN
-    ? shouldShowAvatar && !item.sameSenderAsBelow
-    : !shouldGroupWithPrevious && shouldShowAvatar;
-  const isIndented = IOS_DESIGN
-    ? shouldShowAvatar && !!item.sameSenderAsBelow
-    : shouldGroupWithPrevious && orientation === ORIENTATION.LEFT;
+  const hasAvatar = !shouldGroupWithPrevious && shouldShowAvatar;
+  const isIndented = shouldGroupWithPrevious && orientation === ORIENTATION.LEFT;
   const isRight = orientation === ORIENTATION.RIGHT;
   const bubbleClass = tailwind.isDark
     ? variant === MESSAGE_VARIANTS.EMAIL
@@ -201,13 +197,8 @@ const MessageWrapper = ({
         : darkVariantBaseMap[MESSAGE_VARIANTS.USER]
       : darkVariantBaseMap[variant]
     : variantBaseMap[variant];
-  const showNameAbove =
-    IOS_DESIGN &&
-    !item.sameSenderAsAbove &&
-    !!avatarInfo.name &&
-    ((orientation === ORIENTATION.LEFT && shouldShowAvatar) ||
-      (orientation === ORIENTATION.RIGHT && !isOwnMessage));
-  const shouldShowSenderName = !IOS_DESIGN && hasAvatar && !!avatarInfo.name;
+  const showNameAbove = false;
+  const shouldShowSenderName = hasAvatar && !!avatarInfo.name;
   const shouldShowTail = hasAvatar && !isRight && variant !== MESSAGE_VARIANTS.UNSUPPORTED;
 
   return (
@@ -216,15 +207,11 @@ const MessageWrapper = ({
       style={tailwind.style(
         flexOrientationClass(),
         isIndented ? (isRight ? 'mr-8' : 'ml-8') : '',
-        IOS_DESIGN
-          ? item.sameSenderAsAbove
-            ? 'mt-[2px]'
-            : 'mt-2.5'
-          : [
-              'my-[1px]',
-              !shouldGroupWithPrevious && !shouldGroupWithNext ? 'mb-2' : 'mb-1',
-              item.private ? 'my-1' : '',
-            ].join(' '),
+        [
+          'my-[1px]',
+          !shouldGroupWithPrevious && !shouldGroupWithNext ? 'mb-2' : 'mb-1',
+          item.private ? 'my-1' : '',
+        ].join(' '),
       )}>
       {showNameAbove ? (
         <Text
@@ -279,7 +266,7 @@ const MessageWrapper = ({
                   pointerEvents="none"
                 />
               )}
-              {(IOS_DESIGN || !shouldGroupWithPrevious) && (
+              {!shouldGroupWithPrevious && (
                 <View
                   style={tailwind.style(
                     'h-[27px] pt-[11px] pb-0.5 flex flex-row items-baseline',
@@ -498,7 +485,7 @@ export const MessageComponent = (props: MessageComponentProps) => {
 
   const shouldShowAvatar = () => {
     if (messageType === MESSAGE_TYPES.ACTIVITY) return false;
-    if (orientation() === ORIENTATION.RIGHT && !IOS_DESIGN) return false;
+    if (orientation() === ORIENTATION.RIGHT) return false;
     return true;
   };
 
@@ -521,13 +508,6 @@ export const MessageComponent = (props: MessageComponentProps) => {
   };
 
   const orientation = () => {
-    if (IOS_DESIGN) {
-      if (messageType === MESSAGE_TYPES.ACTIVITY) return ORIENTATION.CENTER;
-      if (messageType === MESSAGE_TYPES.OUTGOING || messageType === MESSAGE_TYPES.TEMPLATE)
-        return ORIENTATION.RIGHT;
-      if (isMyMessage()) return ORIENTATION.RIGHT;
-      return ORIENTATION.LEFT;
-    }
     if (isMyMessage()) {
       return ORIENTATION.RIGHT;
     }

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 
@@ -122,9 +122,7 @@ const ContactFormScreen = ({ navigation, route }: ContactFormScreenProps) => {
           <ActivityIndicator color={tailwind.color('text-gray-950')} />
         </View>
       ) : (
-        <KeyboardAvoidingView
-          style={tailwind.style('flex-1')}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <KeyboardAvoidingView style={tailwind.style('flex-1')} behavior={undefined}>
           <ScrollView
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={tailwind.style('px-4 pt-4 pb-8 gap-5')}>

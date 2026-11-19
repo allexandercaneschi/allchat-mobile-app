@@ -16,7 +16,7 @@ import {
   SnoozedFilledIcon,
 } from '@/svg-icons';
 import i18n from '@/i18n';
-import { IOS_DESIGN, useHaptic, useScaleAnimation } from '@/utils';
+import { useHaptic, useScaleAnimation } from '@/utils';
 import { ConversationStatus } from '@/types';
 
 import { ConversationActionType } from '../ConversationActions';
@@ -88,7 +88,7 @@ const ConversationActionOption = (props: ConversationActionOptionProps) => {
   const actionActive = useSharedValue(0);
 
   const { handlers, animatedStyle } = useScaleAnimation();
-  const isInPane = useIsInDetailPane() || IOS_DESIGN;
+  const isInPane = useIsInDetailPane();
   const rowWidth = useContainerWidth() - usePaneRightInset();
   const isStacked = (rowWidth - 32 - 3 * 6) / 4 < 100;
 

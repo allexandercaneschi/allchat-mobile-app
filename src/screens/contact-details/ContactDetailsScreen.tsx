@@ -1,7 +1,5 @@
-import { FullScreenPage } from '@/navigation/split/FullScreenPage';
-import { IOS_DESIGN } from '@/utils';
 import React, { useEffect } from 'react';
-import { View, Platform } from 'react-native';
+import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import camelCase from 'camelcase';
 
@@ -227,12 +225,7 @@ const ContactDetailsScreen = (props: ContactDetailsScreenProps) => {
   const allDetails = [...userDetails, ...socialMediaDetails];
 
   const content = (
-    <View
-      style={tailwind.style(
-        isInContactPane || IOS_DESIGN
-          ? 'flex-1'
-          : `flex-1 bg-white pt-6 ${Platform.OS === 'android' ? 'pt-12' : 'pt-6'}`,
-      )}>
+    <View style={tailwind.style(isInContactPane ? 'flex-1' : `flex-1 bg-white pt-6 ${'pt-12'}`)}>
       <ContactDetailsScreenHeader
         name={name || contactName || ''}
         thumbnail={thumbnail || contactThumbnail || ''}
@@ -246,25 +239,22 @@ const ContactDetailsScreen = (props: ContactDetailsScreenProps) => {
           phoneNumber={phoneNumber || ''}
           email={email || ''}
         />
-        <Animated.View style={tailwind.style(isInContactPane || IOS_DESIGN ? 'pt-8' : 'pt-10')}>
+        <Animated.View style={tailwind.style(isInContactPane ? 'pt-8' : 'pt-10')}>
           <AttributeList list={allDetails as AttributeListType[]} />
         </Animated.View>
         {hasContactCustomAttributes && (
-          <Animated.View style={tailwind.style(isInContactPane || IOS_DESIGN ? 'pt-8' : 'pt-10')}>
+          <Animated.View style={tailwind.style(isInContactPane ? 'pt-8' : 'pt-10')}>
             <ContactMetaInformation attributes={usedContactCustomAttributes} />
           </Animated.View>
         )}
         {contactId ? (
-          <Animated.View style={tailwind.style(isInContactPane || IOS_DESIGN ? 'pt-8' : 'pt-10')}>
+          <Animated.View style={tailwind.style(isInContactPane ? 'pt-8' : 'pt-10')}>
             <ContactLabelActions labels={contactLabels} contactId={contactId} />
           </Animated.View>
         ) : null}
       </Animated.ScrollView>
     </View>
   );
-  if (IOS_DESIGN && !isInContactPane) {
-    return <FullScreenPage background="bg-gray-50">{content}</FullScreenPage>;
-  }
   return content;
 };
 

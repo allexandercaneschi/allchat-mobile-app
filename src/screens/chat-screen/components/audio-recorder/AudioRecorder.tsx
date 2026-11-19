@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useEffect, useState } from 'react';
-import { Alert, PermissionsAndroid, Platform, Pressable } from 'react-native';
+import { Alert, PermissionsAndroid, Pressable } from 'react-native';
 import AudioRecorderPlayer, {
   RecordBackType,
   AVEncodingOption,
@@ -97,10 +97,7 @@ export const AudioRecorder = ({
         setRecorderData(recordingMeta);
       });
       const dirs = ReactNativeBlobUtil.fs.dirs;
-      const path = Platform.select({
-        ios: `audio-${localRecordedAudioCacheFilePaths.length}.m4a`,
-        android: `${dirs.CacheDir}/audio-${localRecordedAudioCacheFilePaths.length}.aac`,
-      });
+      const path = `${dirs.CacheDir}/audio-${localRecordedAudioCacheFilePaths.length}.aac`;
 
       ARPlayer.startRecorder(path, {
         AVFormatIDKeyIOS: AVEncodingOption.aac,
@@ -126,12 +123,7 @@ export const AudioRecorder = ({
           deleteRecorder();
         });
     };
-    if (Platform.OS === 'android') {
-      requestAndroidPermission();
-    } else {
-      addRecorderListener();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    requestAndroidPermission();
   }, []);
 
   const deleteRecorder = async () => {
@@ -140,11 +132,7 @@ export const AudioRecorder = ({
   };
 
   const createAudioFile = async (value: string) => {
-    const cleanPath =
-      Platform.select({
-        ios: value.replace('file://', ''),
-        android: value.replace(/\/\/+/g, '/'),
-      }) || value;
+    const cleanPath = value.replace(/\/\/+/g, '/') || value;
     const stats = await ReactNativeBlobUtil.fs.stat(cleanPath);
     const fileName = `audio-${localRecordedAudioCacheFilePaths.length}.aac`;
 

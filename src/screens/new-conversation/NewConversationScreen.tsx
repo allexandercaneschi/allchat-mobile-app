@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -159,9 +158,7 @@ const NewConversationScreen = ({ navigation, route }: NewConversationScreenProps
     }
 
     return (
-      <KeyboardAvoidingView
-        style={tailwind.style('flex-1')}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView style={tailwind.style('flex-1')} behavior={undefined}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={tailwind.style('pb-8 gap-5')}>

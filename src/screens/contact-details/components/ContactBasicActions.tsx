@@ -6,7 +6,7 @@ import { Icon, IconButton } from '@/components-next';
 
 import { MailIcon, PhoneIcon } from '@/svg-icons';
 import { useTailwind } from '@/theme/useTailwind';
-import { IOS_DESIGN, useHaptic, useScaleAnimation } from '@/utils';
+import { useHaptic, useScaleAnimation } from '@/utils';
 import i18n from '@/i18n';
 import { openNumber, openEmail } from '@/utils/urlUtils';
 import { useContainerWidth } from '@/context';
@@ -25,7 +25,7 @@ type ContactOptionProps = {
 
 const ContactOptionComponent = (props: ContactOptionProps) => {
   const tailwind = useTailwind();
-  const isInContactPane = useIsInContactPane() || IOS_DESIGN;
+  const isInContactPane = useIsInContactPane();
   const OPTION_WIDTH = (useContainerWidth() - 32 - 12 * 3) / 2;
   const { option, handleOptionPress, disabled = false } = props;
 
@@ -74,7 +74,7 @@ type ContactBasicActionsProps = {
 
 export const ContactBasicActions = (props: ContactBasicActionsProps) => {
   const tailwind = useTailwind();
-  const isInContactPane = useIsInContactPane() || IOS_DESIGN;
+  const isInContactPane = useIsInContactPane();
   const { phoneNumber, email, style } = props;
 
   const onCallPress = () => {

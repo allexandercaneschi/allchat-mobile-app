@@ -38,7 +38,7 @@ import { MacrosList } from './components/macros/MacrosList';
 import { WhatsAppTemplatesList } from './components/whatsapp-templates';
 import { macroActions } from '@/store/macro/macroActions';
 import { useIsInDetailPane, useSplitView } from '@/navigation/split/SplitViewContext';
-import { IOS_DESIGN, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
+import { useIsSplitLayout, useSideTabBarLayout } from '@/utils';
 import { handOffToSplitView } from '@/navigation/split/splitHandoff';
 import { SideToolbarProvider } from '@/context';
 import { SideToolbarSlot } from '@/navigation/tabs/SideToolbarSlot';
@@ -94,14 +94,14 @@ const ConversationPagerView = (props: ChatScreenProps) => {
       orientation="horizontal"
       overdrag
       style={tailwind.style('flex-1')}
-      scrollEnabled={!isInDetailPane && !IOS_DESIGN}
+      scrollEnabled={!isInDetailPane}
       initialPage={0}
       onPageSelected={onPageSelected}>
       <ChatWindow {...props} />
       <ConversationActions />
     </PagerView>
   );
-  if (!IOS_DESIGN || isInDetailPane) return pager;
+  return pager;
   return (
     <GestureDetector gesture={swipeToActions}>
       <Animated.View style={tailwind.style('flex-1')}>{pager}</Animated.View>
@@ -249,18 +249,6 @@ const ChatScreen = (props: ChatScreenProps) => {
         onRetry={fetchConversation}
         onClose={() => splitView?.closeConversation()}
       />
-    );
-  }
-
-  if ((conversationError || !conversation) && IOS_DESIGN) {
-    return (
-      <SafeAreaView edges={['top', 'left', 'right']} style={tailwind.style('flex-1 bg-gray-50')}>
-        <PaneErrorState
-          title={conversationError || i18n.t('CONVERSATION.NOT_FOUND.TITLE')}
-          onRetry={fetchConversation}
-          onClose={handleBackPress}
-        />
-      </SafeAreaView>
     );
   }
 

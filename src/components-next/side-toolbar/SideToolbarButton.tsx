@@ -1,12 +1,9 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
-import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Icon } from '@/components-next/common/icon';
 import { useSideTabBarLayout } from '@/utils';
-
-const useLiquidGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
 
 type SideToolbarButtonProps = {
   icon: React.ReactElement;
@@ -32,14 +29,7 @@ export const SideToolbarButton = ({
   const drawnIconSize = Math.round(iconSize * (sideTabBar?.iconScale ?? 1));
   const circle = { width: size, height: size, borderRadius: size / 2 };
 
-  const background = useLiquidGlass ? (
-    <GlassView
-      colorScheme={tailwind.isDark ? 'dark' : 'light'}
-      glassEffectStyle="regular"
-      isInteractive={!!onPress && !disabled}
-      style={[StyleSheet.absoluteFill, { borderRadius: size / 2 }]}
-    />
-  ) : (
+  const background = (
     <View
       style={[
         StyleSheet.absoluteFill,
@@ -79,7 +69,7 @@ export const SideToolbarButton = ({
       style={({ pressed }) => [
         tailwind.style('items-center justify-center'),
         circle,
-        !useLiquidGlass && pressed ? tailwind.style('opacity-70') : null,
+        pressed ? tailwind.style('opacity-70') : null,
       ]}>
       {background}
       {content}

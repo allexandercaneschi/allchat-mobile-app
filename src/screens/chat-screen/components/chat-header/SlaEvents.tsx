@@ -1,11 +1,9 @@
 import { useTailwind } from '@/theme/useTailwind';
 import { Text, Animated } from 'react-native';
-import { IOS_DESIGN } from '@/utils';
 import { SLAEvent } from '@/types/common/SLA';
 import { SLA_MISS_TYPES } from '@/constants';
 import { SlaEvents as SlaEventItem } from './SLAEventItem';
 import i18n from '@/i18n';
-import { IOSSlaEvents } from './IOSSlaEvents';
 
 export interface SlaEventsProps {
   slaEvents?: SLAEvent[];
@@ -15,7 +13,6 @@ export interface SlaEventsProps {
 
 export const SlaEvents = (props: SlaEventsProps) => {
   const tailwind = useTailwind();
-  if (IOS_DESIGN) return <IOSSlaEvents {...props} />;
   const { slaEvents, statusText } = props;
   const frtMisses = slaEvents?.filter(slaEvent => slaEvent.eventType === SLA_MISS_TYPES.FRT);
   const nrtMisses = slaEvents?.filter(slaEvent => slaEvent.eventType === SLA_MISS_TYPES.NRT);

@@ -40,11 +40,10 @@ import {
   hasMessageFailedWithExternalError,
 } from '@/utils/messageUtils';
 import { transformMessage } from '@/utils/camelCaseKeys';
-import { Platform } from 'react-native';
 
 const getSendMessageContentType = (file?: SendMessagePayload['file']) => {
   if (!file) return 'application/json';
-  return Platform.OS === 'ios' ? file.type : 'multipart/form-data';
+  return 'multipart/form-data';
 };
 
 export const conversationActions = {

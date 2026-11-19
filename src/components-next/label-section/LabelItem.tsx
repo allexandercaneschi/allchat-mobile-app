@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React from 'react';
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { Label } from '@/types';
@@ -31,18 +31,8 @@ export const LabelItem = (props: LabelItemProps) => {
 };
 
 const styles = StyleSheet.create({
-  labelShadow:
-    Platform.select({
-      ios: {
-        shadowColor: '#00000040',
-        shadowOffset: { width: 0, height: 0.15 },
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-        elevation: 2,
-      },
-      android: {
-        elevation: 4,
-        backgroundColor: 'white',
-      },
-    }) || {}, // Add fallback empty object
+  labelShadow: {
+    elevation: 4,
+    backgroundColor: 'white',
+  },
 });

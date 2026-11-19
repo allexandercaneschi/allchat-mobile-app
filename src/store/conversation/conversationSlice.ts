@@ -202,7 +202,7 @@ const conversationSlice = createSlice({
           ),
         );
         state.isLoadingConversations = false;
-        state.isAllConversationsFetched = conversations.length < 20 || false;
+        state.isAllConversationsFetched = conversations.length < 20;
         state.meta = meta;
       })
       .addCase(conversationActions.fetchConversations.rejected, (state, { error }) => {
@@ -263,7 +263,7 @@ const conversationSlice = createSlice({
           const heldIds = new Set(conversation.messages.map(m => m.id));
           const unseen: Message[] = messages.filter(m => !heldIds.has(m.id));
           conversation.messages.unshift(...unseen);
-          state.isAllMessagesFetched = messages.length < 20 || false;
+          state.isAllMessagesFetched = messages.length < 20;
           // A first load (no beforeId) lands on the latest messages.
           if (beforeId == null) {
             state.isAllNewerMessagesFetched = true;

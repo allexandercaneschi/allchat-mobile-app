@@ -9,7 +9,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 // import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -38,13 +38,7 @@ import { useRefsContext } from '@/context';
 import { LockIcon, NotificationIcon, SwitchIcon, TranslateIcon } from '@/svg-icons';
 import { GenericListType } from '@/types';
 
-import {
-  IOS_DESIGN,
-  useHaptic,
-  useIsSplitLayout,
-  useSideTabBarLayout,
-  useTabBarHeight,
-} from '@/utils';
+import { useHaptic, useIsSplitLayout, useSideTabBarLayout, useTabBarHeight } from '@/utils';
 import { HeaderSpacer, ScrollEdgeHeader, useScrollEdge } from '@/components-next/side-toolbar';
 import { SettingsHeader } from './SettingsHeader';
 import { DebugActions } from './components/DebugActions';
@@ -65,8 +59,6 @@ import { CONVERSATION_PERMISSIONS } from '@/constants/permissions';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { showToast } from '@/utils/toastUtils';
 import { PaneHeader } from '@/navigation/split/PaneHeader';
-import { PageHeader } from '@/navigation/split/PageHeader';
-import { SwipeBackPage } from '@/navigation/split/SwipeBackPage';
 
 const appName = Application.applicationName;
 const appVersion = Application.nativeApplicationVersion;
@@ -82,14 +74,10 @@ const SettingsScreen = () => {
   const isSplit = useIsSplitLayout();
   const { width } = useWindowDimensions();
   const [pane, setPane] = useState<SettingsPane>('availability');
-  const [iosPage, setIosPage] = useState<SettingsPane | null>(null);
   const openPane = (next: SettingsPane, openSheetInstead: () => void) => () => {
     if (isSplit) {
       hapticSelection?.();
       setPane(next);
-    } else if (IOS_DESIGN) {
-      hapticSelection?.();
-      setIosPage(next);
     } else {
       openSheetInstead();
     }
@@ -97,10 +85,10 @@ const SettingsScreen = () => {
   const dispatch = useAppDispatch();
   const tabBarHeight = useTabBarHeight();
   const sideTabBar = useSideTabBarLayout();
-  const hasOverlayHeader = IOS_DESIGN || sideTabBar !== null;
+  const hasOverlayHeader = sideTabBar !== null;
   const scrollEdge = useScrollEdge();
   const [headerHeight, setHeaderHeight] = useState(0);
-  const pageBackground = IOS_DESIGN && !isSplit ? 'bg-gray-50' : 'bg-white';
+  const pageBackground = 'bg-white';
   const savedAvailabilityStatus =
     (useSelector(selectCurrentUserAvailability) as AvailabilityStatus) || 'offline';
   const [pendingAvailability, setPendingAvailability] = useState<AvailabilityStatus | null>(null);
@@ -424,25 +412,7 @@ const SettingsScreen = () => {
           </SafeAreaView>
         </>
       ) : null}
-      {!isSplit && IOS_DESIGN && iosPage ? (
-        <Animated.View
-          entering={SlideInRight.duration(280)}
-          exiting={SlideOutRight.duration(240)}
-          style={tailwind.style('absolute inset-0')}>
-          <SwipeBackPage
-            onBack={() => setIosPage(null)}
-            style={tailwind.style('flex-1 bg-gray-50')}>
-            <SafeAreaView edges={['top', 'left', 'right']} style={tailwind.style('flex-1')}>
-              <PageHeader title={titleFor(iosPage)} onBack={() => setIosPage(null)} />
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={tailwind.style('px-4 pt-2', `pb-[${tabBarHeight}px]`)}>
-                {renderPaneCard(iosPage)}
-              </ScrollView>
-            </SafeAreaView>
-          </SwipeBackPage>
-        </Animated.View>
-      ) : null}
+      {null}
     </View>
   );
 };

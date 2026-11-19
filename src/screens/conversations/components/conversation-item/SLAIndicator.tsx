@@ -8,7 +8,6 @@ import { SLA, SLAStatus } from '@/types/common/SLA';
 import { evaluateSLAStatus } from '@chatwoot/utils';
 import { evaluateSLAStatus as evaluateDueSLAStatus, hasSLADueTimes } from '@/utils/slaUtils';
 import i18n from '@/i18n';
-import { IOS_LIST_TEXT, useIOSListText } from '@/utils';
 import { useAppSelector } from '@/hooks';
 import { selectConversationById } from '@/store/conversation/conversationSelectors';
 
@@ -32,7 +31,6 @@ export const SLAIndicator = ({
   onSLAStatusChange: (hasThreshold: boolean) => void;
 }) => {
   const tailwind = useTailwind();
-  const iosText = useIOSListText();
   // Measure misses from recorded SLA events.
   const slaEvents = useAppSelector(state =>
     conversationId ? selectConversationById(state, conversationId)?.slaEvents : undefined,
@@ -112,7 +110,7 @@ export const SLAIndicator = ({
       <Text
         style={tailwind.style(
           'pl-1 text-sm leading-[20px] text-center',
-          iosText && IOS_LIST_TEXT.footnote,
+          false,
           slaStatus?.isSlaMissed ? 'text-ruby-800' : 'text-gray-800',
         )}>
         {`${sLAStatusText()}: ${slaStatus?.threshold}`}

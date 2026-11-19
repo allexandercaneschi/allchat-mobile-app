@@ -18,7 +18,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useChatWindowContext, useRefsContext } from '@/context';
 import {
-  IOS_DESIGN,
   useHaptic,
   isAWhatsAppChannel,
   isAnEmailChannel,
@@ -84,7 +83,6 @@ import { AudioRecorder } from '../audio-recorder/AudioRecorder';
 import { VoiceRecordButton } from './buttons/VoiceRecordButton';
 import { CopilotButton } from './buttons/CopilotButton';
 import { ReplyGlassCircle } from './buttons/ReplyGlassCircle';
-import { ReplySendOrMicButton } from './buttons/ReplySendOrMicButton';
 import { CopilotReplyMenu } from './CopilotReplyMenu';
 import { AddAttachmentMenu } from './AddAttachmentMenu';
 import { Icon } from '@/components-next/common';
@@ -123,13 +121,9 @@ const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStic
 const BottomSheetContent = () => {
   const tailwind = useTailwind();
   const paneRightInset = usePaneRightInset();
-  const iosStyle = IOS_DESIGN;
   const navigation = useNavigation<NativeStackNavigationProp<TabBarExcludedScreenParamList>>();
   const isComposer = useIsInComposePane();
   const splitView = useSplitView();
-  const isComposeColumnOpen = splitView?.secondary?.kind === 'compose';
-  const openComposer = () =>
-    splitView ? splitView.openCompose() : navigation.navigate('ComposeScreen', { conversationId });
   const closeComposer = () => (splitView ? splitView.closeSecondary() : navigation.goBack());
   const hapticSelection = useHaptic();
   const dispatch = useAppDispatch();
@@ -536,8 +530,6 @@ const BottomSheetContent = () => {
 
   const shouldShowCannedResponses = messageContent?.charAt(0) === '/';
 
-  if (iosStyle && !isComposer && isComposeColumnOpen) return null;
-
   if (isComposer) {
     const canSend = messageContent.trim().length > 0 || attachmentsLength > 0;
     const canTogglePrivate = replyEditorMode === REPLY_EDITOR_MODES.REPLY;
@@ -681,8 +673,8 @@ const BottomSheetContent = () => {
         }
         style={[
           tailwind.style(
-            iosStyle ? 'pb-2' : 'pb-2 border-t-[1px] border-t-blackA-A3',
-            shouldShowReplyHeader && !iosStyle ? 'pt-0' : 'pt-2',
+            'pb-2 border-t-[1px] border-t-blackA-A3',
+            shouldShowReplyHeader ? 'pt-0' : 'pt-2',
           ),
           { paddingRight: paneRightInset },
         ]}>
@@ -692,7 +684,7 @@ const BottomSheetContent = () => {
           </Animated.View>
         )}
 
-        {shouldShowReplyHeader && !iosStyle && (
+        {shouldShowReplyHeader && (
           <ReplyEmailHead
             ccEmails={ccEmails}
             bccEmails={bccEmails}
@@ -723,43 +715,21 @@ const BottomSheetContent = () => {
                 ? undefined
                 : LinearTransition.springify().mass(1).damping(15).stiffness(105)
             }
-            style={tailwind.style(
-              iosStyle
-                ? 'flex flex-row px-3 gap-2 items-end z-20 relative'
-                : 'flex flex-row px-1 items-end z-20 relative',
-            )}>
-            {iosStyle && !isCopilotActive && attachmentsLength === 0 && shouldShowFileUpload && (
-              <AddAttachmentMenu>
-                <ReplyGlassCircle>
-                  <Icon icon={<AddIcon stroke={tailwind.color('text-gray-950')} />} size={22} />
-                </ReplyGlassCircle>
-              </AddAttachmentMenu>
-            )}
-            {!iosStyle && !isCopilotActive && attachmentsLength === 0 && shouldShowFileUpload && (
+            style={tailwind.style('flex flex-row px-1 items-end z-20 relative')}>
+            {!isCopilotActive && attachmentsLength === 0 && shouldShowFileUpload && (
               <AddCommandButton
                 onPress={handleShowAddMenuOption}
                 derivedAddMenuOptionStateValue={derivedAddMenuOptionStateValue}
-                glass={iosStyle}
               />
             )}
-            {iosStyle && !isCopilotActive && !isGenerating ? (
-              <CopilotReplyMenu
-                editorContent={messageContent}
-                editorMode={replyEditorMode}
-                onSelectAction={handleCopilotAction}>
-                <ReplyGlassCircle>
-                  <Icon icon={<SparkleIcon stroke={tailwind.color('text-gray-950')} />} size={22} />
-                </ReplyGlassCircle>
-              </CopilotReplyMenu>
-            ) : (
+            {
               <CopilotButton
                 isActive={isCopilotMenuOpen || isCopilotActive}
                 isThinking={isGenerating}
                 onPress={isCopilotActive ? undefined : handleToggleCopilotMenu}
                 disabled={isCopilotActive}
-                glass={iosStyle}
               />
-            )}
+            }
             {isCopilotActive ? (
               <>
                 <CopilotInputBar
@@ -771,23 +741,6 @@ const BottomSheetContent = () => {
                   variant="copilot"
                   onPress={() => handleCopilotFollowUp(copilotFollowUpText)}
                   disabled={isGenerating || copilotFollowUpText.trim().length === 0}
-                />
-              </>
-            ) : iosStyle ? (
-              <>
-                <MessageTextInput
-                  iosStyle
-                  onExpand={inbox && isAnEmailChannel(inbox) ? openComposer : undefined}
-                  maxLength={maxLength()}
-                  replyEditorMode={replyEditorMode}
-                  agents={agents as Agent[]}
-                  messageContent={messageContent}
-                />
-                <ReplySendOrMicButton
-                  showSend={messageContent.length > 0 || attachmentsLength > 0}
-                  showMic={!!shouldShowFileUpload}
-                  onSend={() => confirmOnSendReply(null)}
-                  onMic={onPressVoiceRecordIcon}
                 />
               </>
             ) : (

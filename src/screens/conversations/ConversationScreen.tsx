@@ -58,7 +58,7 @@ import { clearAssignableAgents } from '@/store/assignable-agent/assignableAgentS
 import i18n from '@/i18n';
 import ActionBottomSheet from '@/navigation/tabs/ActionBottomSheet';
 import { getCurrentRouteName } from '@/utils/navigationUtils';
-import { IOS_DESIGN, useTabBarHeight, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
+import { useTabBarHeight, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // The screen list thats need to be checked for refreshing the conversations list
@@ -324,7 +324,7 @@ const ConversationScreen = () => {
   const isSplit = useIsSplitLayout();
   const [headerHeight, setHeaderHeight] = useState(0);
   const sideTabBar = useSideTabBarLayout();
-  const hasOverlayHeader = IOS_DESIGN || sideTabBar !== null;
+  const hasOverlayHeader = sideTabBar !== null;
   const scrollEdge = useScrollEdge();
   const filters = useAppSelector(selectFilters);
   const currentBottomSheet = useAppSelector(selectBottomSheetState);

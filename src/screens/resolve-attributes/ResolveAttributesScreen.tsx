@@ -10,9 +10,6 @@ import {
 } from '@react-navigation/native';
 
 import { Button, Icon } from '@/components-next';
-import { GlassCircleButton } from '@/components-next/side-toolbar/GlassCircleButton';
-import { GlassPillButton } from '@/components-next/side-toolbar/GlassPillButton';
-import { PaneHeader } from '@/navigation/split/PaneHeader';
 import { CloseIcon } from '@/svg-icons';
 import { useTailwind } from '@/theme/useTailwind';
 import i18n from '@/i18n';
@@ -21,7 +18,6 @@ import { selectConversationById } from '@/store/conversation/conversationSelecto
 import { conversationActions } from '@/store/conversation/conversationActions';
 import { macroActions } from '@/store/macro/macroActions';
 import { selectRequiredConversationAttributes } from '@/store/account/accountSlice';
-import { IOS_DESIGN } from '@/utils';
 import { showToast } from '@/utils/toastUtils';
 import { toCustomAttributeKey } from '@/utils/camelCaseKeys';
 import {
@@ -35,7 +31,6 @@ import {
 import type { CustomAttribute } from '@/types';
 
 import { AndroidAttributeField } from './AndroidAttributeField';
-import { IOSAttributeRow } from './IOSAttributeRow';
 import type { ResolveAttributesParams } from './useRequiredAttributes';
 
 const errorMessage = (attribute: CustomAttribute, error: AttributeValueError) => {
@@ -208,57 +203,6 @@ const ResolveAttributesScreen = () => {
       onBlur: () => touch(key),
     };
   };
-
-  if (IOS_DESIGN) {
-    return (
-      <SafeAreaView edges={['top', 'left', 'right']} style={tailwind.style('flex-1 bg-gray-50')}>
-        <View style={tailwind.style('pt-3')}>
-          <PaneHeader
-            title={i18n.t('CONVERSATION.REQUIRED_ATTRIBUTES.TITLE')}
-            left={
-              <GlassCircleButton
-                icon={<CloseIcon stroke={tailwind.color('text-gray-950')} strokeWidth={1.5} />}
-                onPress={close}
-                disabled={isSaving}
-                accessibilityLabel={i18n.t('CONVERSATION.COMPOSE.CLOSE')}
-              />
-            }
-            right={
-              <GlassPillButton
-                label={i18n.t('CONVERSATION.RESOLVE')}
-                onPress={handleSubmit}
-                disabled={isSaving}
-                isLoading={isSaving}
-              />
-            }
-          />
-        </View>
-        <KeyboardAwareScrollView
-          bottomOffset={24}
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={[
-            tailwind.style('px-4 pt-1.5 gap-2'),
-            { paddingBottom: insets.bottom + 24 },
-          ]}>
-          <Text
-            style={tailwind.style(
-              'mx-4 mb-1 text-[13px] leading-[18px] font-inter-420-20 text-gray-900',
-            )}>
-            {intro}
-          </Text>
-          <View style={tailwind.style('rounded-[13px] bg-white overflow-hidden')}>
-            {attributes.map((attribute, index) => (
-              <IOSAttributeRow
-                key={attribute.attributeKey}
-                {...fieldProps(attribute)}
-                isLast={index === attributes.length - 1}
-              />
-            ))}
-          </View>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={tailwind.style('flex-1 bg-white')}>

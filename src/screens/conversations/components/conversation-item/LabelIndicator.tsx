@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Text } from 'react-native';
 import { AnimatedNativeView, NativeView } from '@/components-next/native-components';
 import { Label } from '@/types';
-import { IOS_LIST_TEXT, useIOSListText } from '@/utils';
 
 interface LabelState {
   result: Label[]; // List of labels that fit within the available width
@@ -21,15 +20,14 @@ interface LayoutChangeEvent {
 
 const LabelText = ({ labelText, labelColor }: { labelText: string; labelColor: string }) => {
   const tailwind = useTailwind();
-  const iosText = useIOSListText();
   return (
     // Exact line height avoids clipping descenders.
-    <NativeView style={tailwind.style('flex-row items-center', iosText ? '' : 'py-[3px]')}>
+    <NativeView style={tailwind.style('flex-row items-center', 'py-[3px]')}>
       <NativeView style={tailwind.style('h-[5px] w-[5px] rounded-full', `bg-[${labelColor}]`)} />
       <Text
         style={tailwind.style(
           'pl-1 text-sm font-inter-420-20 leading-[16px] tracking-[0.32px] text-gray-700',
-          iosText && IOS_LIST_TEXT.footnote,
+          false,
         )}>
         {labelText}
       </Text>

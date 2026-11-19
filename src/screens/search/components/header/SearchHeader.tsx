@@ -5,9 +5,7 @@ import { SearchBar } from '@/components-next/common/search';
 import { Icon } from '@/components-next';
 import { ChevronLeft } from '@/svg-icons';
 import { useTailwind } from '@/theme/useTailwind';
-import { IOS_DESIGN } from '@/utils';
 import i18n from 'i18n';
-import { IOSSearchHeader } from './IOSSearchHeader';
 
 export interface SearchHeaderProps {
   searchText: string;
@@ -27,9 +25,7 @@ export function SearchHeader(props: SearchHeaderProps) {
         backgroundColor={tailwind.color('bg-white')}
         barStyle={tailwind.isDark ? 'light-content' : 'dark-content'}
       />
-      {IOS_DESIGN ? (
-        <IOSSearchHeader {...props} />
-      ) : (
+      {
         <Animated.View style={tailwind.style('pt-2 pb-[12px] border-b border-b-blackA-A3')}>
           <Animated.View style={tailwind.style('flex flex-row items-center gap-2 pl-4 pr-2')}>
             <Pressable
@@ -50,7 +46,7 @@ export function SearchHeader(props: SearchHeaderProps) {
             </Animated.View>
           </Animated.View>
         </Animated.View>
-      )}
+      }
     </>
   );
 }

@@ -19,7 +19,7 @@ import { resetSentMessage } from '@/store/conversation/sendMessageSlice';
 import { selectAllDashboardApps } from '@/store/dashboard-app/dashboardAppSlice';
 import { selectUser } from '@/store/auth/authSelectors';
 import { selectInboxById } from '@/store/inbox/inboxSelectors';
-import { IOS_DESIGN, getChannelIcon } from '@/utils';
+import { getChannelIcon } from '@/utils';
 import { Channel } from '@/types';
 import { useRequiredAttributes } from '@/screens/resolve-attributes/useRequiredAttributes';
 
@@ -160,8 +160,6 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
         currentUser,
       });
       navigation.dispatch(navigateToScreen);
-    } else if (IOS_DESIGN) {
-      navigation.dispatch(StackActions.push('ConversationActionsScreen', { conversationId }));
     } else {
       chatPagerView.current?.setPage(1);
     }
@@ -236,13 +234,7 @@ export const ChatHeaderContainer = (props: ChatScreenHeaderProps) => {
       onBackPress={isInDetailPane && splitView ? splitView.closeConversation : handleBackPress}
       onContactDetailsPress={handleNavigationToContactDetails}
       onToggleChatStatus={toggleChatStatus}
-      onOpenActions={
-        isInDetailPane && splitView
-          ? splitView.openActions
-          : IOS_DESIGN
-            ? () => handleNavigation()
-            : undefined
-      }
+      onOpenActions={isInDetailPane && splitView ? splitView.openActions : undefined}
     />
   );
 };

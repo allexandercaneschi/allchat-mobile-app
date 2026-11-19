@@ -6,7 +6,7 @@ import Animated from 'react-native-reanimated';
 import { Sheet } from '@/components-next/common/sheet/Sheet';
 import { Icon } from '@/components-next/common/icon';
 import { DoubleCheckIcon, InboxFilterIcon } from '@/svg-icons';
-import { IOS_DESIGN, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
+import { useIsSplitLayout, useSideTabBarLayout } from '@/utils';
 import { InboxFilters } from './InboxFilters';
 import { InboxSortMenu, useIsInboxSortChanged } from './InboxSortMenu';
 import i18n from '@/i18n';
@@ -56,10 +56,10 @@ export const InboxHeader = (props: InboxHeaderProps) => {
   return (
     <Animated.View
       style={[
-        IOS_DESIGN || sideTabBar ? null : tailwind.style('border-b-[1px] border-b-blackA-A3'),
+        sideTabBar ? null : tailwind.style('border-b-[1px] border-b-blackA-A3'),
         { paddingTop: sideTabBar?.contentTopPadding ?? 0 },
       ]}>
-      {isSplit || (IOS_DESIGN && !isSideLayout) ? (
+      {isSplit ? (
         <Animated.View style={tailwind.style('flex flex-row items-center px-4 pt-1 pb-3')}>
           <Animated.View style={tailwind.style('w-24 flex-row items-center')}>
             <GlassCircleButton

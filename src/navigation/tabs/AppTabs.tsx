@@ -4,8 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAppSelector } from '@/hooks';
 import { selectLoggedIn } from '@/store/auth/authSelectors';
 
-import { IOS_DESIGN } from '@/utils';
-
 import { AuthStack } from '../stack';
 import ChatScreen from '@/screens/chat-screen/ChatScreen';
 import ComposeScreen from '@/screens/chat-screen/ComposeScreen';
@@ -68,9 +66,7 @@ export type TabBarExcludedScreenParamList = {
 };
 const Stack = createNativeStackNavigator<TabBarExcludedScreenParamList>();
 
-const sidePageOptions = IOS_DESIGN
-  ? ({ animation: 'slide_from_right' } as const)
-  : ({ presentation: 'modal', animation: 'slide_from_bottom' } as const);
+const sidePageOptions = { presentation: 'modal', animation: 'slide_from_bottom' } as const;
 
 export const AppTabs = () => {
   const isLoggedIn = useAppSelector(selectLoggedIn);

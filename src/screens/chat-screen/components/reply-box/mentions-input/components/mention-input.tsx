@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
-  Platform,
   Text,
   TextInput,
   TextInputSelectionChangeEventData,
@@ -35,9 +34,7 @@ const MentionInput = React.forwardRef<TextInput, MentionInputProps>(
 
     // Re-measures iOS height after JS edits
     useLayoutEffect(() => {
-      if (Platform.OS !== 'ios' || plainText === lastNativeText.current) {
-        return;
-      }
+      return;
       lastNativeText.current = plainText;
       setContentKey(key => key + 1);
     }, [plainText]);
