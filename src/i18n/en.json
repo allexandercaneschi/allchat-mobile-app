@@ -615,5 +615,21 @@
     "DECLINED": "Request declined",
     "ANSWER_ERROR": "Could not answer the request",
     "NO_CONTACT": "a contact"
+  },
+  "WIDGET": {
+    "NAME": "ALLChat",
+    "SIGNED_OUT": "Sign in to the app to see your messages",
+    "ERROR": "Could not update",
+    "ERROR_HINT": "Tap to open the app",
+    "ALL_CAUGHT_UP": "All caught up",
+    "UNREAD": {
+      "zero": "No unread messages",
+      "one": "1 unread message",
+      "other": "%{count} unread messages"
+    },
+    "IN_CONVERSATIONS": {
+      "one": "in 1 conversation",
+      "other": "in %{count} conversations"
+    }
   }
 }

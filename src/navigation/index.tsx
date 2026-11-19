@@ -28,9 +28,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { transformNotification } from '@/utils/camelCaseKeys';
 import { useAppDispatch } from '@/hooks';
 import { APP_FONTS } from '@/theme/fonts';
+import { isNewConversationPath } from './widgetDeepLink';
+import { refreshUnreadWidget } from '@/widget/refreshUnreadWidget';
 
 setBackgroundMessageHandler(getMessaging(), async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
+  // Only reached by data-only pushes; notification pushes are shown by Android directly.
+  await refreshUnreadWidget();
 });
 
 export const AppNavigationContainer = () => {
@@ -46,7 +50,7 @@ export const AppNavigationContainer = () => {
   const currentAccountId = useAppSelector(selectCurrentUserAccountId);
 
   const linking = {
-    prefixes: [installationUrl],
+    prefixes: [installationUrl, 'allchat://'],
     config: {
       screens: {
         ChatScreen: {
@@ -62,6 +66,10 @@ export const AppNavigationContainer = () => {
     },
     // getStateFromPath: App running, receives deep link - handles conversation navigation
     getStateFromPath: (path: string, config: Parameters<typeof getStateFromPath>[1]) => {
+      if (isNewConversationPath(path)) {
+        return { routes: [{ name: 'NewConversation' }] };
+      }
+
       let primaryActorId = null;
       let primaryActorType = null;
       let accountId = null;

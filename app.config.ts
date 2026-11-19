@@ -87,6 +87,26 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ],
       ['react-native-permissions', {}],
       [
+        'react-native-android-widget',
+        {
+          widgets: [
+            {
+              name: 'UnreadMessages',
+              label: 'ALLChat',
+              description: 'Mensagens não lidas e atalho para nova conversa',
+              minWidth: '180dp',
+              minHeight: '110dp',
+              targetCellWidth: 3,
+              targetCellHeight: 2,
+              previewImage: './assets/widget/preview.png',
+              resizeMode: 'horizontal',
+              // Android's minimum period; pushes and opening the app refresh it sooner.
+              updatePeriodMillis: 1800000,
+            },
+          ],
+        },
+      ],
+      [
         '@sentry/react-native',
         {
           url: 'https://sentry.io/',

@@ -429,5 +429,21 @@
     "DECLINED": "Pedido recusado",
     "ANSWER_ERROR": "Não foi possível responder ao pedido",
     "NO_CONTACT": "um contato"
+  },
+  "WIDGET": {
+    "NAME": "ALLChat",
+    "SIGNED_OUT": "Entre no app para ver suas mensagens",
+    "ERROR": "Não foi possível atualizar",
+    "ERROR_HINT": "Toque para abrir o app",
+    "ALL_CAUGHT_UP": "Tudo em dia",
+    "UNREAD": {
+      "zero": "Nenhuma mensagem não lida",
+      "one": "1 mensagem não lida",
+      "other": "%{count} mensagens não lidas"
+    },
+    "IN_CONVERSATIONS": {
+      "one": "em 1 conversa",
+      "other": "em %{count} conversas"
+    }
   }
 }
