@@ -10,13 +10,15 @@ const {
 
 // Small status-bar icon for push notifications. Android draws it using only the alpha channel,
 // so it has to be a white silhouette on a transparent background; the launcher icon would show
-// up as a solid square. The accent color (read by @react-native-firebase/messaging through
-// `messaging_android_notification_color` in firebase.json) tints it in the notification shade.
+// up as a solid square. The accent color tints it in the notification shade. It is declared in
+// the app manifest (overriding the library's default) and not in firebase.json: the library's
+// own resource check cannot see a color that only exists in the app and fails the release build.
 const ICON_NAME = 'notification_icon';
 const COLOR_NAME = 'notification_accent';
 const ACCENT = '#35A8E0';
 const SOURCE_DIR = 'assets/notification-icon';
 const ICON_META = 'com.google.firebase.messaging.default_notification_icon';
+const COLOR_META = 'com.google.firebase.messaging.default_notification_color';
 
 function withIconFiles(config) {
   return withDangerousMod(config, [
@@ -48,15 +50,30 @@ function withAccentColor(config) {
   });
 }
 
+function applyNotificationMetaData(manifest) {
+  AndroidConfig.Manifest.ensureToolsAvailable(manifest);
+  const application = AndroidConfig.Manifest.getMainApplicationOrThrow(manifest);
+  AndroidConfig.Manifest.addMetaDataItemToMainApplication(
+    application,
+    ICON_META,
+    `@drawable/${ICON_NAME}`,
+    'resource',
+  );
+  AndroidConfig.Manifest.addMetaDataItemToMainApplication(
+    application,
+    COLOR_META,
+    `@color/${COLOR_NAME}`,
+    'resource',
+  );
+  // The messaging library declares this same entry with its own default; ours must win the merge.
+  const colorItem = application['meta-data'].find(item => item.$['android:name'] === COLOR_META);
+  colorItem.$['tools:replace'] = 'android:resource';
+  return manifest;
+}
+
 function withIconMetaData(config) {
   return withAndroidManifest(config, cfg => {
-    const application = AndroidConfig.Manifest.getMainApplicationOrThrow(cfg.modResults);
-    AndroidConfig.Manifest.addMetaDataItemToMainApplication(
-      application,
-      ICON_META,
-      `@drawable/${ICON_NAME}`,
-      'resource',
-    );
+    cfg.modResults = applyNotificationMetaData(cfg.modResults);
     return cfg;
   });
 }
@@ -70,3 +87,5 @@ module.exports = createRunOncePlugin(
   'with-android-notification-icon',
   '1.0.0',
 );
+
+module.exports.applyNotificationMetaData = applyNotificationMetaData;
