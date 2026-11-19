@@ -437,6 +437,11 @@
       "JOIN_FAILED": "Couldn't connect the call.",
       "MINIMISE": "Minimise call",
       "RETURN_TO_CALL": "Return to call"
+    },
+    "TABS": {
+      "ME": "Mine",
+      "UNASSIGNED": "Unassigned",
+      "ALL": "All"
     }
   },
   "FILTER": {

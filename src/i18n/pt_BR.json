@@ -240,6 +240,11 @@
         "EMPTY": "Nenhuma prioridade adicionada",
         "EDIT": "Alterar"
       }
+    },
+    "TABS": {
+      "ME": "Minhas",
+      "UNASSIGNED": "Sem responsável",
+      "ALL": "Todas"
     }
   },
   "FILTER": {
