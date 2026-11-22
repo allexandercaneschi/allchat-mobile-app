@@ -4,8 +4,14 @@ O APK assinado é gerado pelo GitHub Actions (`.github/workflows/build-apk.yml`)
 uma tag `v*` é criada (`git tag v0.1.0 && git push origin v0.1.0`) ou a mão, em
 **Actions → Build APK → Run workflow**. Antes de compilar ele confere tipos, lint e testes.
 
-O APK fica como **artefato da execução** (30 dias). Só quem tem acesso ao repositório baixa. Ele não
-é publicado em Release de propósito: o repositório é público e o APK é só da equipe.
+O APK fica como **artefato da execução** (30 dias). Quando a execução vem de uma **tag** `v*`, o
+workflow também publica o APK em **Releases**, marcado como pré-release, com o SHA-256 nas notas.
+Execuções manuais (`Run workflow`) não criam Release.
+
+**Atenção:** o repositório é público, então o APK da Release pode ser baixado por qualquer pessoa.
+O app só funciona com login no servidor ALLChat, mas o APK traz embutida a configuração do Firebase.
+Para voltar ao modo só-artefato, apague o job `release` do `.github/workflows/build-apk.yml`.
+Se uma tag for executada de novo, o APK da Release existente é substituído.
 
 ## Secrets necessários
 

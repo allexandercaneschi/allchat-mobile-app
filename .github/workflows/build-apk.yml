@@ -1,8 +1,10 @@
 name: Build APK
 
 # Gera o APK assinado do ALLChat. Roda quando uma tag "v*" é criada (ex.: v0.1.0) ou a mão,
-# em Actions > Build APK > Run workflow. O APK fica como artefato da execução (30 dias) e só quem
-# tem acesso ao repositório consegue baixar. Os secrets usados estão descritos em docs/build-apk.md.
+# em Actions > Build APK > Run workflow. O APK fica como artefato da execução (30 dias) e, quando
+# a execução vem de uma tag, também é publicado em Releases como pré-release. ATENÇÃO: o repositório
+# é público, então o APK da Release pode ser baixado por qualquer pessoa. Os secrets usados estão
+# descritos em docs/build-apk.md.
 on:
   workflow_dispatch:
   push:
@@ -151,3 +153,35 @@ jobs:
       - name: Apagar o keystore do runner
         if: always()
         run: rm -f "$RUNNER_TEMP/allchat.jks" google-services.json
+
+  # Publica o APK em Releases. Fica num job à parte para que só ele tenha permissão de escrita:
+  # o build (testes, Gradle, keystore) continua só com leitura.
+  release:
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: allchat-apk-*
+          merge-multiple: true
+          path: apk
+
+      - name: Publicar a Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          apk="$(ls apk/*.apk)"
+          sha="$(sha256sum "$apk" | cut -d' ' -f1)"
+          notes="APK assinado do ALLChat para Android, gerado pela tag $GITHUB_REF_NAME."$'\n\n'"SHA-256 do APK: \`$sha\`"
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            # Reexecução da mesma tag: troca o APK da Release que já existe.
+            gh release upload "$GITHUB_REF_NAME" "$apk" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$apk" \
+              --verify-tag --prerelease \
+              --title "ALLChat $GITHUB_REF_NAME" --notes "$notes"
+          fi
