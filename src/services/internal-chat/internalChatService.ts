@@ -22,10 +22,12 @@ const BASE = 'internal_chat';
 // answers 409. Both are expected answers, so the generic error toast stays quiet for them.
 const QUIET_NUDGE: AccountScopedRequestConfig = { quietStatuses: [429] };
 const QUIET_CLAIM: AccountScopedRequestConfig = { quietStatuses: [409] };
+// A server without the internal chat (plain Chatwoot) answers 404: the app just hides the feature.
+const QUIET_LIST: AccountScopedRequestConfig = { quietStatuses: [404] };
 
 export class InternalChatService {
   static async getChannels(): Promise<InternalChatChannel[]> {
-    const { data } = await apiService.get<{ payload: any[] }>(`${BASE}/channels`);
+    const { data } = await apiService.get<{ payload: any[] }>(`${BASE}/channels`, QUIET_LIST);
     return data.payload.map(transformInternalChatChannel);
   }
 
@@ -151,3 +153,6 @@ export const getRetryAfterSeconds = (error: unknown): number | null => {
 
 export const isAlreadyClaimedError = (error: unknown): boolean =>
   (error as { response?: { status?: number } })?.response?.status === 409;
+
+export const isNotFoundError = (error: unknown): boolean =>
+  (error as { response?: { status?: number } })?.response?.status === 404;

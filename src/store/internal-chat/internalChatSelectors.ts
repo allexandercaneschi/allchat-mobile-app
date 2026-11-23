@@ -51,5 +51,8 @@ export const selectInternalChatHasLoadedChannels = (state: RootState) =>
 export const selectInternalChatIsLoadingChannels = (state: RootState) =>
   state.internalChat.uiFlags.isLoadingChannels;
 
+export const selectInternalChatIsUnavailable = (state: RootState) =>
+  state.internalChat.uiFlags.isUnavailable;
+
 export const selectNudgeAvailableAt = (state: RootState, channelId: number) =>
   state.internalChat.nudgeAvailableAt[channelId] ?? 0;

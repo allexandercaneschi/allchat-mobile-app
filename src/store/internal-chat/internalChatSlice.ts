@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { internalChatActions, NUDGE_COOLDOWN_SECONDS } from './internalChatActions';
+import { internalChatActions, NOT_AVAILABLE, NUDGE_COOLDOWN_SECONDS } from './internalChatActions';
 import type {
   InternalChatChannel,
   InternalChatMessage,
@@ -12,7 +12,12 @@ export const initialState: InternalChatState = {
   hasMoreMessages: {},
   viewingChannelId: null,
   nudgeAvailableAt: {},
-  uiFlags: { isLoadingChannels: false, hasLoadedChannels: false, isLoadingMessages: {} },
+  uiFlags: {
+    isLoadingChannels: false,
+    hasLoadedChannels: false,
+    isUnavailable: false,
+    isLoadingMessages: {},
+  },
 };
 
 // Puts a message in the thread of its channel (once: a message that I send comes back both from the
@@ -97,6 +102,7 @@ const internalChatSlice = createSlice({
       .addCase(internalChatActions.fetchChannels.fulfilled, (state, action) => {
         state.uiFlags.isLoadingChannels = false;
         state.uiFlags.hasLoadedChannels = true;
+        state.uiFlags.isUnavailable = false;
         state.channels = Object.fromEntries(
           action.payload.map(channel => {
             // The conversation on screen is read as it goes: the server count may be a bit behind.
@@ -105,8 +111,12 @@ const internalChatSlice = createSlice({
           }),
         );
       })
-      .addCase(internalChatActions.fetchChannels.rejected, state => {
+      .addCase(internalChatActions.fetchChannels.rejected, (state, action) => {
         state.uiFlags.isLoadingChannels = false;
+        if (action.payload === NOT_AVAILABLE) {
+          state.uiFlags.isUnavailable = true;
+          state.uiFlags.hasLoadedChannels = true;
+        }
       })
 
       .addCase(internalChatActions.fetchMessages.pending, (state, action) => {

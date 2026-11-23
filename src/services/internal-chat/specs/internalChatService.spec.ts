@@ -3,6 +3,7 @@ import {
   getRetryAfterSeconds,
   InternalChatService,
   isAlreadyClaimedError,
+  isNotFoundError,
 } from '../internalChatService';
 
 jest.mock('@/services/APIService', () => ({
@@ -50,7 +51,7 @@ describe('InternalChatService', () => {
       },
     });
     const [channel] = await InternalChatService.getChannels();
-    expect(api.get).toHaveBeenCalledWith('internal_chat/channels');
+    expect(api.get).toHaveBeenCalledWith('internal_chat/channels', { quietStatuses: [404] });
     expect(channel).toMatchObject({ postingPolicy: 'admins_only', canPost: false, unreadCount: 2 });
     expect(channel.lastMessage?.channelId).toBe(3);
   });
@@ -157,6 +158,11 @@ describe('error helpers', () => {
       getRetryAfterSeconds({ response: { status: 500, data: { retry_after: 5 } } }),
     ).toBeNull();
     expect(getRetryAfterSeconds(new Error('x'))).toBeNull();
+  });
+
+  it('recognises a server without the internal chat (404)', () => {
+    expect(isNotFoundError({ response: { status: 404 } })).toBe(true);
+    expect(isNotFoundError({ response: { status: 500 } })).toBe(false);
   });
 
   it('recognises a help request that was already taken (409)', () => {

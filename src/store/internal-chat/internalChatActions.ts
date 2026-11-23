@@ -3,6 +3,7 @@ import {
   getRetryAfterSeconds,
   InternalChatService,
   isAlreadyClaimedError,
+  isNotFoundError,
 } from '@/services/internal-chat/internalChatService';
 import type {
   ClaimHelpRequestResult,
@@ -16,6 +17,9 @@ import type {
 // decides; when it answers 429 the `retry_after` it sends wins over this value.
 export const NUDGE_COOLDOWN_SECONDS = 60;
 
+// Payload of `fetchChannels` when the server does not have the internal chat (HTTP 404).
+export const NOT_AVAILABLE = 'not_available';
+
 const errorMessage = (error: unknown) => (error instanceof Error ? error.message : '');
 
 export const internalChatActions = {
@@ -25,7 +29,7 @@ export const internalChatActions = {
       try {
         return await InternalChatService.getChannels();
       } catch (error) {
-        return rejectWithValue(errorMessage(error));
+        return rejectWithValue(isNotFoundError(error) ? NOT_AVAILABLE : errorMessage(error));
       }
     },
   ),

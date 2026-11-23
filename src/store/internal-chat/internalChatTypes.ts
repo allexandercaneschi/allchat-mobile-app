@@ -88,6 +88,8 @@ export type InternalChatState = {
   uiFlags: {
     isLoadingChannels: boolean;
     hasLoadedChannels: boolean;
+    // The server answered 404: it has no internal chat.
+    isUnavailable: boolean;
     isLoadingMessages: Record<number, boolean>;
   };
 };
