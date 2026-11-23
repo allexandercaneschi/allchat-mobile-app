@@ -9,6 +9,7 @@ import {
 } from '../internalChatEvents';
 import { InternalChatService } from '@/services/internal-chat/internalChatService';
 import { showToast } from '@/utils/toastUtils';
+import { resetAttentionMemory } from '../internalChatAttention';
 import { ANA, buildChannel, buildMessage, ME } from './internalChatFixtures';
 
 let mockStore: ReturnType<typeof createTestStore>;
@@ -56,6 +57,7 @@ const service = InternalChatService as jest.Mocked<typeof InternalChatService>;
 describe('internal chat websocket events', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    resetAttentionMemory();
     mockStore = createTestStore();
     mockStore.dispatch(channelUpserted(buildChannel()));
     jest.spyOn(Vibration, 'vibrate').mockImplementation(() => {});

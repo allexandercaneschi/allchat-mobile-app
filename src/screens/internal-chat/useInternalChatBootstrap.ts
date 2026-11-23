@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
+import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { selectCurrentUserAccountId } from '@/store/auth/authSelectors';
 import { internalChatActions } from '@/store/internal-chat/internalChatActions';
 import { resetInternalChat } from '@/store/internal-chat/internalChatSlice';
+import { handleInternalChatPush } from '@/store/internal-chat/internalChatPush';
 
 // Loads the conversations when the tabs open (and when the account changes), so the unread badge of
 // the tab is right from the start, and again when the app comes back to the foreground: messages
@@ -24,6 +26,13 @@ export const useInternalChatBootstrap = () => {
     const subscription = AppState.addEventListener('change', state => {
       if (state === 'active') dispatch(internalChatActions.fetchChannels());
     });
-    return () => subscription.remove();
+    // Push received while the app is open (urgent messages and "call attention" included).
+    const unsubscribePush = onMessage(getMessaging(), async message => {
+      handleInternalChatPush(message);
+    });
+    return () => {
+      subscription.remove();
+      unsubscribePush();
+    };
   }, [dispatch]);
 };

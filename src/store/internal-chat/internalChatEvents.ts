@@ -1,18 +1,16 @@
-import { AppState, Vibration } from 'react-native';
+import { AppState } from 'react-native';
 import { store } from '@/store';
 import i18n from '@/i18n';
-import { showToast } from '@/utils/toastUtils';
 import { selectUserId } from '@/store/auth/authSelectors';
 import { internalChatActions } from './internalChatActions';
 import { messageReceived, messageUpdated } from './internalChatSlice';
+import { alertAttention } from './internalChatAttention';
 import { transformInternalChatMessage } from './internalChatTransforms';
 import type { InternalChatMessage } from './internalChatTypes';
 
 // Names of the websocket events sent by the ALLChat server to the members of a conversation.
 export const INTERNAL_CHAT_MESSAGE_CREATED = 'internal_chat.message.created';
 export const INTERNAL_CHAT_MESSAGE_UPDATED = 'internal_chat.message.updated';
-
-const ATTENTION_VIBRATION_PATTERN = [0, 400, 200, 400];
 
 // A message that must call attention: a nudge, a message marked as urgent or a mention.
 export const isAttentionMessage = (message: InternalChatMessage, userId?: number) =>
@@ -22,13 +20,12 @@ export const isAttentionMessage = (message: InternalChatMessage, userId?: number
 
 const notifyAttention = (message: InternalChatMessage) => {
   const name = message.sender?.name ?? '';
-  Vibration.vibrate(ATTENTION_VIBRATION_PATTERN);
-  showToast({
-    message:
-      message.kind === 'nudge'
-        ? i18n.t('INTERNAL_CHAT.ATTENTION.NUDGE', { name })
-        : i18n.t('INTERNAL_CHAT.ATTENTION.URGENT', { name }),
-  });
+  alertAttention(
+    message.id,
+    message.kind === 'nudge'
+      ? i18n.t('INTERNAL_CHAT.ATTENTION.NUDGE', { name })
+      : i18n.t('INTERNAL_CHAT.ATTENTION.URGENT', { name }),
+  );
 };
 
 // `internal_chat.message.created`: a message in a conversation of the current user.
