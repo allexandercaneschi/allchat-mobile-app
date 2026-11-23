@@ -1,6 +1,6 @@
 name: Build APK
 
-# Gera o APK assinado do ALLChat. Roda quando uma tag "v*" é criada (ex.: v0.1.0) ou a mão,
+# Gera o APK assinado do allchat-mobile (app ALLChat para Android). Roda quando uma tag "v*" é criada (ex.: v0.1.0) ou a mão,
 # em Actions > Build APK > Run workflow. O APK fica como artefato da execução (30 dias) e, quando
 # a execução vem de uma tag, também é publicado em Releases como pré-release. ATENÇÃO: o repositório
 # é público, então o APK da Release pode ser baixado por qualquer pessoa. Os secrets usados estão
@@ -134,7 +134,7 @@ jobs:
             echo "::error::O APK foi assinado com a chave de debug, não com o keystore do ALLChat."
             exit 1
           fi
-          name="allchat-${ALLCHAT_VERSION_NAME}-${ALLCHAT_VERSION_CODE}.apk"
+          name="allchat-mobile-${ALLCHAT_VERSION_NAME}-${ALLCHAT_VERSION_CODE}.apk"
           mv "$apk" "$name"
           echo "file=$name" >> "$GITHUB_OUTPUT"
           {
@@ -145,7 +145,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: allchat-apk-${{ env.ALLCHAT_VERSION_NAME }}-${{ env.ALLCHAT_VERSION_CODE }}
+          name: allchat-mobile-apk-${{ env.ALLCHAT_VERSION_NAME }}-${{ env.ALLCHAT_VERSION_CODE }}
           path: ${{ steps.apk.outputs.file }}
           if-no-files-found: error
           retention-days: 30
@@ -165,7 +165,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          pattern: allchat-apk-*
+          pattern: allchat-mobile-apk-*
           merge-multiple: true
           path: apk
 
@@ -176,12 +176,12 @@ jobs:
         run: |
           apk="$(ls apk/*.apk)"
           sha="$(sha256sum "$apk" | cut -d' ' -f1)"
-          notes="APK assinado do ALLChat para Android, gerado pela tag $GITHUB_REF_NAME."$'\n\n'"SHA-256 do APK: \`$sha\`"
+          notes="APK assinado do allchat-mobile (ALLChat para Android), gerado pela tag $GITHUB_REF_NAME."$'\n\n'"SHA-256 do APK: \`$sha\`"
           if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
             # Reexecução da mesma tag: troca o APK da Release que já existe.
             gh release upload "$GITHUB_REF_NAME" "$apk" --clobber
           else
             gh release create "$GITHUB_REF_NAME" "$apk" \
               --verify-tag --prerelease \
-              --title "ALLChat $GITHUB_REF_NAME" --notes "$notes"
+              --title "allchat-mobile $GITHUB_REF_NAME" --notes "$notes"
           fi
