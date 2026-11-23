@@ -541,7 +541,8 @@
     "CONVERSATION_SLA_MISSED_FIRST_RESPONSE": "A conversation misses first response SLA",
     "CONVERSATION_SLA_MISSED_NEXT_RESPONSE": "A conversation misses next response SLA",
     "CONVERSATION_SLA_MISSED_RESOLUTION": "A conversation misses resolution SLA",
-    "VOICE_CALL_MISSED": "You miss a call"
+    "VOICE_CALL_MISSED": "You miss a call",
+    "INTERNAL_MESSAGE_PUSH": "A team chat message arrives"
   },
   "CONVERSATION_DETAILS": {
     "TITLE": "Attributes",
@@ -783,7 +784,7 @@
       "URGENT_ON": "Marked as urgent",
       "CALL_ATTENTION": "Call attention",
       "NUDGE_SENT": "You called {{name}}'s attention",
-    "NUDGE_SENT_SHORT": "You called attention",
+      "NUDGE_SENT_SHORT": "You called attention",
       "NUDGE_RECEIVED": "{{name}} called your attention",
       "NUDGE_WAIT": "Wait {{seconds}}s to call attention again",
       "ASK_HELP": "Ask for help",
@@ -794,7 +795,7 @@
     },
     "HELP_REQUEST": {
       "TITLE": "Help request",
-        "TO_TEAM": "Asked the team for help",
+      "TO_TEAM": "Asked the team for help",
       "STATUS_OPEN": "Open",
       "STATUS_CLAIMED": "Taken by {{name}}",
       "STATUS_RESOLVED": "Resolved",
