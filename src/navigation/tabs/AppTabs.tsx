@@ -23,6 +23,12 @@ import { LayoutChangeCover } from './LayoutChangeCover';
 import { GlassToastHost } from '@/components-next/toast';
 import { InAppCallScreen } from '@/screens/call';
 import { Tabs } from './Tabs';
+import {
+  InternalChatConversationScreen,
+  InternalChatHelpRequestScreen,
+  InternalChatNewChatScreen,
+  type InternalChatRootParamList,
+} from '@/screens/internal-chat';
 
 export type TabParamList = {
   Conversations: undefined;
@@ -33,6 +39,7 @@ export type TabParamList = {
   ForgotPassword: undefined;
   Search: undefined;
   Notifications: undefined;
+  InternalChat: undefined;
 };
 
 export type TabBarExcludedScreenParamList = {
@@ -57,7 +64,7 @@ export type TabBarExcludedScreenParamList = {
   ConversationDetails: undefined;
   ConversationAction: undefined;
   ResolveAttributes: ResolveAttributesParams;
-};
+} & InternalChatRootParamList;
 const Stack = createNativeStackNavigator<TabBarExcludedScreenParamList>();
 
 const sidePageOptions = IOS_DESIGN
@@ -114,6 +121,21 @@ export const AppTabs = () => {
             options={{ headerShown: false, animation: 'slide_from_right' }}
             name="SearchScreen"
             component={SearchScreen}
+          />
+          <Stack.Screen
+            options={{ animation: 'slide_from_right' }}
+            name="InternalChatConversation"
+            component={InternalChatConversationScreen}
+          />
+          <Stack.Screen
+            options={{ animation: 'slide_from_right' }}
+            name="InternalChatNewChat"
+            component={InternalChatNewChatScreen}
+          />
+          <Stack.Screen
+            options={{ animation: 'slide_from_right' }}
+            name="InternalChatHelpRequest"
+            component={InternalChatHelpRequestScreen}
           />
         </Stack.Navigator>
         <SideColumnDivider />

@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { PropsWithChildren } from 'react';
-import { Platform, Pressable } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -19,6 +19,8 @@ import {
   ConversationIconOutline,
   InboxIconFilled,
   InboxIconOutline,
+  InternalChatIconFilled,
+  InternalChatIconOutline,
   SettingsIconFilled,
   SettingsIconOutline,
 } from '@/svg-icons';
@@ -33,6 +35,7 @@ import {
 import { TabParamList } from './AppTabs';
 import { useAppSelector } from '@/hooks';
 import { CapsuleFill } from './CapsuleFill';
+import { InternalChatTabBadge } from '@/screens/internal-chat/components/TabBadge';
 import { SideToolbarSlot } from './SideToolbarSlot';
 
 const tabExitSpringConfig = { damping: 20, stiffness: 360, mass: 1 };
@@ -57,6 +60,17 @@ const TabBarIcons = ({ focused, route, compact }: TabBarIconsProps) => {
         <InboxIconFilled compact={compact} />
       ) : (
         <InboxIconOutline compact={compact} />
+      );
+    case 'InternalChat':
+      return (
+        <View>
+          {focused ? (
+            <InternalChatIconFilled compact={compact} />
+          ) : (
+            <InternalChatIconOutline compact={compact} />
+          )}
+          <InternalChatTabBadge />
+        </View>
       );
     case 'Settings':
       return focused ? (

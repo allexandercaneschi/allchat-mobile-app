@@ -32,6 +32,10 @@ import { transformNotification } from '@/utils/camelCaseKeys';
 import { SsoUtils } from '@/utils/ssoUtils';
 import { useAppDispatch } from '@/hooks';
 import { APP_FONTS } from '@/theme/fonts';
+import {
+  buildInternalChatState,
+  parseInternalChatPath,
+} from '@/screens/internal-chat/internalChatLinking';
 
 setBackgroundMessageHandler(getMessaging(), async remoteMessage => {
   // Native code already handles call pushes.
@@ -75,6 +79,14 @@ export const AppNavigationContainer = () => {
         SsoUtils.handleSsoCallback(ssoParams, dispatch);
         // Return undefined to prevent navigation change for SSO callback
         return undefined;
+      }
+
+      // Team chat: push of an internal message -> open its conversation.
+      const internalChatLink = parseInternalChatPath(path);
+      if (internalChatLink) {
+        const targetAccount = resolveAccountSwitch(internalChatLink.accountId);
+        if (targetAccount && !switchAccount(dispatch, targetAccount)) return undefined;
+        return buildInternalChatState(internalChatLink.channelId);
       }
 
       let primaryActorId = null;

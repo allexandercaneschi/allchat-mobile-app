@@ -39,6 +39,8 @@ import { clearSelection } from '@/store/conversation/conversationSelectedSlice';
 import { runCallReadiness } from '@/screens/call/utils/callReadiness';
 import { RESULTS, checkNotifications, requestNotifications } from 'react-native-permissions';
 import { CustomTabBar } from './CustomTabBar';
+import { InternalChatListScreen } from '@/screens/internal-chat';
+import { useInternalChatBootstrap } from '@/screens/internal-chat/useInternalChatBootstrap';
 
 const Tab = createBottomTabNavigator();
 
@@ -55,6 +57,7 @@ export const Tabs = () => {
   const userId = useAppSelector(selectUserId);
   const accountId = useAppSelector(selectCurrentUserAccountId);
   const webSocketUrl = useAppSelector(selectWebSocketUrl);
+  useInternalChatBootstrap();
 
   useEffect(() => {
     // Here is the place we are loading all the data for the app first time first time or user switches account
@@ -176,6 +179,11 @@ export const Tabs = () => {
             component={ConversationStack}
           />
         )}
+        <Tab.Screen
+          name="InternalChat"
+          options={{ headerShown: false }}
+          component={InternalChatListScreen}
+        />
         <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsStack} />
       </Tab.Navigator>
     </SideToolbarProvider>

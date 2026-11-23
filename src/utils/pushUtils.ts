@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import { NOTIFICATION_TYPES } from '@/constants';
 import { Notification } from '@/types/Notification';
+import { findInternalChatLinkFromPush } from '@/screens/internal-chat/internalChatLinking';
 
 let notifee: typeof import('@notifee/react-native').default | undefined;
 
@@ -32,6 +33,14 @@ export const findConversationLinkFromPush = ({
   currentAccountId?: number;
 }) => {
   const { notificationType } = notification;
+
+  // Team chat messages open the internal conversation instead of a customer conversation.
+  const internalChatLink = findInternalChatLinkFromPush({
+    notification,
+    installationUrl,
+    currentAccountId,
+  });
+  if (internalChatLink) return internalChatLink;
 
   if (NOTIFICATION_TYPES.includes(notificationType)) {
     const { primaryActor, primaryActorId, primaryActorType } = notification;
