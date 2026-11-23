@@ -4,7 +4,6 @@ export * from './ConversationPriority';
 export * from './ConversationStatus';
 export * from './UnixTimestamp';
 export * from './UserRole';
-export * from './Theme';
 export * from './ConversationTyping';
 export * from './Label';
 export * from './SLA';

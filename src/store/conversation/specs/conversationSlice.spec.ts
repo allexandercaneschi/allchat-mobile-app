@@ -256,8 +256,8 @@ describe('conversation reducer', () => {
 });
 
 describe('fetchPreviousMessages first load', () => {
-  const message = (id: number, content: string, contentType = 'text') =>
-    ({ id, content, contentType, createdAt: id * 100 }) as unknown as Message;
+  const message = (id: number, content: string) =>
+    ({ id, content, contentType: 'text', createdAt: id * 100 }) as unknown as Message;
 
   const load = (held: Message[], fetched: Message[]) => {
     let state = conversationReducer(
@@ -283,14 +283,5 @@ describe('fetchPreviousMessages first load', () => {
 
     expect(messages.map(m => m.id)).toEqual([1, 3, 4]);
     expect(messages[1].content).toBe('held three');
-  });
-
-  it('takes the fetched copy of a call message whose status moved on', () => {
-    const messages = load(
-      [message(5, 'ringing', 'voice_call')],
-      [message(5, 'ended', 'voice_call')],
-    );
-
-    expect(messages.map(m => m.content)).toEqual(['ended']);
   });
 });

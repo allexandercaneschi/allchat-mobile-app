@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, useSharedValue } from 'react-native-reanimated';
 import Svg, { Path, Rect } from 'react-native-svg';
 
@@ -27,7 +27,6 @@ import { MESSAGE_VARIANTS } from '@/constants';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/hooks';
 import { preparePlayableAudio } from '@/utils/audioConverter';
-import { iosNeedsConversion } from '@/utils/audioSource';
 
 // eslint-disable-next-line react/display-name
 export const PlayIcon = React.memo(({ fill, fillOpacity }: IconProps) => {
@@ -102,11 +101,7 @@ export const AudioBubblePlayer = React.memo((props: AudioPlayerProps) => {
       setIsSoundLoading(false);
       setHasConversionFailed(false);
       setConvertedAudioSrc(audioSrc);
-      // Sources the metadata marks as natively playable skip the download.
-      // Ogg/WebM and unidentified sources go through preparePlayableAudio.
-      if (Platform.OS !== 'ios' || iosNeedsConversion(source) === false) {
-        return;
-      }
+      return;
       setIsSoundLoading(true);
       try {
         const playableSrc = await preparePlayableAudio(source);

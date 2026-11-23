@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import Animated, { Easing, FadeIn, FadeOut } from 'react-native-reanimated';
 import { useVideoPlayer, VideoView, type VideoPlayerStatus } from 'expo-video';
 import { Image } from 'expo-image';
@@ -56,7 +56,7 @@ export const VideoBubblePlayer = (props: VideoPlayerProps) => {
         style={tailwind.style('w-full ios:h-full aspect-video')}
         ref={videoRef}
         player={player}
-        contentFit={Platform.OS === 'android' ? 'contain' : 'cover'}
+        contentFit={'contain'}
         nativeControls={playerEnabled}
         onFullscreenExit={() => {
           player.pause();
@@ -94,8 +94,6 @@ export const VideoThumbnail = (props: VideoBubbleProps) => {
   const { videoSrc } = props;
   const videoRef = useRef<VideoView>(null);
   const [status, setStatus] = useState<VideoPlayerStatus>('loading');
-  // iOS fullscreen needs controls to close
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const player = useVideoPlayer({ uri: videoSrc }, instance => {
     instance.loop = false;
@@ -124,10 +122,8 @@ export const VideoThumbnail = (props: VideoBubbleProps) => {
         ref={videoRef}
         player={player}
         contentFit="cover"
-        nativeControls={Platform.OS === 'ios' && isFullscreen}
-        onFullscreenEnter={() => setIsFullscreen(true)}
+        nativeControls={false}
         onFullscreenExit={() => {
-          setIsFullscreen(false);
           player.pause();
           player.currentTime = 0;
         }}

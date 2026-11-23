@@ -1,9 +1,9 @@
-import { Platform, TextStyle } from 'react-native';
+import { TextStyle } from 'react-native';
 
 // TRIAL: system font on iOS.
 export const USE_SYSTEM_FONT_ON_IOS = true;
 
-export const useSystemFont = Platform.OS === 'ios' && USE_SYSTEM_FONT_ON_IOS;
+export const useSystemFont = false;
 
 const INTER_TO_SYSTEM_WEIGHT: Record<string, TextStyle['fontWeight']> = {
   'Inter-400-20': '400',

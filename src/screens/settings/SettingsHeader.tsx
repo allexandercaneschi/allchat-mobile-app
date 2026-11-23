@@ -3,13 +3,13 @@ import React from 'react';
 import Animated from 'react-native-reanimated';
 
 import i18n from 'i18n';
-import { IOS_DESIGN, useSideTabBarLayout } from '@/utils';
+import { useSideTabBarLayout } from '@/utils';
 
 export const SettingsHeader = () => {
   const tailwind = useTailwind();
   const sideTabBar = useSideTabBarLayout();
 
-  if (sideTabBar || IOS_DESIGN) {
+  if (sideTabBar) {
     return (
       <Animated.View style={{ paddingTop: sideTabBar?.contentTopPadding ?? 0 }}>
         <Animated.View style={tailwind.style('flex flex-row items-center px-4 pt-1 pb-3')}>

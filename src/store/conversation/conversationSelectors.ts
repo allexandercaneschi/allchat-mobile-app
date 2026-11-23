@@ -97,7 +97,9 @@ export const getFilteredConversations = createDraftSafeSelector(
         const assignee = conversation.meta?.assignee;
 
         const shouldFilter = shouldApplyFilters(conversation, filters);
-        const isAssignedToMe = assignee && assignee.id === userId;
+        // A bot's id can equal an agent's id, so only a person counts as "mine".
+        const isAssignedToMe =
+          assignee && conversation.meta?.assigneeType !== 'AgentBot' && assignee.id === userId;
         const isChatMine = isAssignedToMe && shouldFilter;
         return isChatMine;
       });

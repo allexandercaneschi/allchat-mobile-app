@@ -1,7 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
+import { StyleSheet, Text, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -16,7 +15,6 @@ import { useSideTabBarLayout } from '@/utils';
 
 import { subscribeToToasts, type ToastMessage } from '@/utils/toastEvents';
 
-const useLiquidGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
 const VISIBLE_MS = 2200;
 
 export const GlassToastHost = () => {
@@ -91,18 +89,12 @@ export const GlassToastHost = () => {
           style={[
             tailwind.style(
               'min-h-11 max-w-[88%] px-4 py-2.5 rounded-[22px] items-center justify-center',
-              useLiquidGlass ? '' : 'bg-white border-[0.5px] border-blackA-A6',
+              'bg-white border-[0.5px] border-blackA-A6',
             ),
-            useLiquidGlass ? null : styles.shadow,
+            styles.shadow,
             style,
           ]}>
-          {useLiquidGlass ? (
-            <GlassView
-              colorScheme={tailwind.isDark ? 'dark' : 'light'}
-              glassEffectStyle="regular"
-              style={[StyleSheet.absoluteFill, { borderRadius: 22 }]}
-            />
-          ) : null}
+          {null}
           <Text
             numberOfLines={3}
             style={tailwind.style(

@@ -1,24 +1,11 @@
 {
-  "WELCOME": "Bem-vindo",
   "COMMON": {
     "ERROR": "Erro",
     "ERROR_TITLE": "Ocorreu um erro inesperado",
     "REPORT_MESSAGE": "Já relatamos isso para nossa equipe! Por favor, feche o aplicativo e comece novamente!",
     "CLOSE": "Fechar"
   },
-  "FOOTER": {
-    "HOME": "Principal",
-    "CONVERSATION": "Conversas",
-    "NOTIFICATION": "Notificações",
-    "SETTINGS": "Configurações"
-  },
   "CONFIGURE_URL": {
-    "ENTER_URL": "URL de instalação",
-    "DESCRIPTION": "Se você estiver usando uma instalação auto-hospedada do Chatwoot, insira o URL do servidor. Caso contrário, use app.chatwoot.com.",
-    "URL_ERROR": "Insira uma URL válida",
-    "URL_REQUIRED": "URL é obrigatório",
-    "CONNECT": "Conectar",
-    "CHANGE_LANGUAGE": "Alterar idioma",
     "ERROR": "Url de instalação inválida"
   },
   "LOGIN": {
@@ -33,22 +20,12 @@
     "LOGIN": "Entrar",
     "LOGIN_LOADING": "Entrar...",
     "FORGOT_PASSWORD": "Esqueceu sua senha?",
-    "RESET_HERE": "Redefinir aqui",
-    "NO_ACCOUNT": "Não possui uma conta?",
-    "CREATE_ACCOUNT": "Criar nova conta",
-    "SETTINGS": "Configurações",
-    "CHANGE_LANGUAGE": "Alterar idioma",
-    "TERMS": "Termos & Condições",
-    "CHANGE_URL": "Alterar URL"
+    "CHANGE_LANGUAGE": "Alterar idioma"
   },
   "FORGOT_PASSWORD": {
-    "EMAIL": "Por favor, digite seu e-mail",
-    "EMAIL_ERROR": "Digite um e-mail válido",
     "RESET_HERE": "Redefinir senha",
-    "HEADER_TITLE": "Redefinir senha",
     "TITLE": "Esqueceu a Senha?",
-    "SUB_TITLE": "Não se preocupe! Nós te protegemos",
-    "API_SUCCESS": "O link de redefinição de senha foi enviado para o seu endereço de e-mail"
+    "SUB_TITLE": "Não se preocupe! Nós te protegemos"
   },
   "CONVERSATION": {
     "HEADER": {
@@ -97,8 +74,6 @@
         "SEARCH_AGENT": "Pesquisar agentes"
       },
       "STATUS": {
-        "HEADER_TITLE": "Atribuir situação",
-        "TITLE": "Filtrar pela situação",
         "OPTIONS": {
           "OPEN": "Abertas",
           "PENDING": "Pendentes",
@@ -108,28 +83,14 @@
         }
       }
     },
-    "DEFAULT_HEADER_TITLE": "Conversas",
-    "UPDATING": "Atualizando...",
-    "MINE": "Minhas",
-    "UN_ASSIGNED": "Não atribuídas",
-    "ALL": "Todas",
     "EMPTY": "Não há conversas ativas neste grupo.",
-    "PICTURE_CONTENT": "Mensagem de imagem",
-    "ATTACHMENT_CONTENT": "Anexo",
-    "DOWNLOAD": "Baixar",
     "TODAY": "Hoje",
     "YESTERDAY": "Ontem",
     "TYPE_MESSAGE": "Digite a mensagem",
-    "TYPING": "digitando",
-    "ALL_CONVERSATION_LOADED": "Todas as conversas foram carregadas",
     "ASSIGN": "Atribuir conversa",
     "FILE_SIZE_LIMIT": "O arquivo excede o limite de anexos de 5MB",
     "SHARE": "Compartilhar",
-    "DETAILS": "Detalhes",
-    "LABELS": "Etiquetas da conversa",
-    "ASSIGNED_AGENT": "Agente atribuído",
     "TEAM": "Time",
-    "PRIVATE_MSG_INPUT": "Isto será visível apenas para Agentes",
     "UNSUPPORTED_MESSAGE": "Esta mensagem não é suportada. Você pode ver esta mensagem no aplicativo Facebook Messenger.",
     "NOT_FOUND": {
       "TITLE": "Não foi possível carregar a conversa",
@@ -144,20 +105,7 @@
       "BCC": "CCO"
     },
     "SELF_ASSIGN": "Atribuir a mim",
-    "UN_ASSIGN": "Desassociar conversa",
-    "CONVERSATION_NOT_FOUND": "Não foi possível obter a conversa",
-    "MARK_AS_PENDING": "Marcar como pendente",
-    "SNOOZE_UNTIL": "Adiar até",
-    "SNOOZE_UNTIL_NEXT_REPLY": "Até a próxima resposta",
-    "SNOOZE_UNTIL_TOMORROW": "Até amanhã",
-    "SNOOZE_UNTIL_NEXT_WEEK": "Até a próxima semana",
-    "SNOOZE": "Adiar conversa",
     "CHANGE_PRIORITY": "Alterar prioridade",
-    "MESSAGES": "Mensagens",
-    "UNDEFINED_VARIABLES_TITLE": "Variáveis não definidas",
-    "UNDEFINED_VARIABLES_CLOSE": "Fechar",
-    "DELETE_MESSAGE_TITLE": "Você tem certeza que deseja excluir esta mensagem?",
-    "DELETE_MESSAGE_SUB_TITLE": "Esta ação não pode ser desfeita.",
     "COPY_MESSAGE": "Mensagem copiada para área de transferência",
     "STORY_NOT_AVAILABLE": "Esta história não está mais disponível",
     "DELETE_MESSAGE_SUCCESS": "Mensagem excluída com sucesso",
@@ -170,24 +118,15 @@
     "CHANGE_STATUS": "Alterar situação",
     "SEARCH_TEAM": "Pesquisar times",
     "PRIORITY": {
-      "TITLE": "Prioridade",
       "OPTIONS": {
         "NONE": "Nenhuma",
         "URGENT": "Urgente",
         "HIGH": "Alta",
         "MEDIUM": "Média",
         "LOW": "Baixa"
-      },
-      "CHANGE_PRIORITY": {
-        "SELECT_PLACEHOLDER": "Nenhuma",
-        "INPUT_PLACEHOLDER": "Selecionar prioridade",
-        "NO_RESULTS": "Nenhum resultado encontrado",
-        "SUCCESSFUL": "Alterada a prioridade do ID da conversa %{conversationId} para %{priority}",
-        "FAILED": "Não foi possível alterar a prioridade. Por favor, tente novamente."
       }
     },
     "ITEM": {
-      "ASSIGN": "Atribuir",
       "STATUS": "Situação"
     },
     "ATTACHMENTS": {
@@ -219,12 +158,10 @@
       "DELETE_MESSAGE": "Apagar mensagem"
     },
     "EMAIL_HEADER": {
-      "FROM": "De",
       "TO": "Para",
       "BCC": "CCO",
       "CC": "Cc",
-      "SUBJECT": "Assunto",
-      "EXPAND": "Expandir e-mail"
+      "SUBJECT": "Assunto"
     },
     "ACTIONS": {
       "ASSIGNEE": {
@@ -240,50 +177,32 @@
         "EMPTY": "Nenhuma prioridade adicionada",
         "EDIT": "Alterar"
       }
+    },
+    "TABS": {
+      "ME": "Minhas",
+      "UNASSIGNED": "Sem responsável",
+      "ALL": "Todas"
     }
   },
   "FILTER": {
-    "ALL_INBOXES": "Todas as caixas de entrada",
-    "FILTER_BY_ASSIGNEE_TYPE": "Filtrar por tipo de responsável",
-    "FILTER_BY_CONVERSATION_STATUS": "Filtrar por estado da conversa",
-    "SORT_BY": "Ordenar por",
-    "FILTER_BY_INBOX": "Filtrar por caixa de entrada",
-    "HEADER_TITLE": "Filtro da Conversa",
-    "CHOOSE_INBOX": "Selecionar Caixa de Entrada",
-    "CHOOSE_STATUS": "Situação da conversa",
-    "OPEN": "Abertas",
-    "RESOLVED": "Resolvidas",
-    "BOT": "Robô",
-    "SUBMIT": "Enviar",
-    "PENDING": "Pendentes",
-    "SNOOZED": "Adiado"
+    "ALL_INBOXES": "Todas as caixas de entrada"
   },
   "SETTINGS": {
     "HEADER_TITLE": "Configurações",
     "SET_AVAILABILITY": "Defina como",
-    "CHANGE_AVAILABILITY": "Definir disponibilidade",
     "PREFERENCES": "Preferências",
-    "ABOUT": "Sobre",
-    "SUPPORT": "Suporte",
     "SWITCH_ACCOUNT": "Alterar conta",
     "CHANGE_LANGUAGE": "Alterar Idioma",
     "NOTIFICATIONS": "Notificações",
     "NOTIFICATION_PREFERENCES": "Preferências de Notificação",
-    "READ_DOCS": "Ler documentação",
-    "CHAT_WITH_US": "Fale conosco no chat",
     "LOGOUT": "Sair",
-    "SUBMIT": "Enviar",
     "SET_LANGUAGE": "Configurar Idioma",
     "DEBUG_ACTIONS": "Ações de Depuração"
   },
   "NOTIFICATION": {
-    "HEADER_TITLE": "Notificações",
     "INBOX": "Caixa de Entrada",
     "EMPTY": "Ainda não há notificações.",
-    "EMPTY_MORE_TEXT": "Quando você começar a receber notificações, elas aparecerão aqui.",
-    "ALL_NOTIFICATION_LOADED": "Todas as notificações carregadas",
     "MARK_ALL": "Marcar todas como lidas",
-    "CANCEL": "Cancelar",
     "DELETE": "Excluir",
     "TYPES": {
       "CONVERSATION_MENTION": "Você foi mencionado em uma conversa",
@@ -297,7 +216,6 @@
     },
     "FILTERS": {
       "SORT_BY": {
-        "TITLE": "Ordenar por",
         "OPTIONS": {
           "ASC": "Mais antigo",
           "DESC": "Mais recente"
@@ -307,11 +225,8 @@
     "ALERTS": {
       "MARK_AS_READ": "Notificação marcada como lida",
       "MARK_AS_UNREAD": "Notificação marcada como não lida",
-      "SNOOZE": "Notificação adiada",
       "DELETE": "Notificação excluída",
-      "MARK_ALL_READ": "Todas as notificações foram marcadas como lidas",
-      "DELETE_ALL": "Todas as notificações foram excluídas",
-      "DELETE_ALL_READ": "Todas as notificações lidas foram excluídas"
+      "MARK_ALL_READ": "Todas as notificações foram marcadas como lidas"
     }
   },
   "AVAILABILITY": {
@@ -330,7 +245,8 @@
     "CONVERSATION_PARTICIPATING_NEW_MESSAGE_PUSH": "Uma nova mensagem foi criada em uma conversa que você participa",
     "CONVERSATION_SLA_MISSED_FIRST_RESPONSE": "Uma conversa não alcançou o SLA de primeira resposta",
     "CONVERSATION_SLA_MISSED_NEXT_RESPONSE": "Uma conversa não alcançou o SLA da próxima resposta",
-    "CONVERSATION_SLA_MISSED_RESOLUTION": "Uma conversa não alcançou o SLA de resolução"
+    "CONVERSATION_SLA_MISSED_RESOLUTION": "Uma conversa não alcançou o SLA de resolução",
+    "INTERNAL_MESSAGE_PUSH": "Chega uma mensagem do chat interno"
   },
   "CONVERSATION_DETAILS": {
     "TITLE": "Atributos",
@@ -339,13 +255,10 @@
     "INITIATED_AT": "Iniciada em",
     "INITIATED_FROM": "Iniciado por",
     "IP_ADDRESS": "Endereço IP",
-    "CONVERSATION_ID": "ID da conversa",
-    "CLIPBOARD_SUCCESS": "Código copiado para área de transferência"
+    "CONVERSATION_ID": "ID da conversa"
   },
   "CONTACT_DETAILS": {
-    "TITLE": "Detalhes do contato",
     "EMAIL": "e-mail",
-    "PHONE_NUMBER": "Número de Telefone",
     "PHONE": "Telefone",
     "CALL": "Chamada",
     "LOCATION": "Localização",
@@ -355,20 +268,7 @@
   },
   "CONVERSATION_PARTICIPANTS": {
     "TITLE": "Participantes",
-    "TOTAL_PARTICIPANTS_TEXT": "%{count} pessoas estão participando.",
-    "TOTAL_PARTICIPANT_TEXT": "%{count} pessoa está participando.",
-    "NO_PARTICIPANTS_TEXT": "Ninguém está participando!",
-    "WATCH_CONVERSATION": "Participar da conversa",
-    "YOU_ARE_WATCHING": "Você está participando",
-    "NO_RECORDS_FOUND": "Nenhum resultado encontrado",
-    "SELECT_PARTICIPANTS": "Selecionar agentes",
-    "ADD_PARTICIPANTS": "Selecionar participantes",
-    "REMAINING_PARTICIPANTS_TEXT": "outros",
-    "REMAINING_PARTICIPANT_TEXT": "outro",
     "ADD_PARTICIPANT": "Adicionar Participante"
-  },
-  "CONTACT_ATTRIBUTES": {
-    "TITLE": "Atributos do contato"
   },
   "CONVERSATION_ACTION": {
     "TITLE": "Ações",
@@ -387,53 +287,18 @@
       "MACROS": "Macros"
     }
   },
-  "CONVERSATION_TEAMS": {
-    "TITLE": "Atribuir time",
-    "SELECT_TEAM": "Selecionar time",
-    "NO_RESULT": "Nenhum time encontrado"
-  },
   "CONVERSATION_LABELS": {
     "TITLE": "Etiquetas da conversa",
-    "ADD_LABEL": "Adicionar etiqueta",
-    "EMPTY_LIST": "Por favor, adicione marcadores à sua conta",
-    "NO_LABEL": "Nenhum marcador atribuído",
-    "UPDATE_LABEL": "Etiqueta atualizada com sucesso",
-    "SELECTED": "Selecionar",
-    "NOT_SELECTED": "Nenhuma etiqueta selecionada",
-    "NO_RESULT": "Nenhua etiqueta encontrada"
+    "ADD_LABEL": "Adicionar etiqueta"
   },
   "CONTACT_LABELS": {
     "TITLE": "Etiquetas do contato",
-    "ADD_LABEL": "Adicionar etiqueta",
-    "EMPTY_LIST": "Por favor, adicione marcadores à sua conta",
-    "NO_LABEL": "Nenhum marcador atribuído",
-    "UPDATE_LABEL": "Etiqueta atualizada com sucesso",
-    "SELECTED": "Selecionar",
-    "NOT_SELECTED": "Nenhuma etiqueta selecionada",
-    "NO_RESULT": "Nenhuma etiqueta encontrada"
-  },
-  "CONVERSATION_AGENTS": {
-    "TITLE": "Atribuir agente",
-    "SELECT_AGENT": "Selecionar agente",
-    "NO_RESULT": "Nenhum agente encontrado"
-  },
-  "AGENT": {
-    "TITLE": "Selecione o Agente"
-  },
-  "TEAMS": {
-    "TITLE": "Selecionar Time",
-    "EMPTY": "Adicione times à sua conta para atribuir conversas a equipes.",
-    "CHANGE_TEAMS": "Time alterado"
+    "ADD_LABEL": "Adicionar etiqueta"
   },
   "ERRORS": {
     "COMMON_ERROR": "Não foi possível conectar ao servidor Woot, por favor tente novamente mais tarde",
     "OfFLINE": "Você precisa se conectar ao Wi-Fi ou a uma rede celular para ficar online novamente",
-    "CANNOT_FETCH": "Ocorreu um erro ao buscar as informações, por favor, tente novamente",
-    "AUTH": "Nome de usuário / senha incorreta. Por favor, tente novamente",
-    "NO_ACCOUNTS_MESSAGE": "Você não tem acesso a nenhuma conta no chatwoot"
-  },
-  "SUCCESS": {
-    "AUTH": "Acesso bem sucedido"
+    "AUTH": "Nome de usuário / senha incorreta. Por favor, tente novamente"
   },
   "SERVER_UPGRADE": {
     "TITLE": "Atualização do servidor necessária",
@@ -481,5 +346,161 @@
     "EXECUTION_SUCCESS": "Macro executada com sucesso",
     "EXECUTION_ERROR": "Falha ao executar macro",
     "NO_MACROS": "Nenhuma macro encontrada"
+  },
+  "APP_LOCK": {
+    "TITLE": "ALLChat bloqueado",
+    "SUBTITLE": "Confirme sua identidade para continuar.",
+    "UNLOCK": "Desbloquear",
+    "LOGOUT": "Sair da conta",
+    "PROMPT": "Desbloqueie o ALLChat",
+    "ENABLE_PROMPT": "Confirme para ativar o bloqueio",
+    "CANCEL": "Cancelar",
+    "SETTING": "Bloqueio por biometria",
+    "SETTING_ON": "Ativado",
+    "SETTING_OFF": "Desativado",
+    "NOT_AVAILABLE": "Este aparelho não tem biometria nem PIN/padrão configurado. Configure um bloqueio de tela nas configurações do Android para usar esta opção."
+  },
+  "CONTACTS": {
+    "TITLE": "Contatos",
+    "SEARCH": "Buscar por nome, telefone ou e-mail",
+    "EMPTY": "Nenhum contato encontrado",
+    "EMPTY_HINT": "Toque em + para cadastrar um contato.",
+    "LOAD_ERROR": "Não foi possível carregar os contatos",
+    "RETRY": "Tentar de novo",
+    "NEW": "Novo contato",
+    "CHAT": "Iniciar conversa",
+    "NO_PHONE": "Sem telefone",
+    "FORM": {
+      "TITLE_NEW": "Novo contato",
+      "TITLE_EDIT": "Editar contato",
+      "NAME": "Nome",
+      "PHONE": "Telefone (WhatsApp)",
+      "PHONE_HINT": "Com DDD, por exemplo (31) 99999-8888. O 9 extra é removido automaticamente.",
+      "EMAIL": "E-mail (opcional)",
+      "SAVE": "Salvar",
+      "SAVED_NEW": "Contato criado",
+      "SAVED_EDIT": "Contato atualizado",
+      "SAVE_ERROR": "Não foi possível salvar o contato",
+      "LOAD_ERROR": "Não foi possível abrir o contato",
+      "START_CONVERSATION": "Iniciar conversa",
+      "ERRORS": {
+        "NAME_REQUIRED": "Informe o nome",
+        "PHONE_REQUIRED": "Informe o telefone",
+        "PHONE_INVALID": "Telefone inválido. Use o DDD e o número.",
+        "EMAIL_INVALID": "E-mail inválido"
+      }
+    }
+  },
+  "NEW_CONVERSATION": {
+    "TITLE": "Nova conversa",
+    "ACCESSIBILITY": "Nova conversa",
+    "CHANGE_CONTACT": "Trocar",
+    "INBOX": "Enviar por",
+    "NO_INBOX": "Este contato não pode receber mensagens por nenhuma caixa de entrada.",
+    "MESSAGE": "Mensagem",
+    "MESSAGE_PLACEHOLDER": "Escreva a primeira mensagem",
+    "SEND": "Enviar",
+    "SEND_ERROR": "Não foi possível iniciar a conversa",
+    "INBOXES_ERROR": "Não foi possível carregar as caixas de entrada"
+  },
+  "OWNERSHIP": {
+    "UNASSIGNED_TITLE": "Conversa sem responsável",
+    "UNASSIGNED_HINT": "Assuma a conversa para poder responder.",
+    "TAKE": "Assumir conversa",
+    "TAKE_ERROR": "Não foi possível assumir a conversa",
+    "OTHER_TITLE": "Em atendimento por {{name}}",
+    "OTHER_HINT": "Peça participação ao responsável para responder.",
+    "ASK": "Pedir participação",
+    "ASK_ERROR": "Não foi possível enviar o pedido",
+    "ASKED": "Pedido enviado. Aguardando {{name}}.",
+    "CANCEL_REQUEST": "Cancelar pedido",
+    "CANCEL_ERROR": "Não foi possível cancelar o pedido",
+    "TRANSFER_SENT": "Pedido de transferência enviado a {{name}}"
+  },
+  "REQUESTS": {
+    "TITLE": "Pedidos",
+    "BANNER_ONE": "1 pedido aguardando sua resposta",
+    "BANNER_MANY": "{{count}} pedidos aguardando sua resposta",
+    "EMPTY": "Nenhum pedido pendente",
+    "PARTICIPATION": "{{name}} pede para participar da conversa com {{contact}}",
+    "TRANSFER": "{{name}} quer transferir a conversa com {{contact}} para você",
+    "ACCEPT": "Aceitar",
+    "DECLINE": "Recusar",
+    "ACCEPTED": "Pedido aceito",
+    "DECLINED": "Pedido recusado",
+    "ANSWER_ERROR": "Não foi possível responder ao pedido",
+    "NO_CONTACT": "um contato"
+  },
+  "WIDGET": {
+    "NAME": "ALLChat",
+    "SIGNED_OUT": "Entre no app para ver suas mensagens",
+    "ERROR": "Não foi possível atualizar",
+    "ERROR_HINT": "Toque para abrir o app",
+    "ALL_CAUGHT_UP": "Tudo em dia",
+    "UNREAD": {
+      "zero": "Nenhuma mensagem não lida",
+      "one": "1 mensagem não lida",
+      "other": "%{count} mensagens não lidas"
+    },
+    "IN_CONVERSATIONS": {
+      "one": "em 1 conversa",
+      "other": "em %{count} conversas"
+    }
+  },
+  "INTERNAL_CHAT": {
+    "TITLE": "Chat interno",
+    "SEARCH_PLACEHOLDER": "Buscar conversas e mensagens",
+    "EMPTY_LIST": "Nenhuma conversa ainda",
+    "EMPTY_LIST_HINT": "Comece uma conversa com um colega.",
+    "EMPTY_SEARCH": "Nada encontrado",
+    "MESSAGES_RESULTS": "Mensagens",
+    "LOADING_ERROR": "Não foi possível carregar o chat interno. Puxe para atualizar.",
+    "UNAVAILABLE": "O chat interno não está disponível neste servidor.",
+    "NEW_CHAT": "Nova conversa",
+    "NEW_CHAT_SEARCH": "Buscar colega",
+    "NO_AGENTS": "Nenhum colega encontrado",
+    "COMPANY_ROOM": "Sala da empresa",
+    "TEAM_ROOM": "Sala do time",
+    "YOU": "Você",
+    "NO_MESSAGES": "Nenhuma mensagem ainda",
+    "ATTENTION": {
+      "NUDGE": "{{name}} chamou sua atenção",
+      "URGENT": "Mensagem urgente de {{name}}"
+    },
+    "CONVERSATION": {
+      "MESSAGE_PLACEHOLDER": "Escreva uma mensagem",
+      "SEND": "Enviar",
+      "URGENT": "Urgente",
+      "URGENT_ON": "Marcada como urgente",
+      "CALL_ATTENTION": "Chamar atenção",
+      "NUDGE_SENT": "Você chamou a atenção de {{name}}",
+      "NUDGE_SENT_SHORT": "Você chamou a atenção",
+      "NUDGE_RECEIVED": "{{name}} chamou sua atenção",
+      "NUDGE_WAIT": "Aguarde {{seconds}}s para chamar a atenção de novo",
+      "ASK_HELP": "Pedir ajuda",
+      "CANNOT_POST_ADMINS_ONLY": "Só administradores podem enviar mensagens nesta sala.",
+      "CANNOT_POST_ADMINS_AND_SUPERVISORS": "Só administradores e supervisores podem enviar mensagens nesta sala.",
+      "SEND_FAILED": "Não foi possível enviar a mensagem. Tente de novo.",
+      "LOAD_FAILED": "Não foi possível carregar as mensagens."
+    },
+    "HELP_REQUEST": {
+      "TITLE": "Pedido de ajuda",
+      "TO_TEAM": "Pediu ajuda ao time",
+      "STATUS_OPEN": "Aberto",
+      "STATUS_CLAIMED": "Assumido por {{name}}",
+      "STATUS_RESOLVED": "Resolvido",
+      "CLAIM": "Assumir",
+      "RESOLVE": "Resolver",
+      "ALREADY_CLAIMED": "Outra pessoa já assumiu este pedido.",
+      "ACTION_FAILED": "Não foi possível atualizar o pedido. Tente de novo.",
+      "NEW_TITLE": "Pedir ajuda",
+      "WHO": "Quem pode ajudar?",
+      "PERSON": "Uma pessoa",
+      "TEAM": "Meu time",
+      "NO_TEAMS": "Você não está em nenhum time.",
+      "MESSAGE_PLACEHOLDER": "Descreva o que você precisa",
+      "SEND": "Enviar pedido",
+      "SENT": "Pedido de ajuda enviado"
+    }
   }
 }

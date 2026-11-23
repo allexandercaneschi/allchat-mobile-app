@@ -61,14 +61,6 @@ export interface ProfileResponse {
   user: User;
 }
 
-export interface WorkPreferencesPayload {
-  profile: {
-    account_id: number;
-    accepts_conversations: boolean;
-    accepts_calls: boolean;
-  };
-}
-
 export interface ApiErrorResponse {
   success: boolean;
   errors: string[];
@@ -78,14 +70,4 @@ export interface SetActiveAccountPayload {
   profile: {
     account_id: number;
   };
-}
-
-export interface SsoAuthPayload {
-  email: string;
-  sso_auth_token: string;
-}
-
-export interface SsoAuthResponse {
-  user: User;
-  headers: AuthHeaders;
 }

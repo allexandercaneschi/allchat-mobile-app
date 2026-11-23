@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '@/hooks';
 import { useChatWindowContext, useRefsContext } from '@/context';
-import { AppState, Platform, View, ActivityIndicator } from 'react-native';
-import { KeyboardGestureArea } from 'react-native-keyboard-controller';
+import { AppState, View, ActivityIndicator } from 'react-native';
 import { flatMap } from 'lodash';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import {
@@ -81,9 +80,6 @@ const isSameSenderAsAbove = (index: number, list: MessageOrDate[]) => {
     current.messageType === above.messageType
   );
 };
-
-const PlatformSpecificKeyboardWrapperComponent =
-  Platform.OS === 'android' ? Animated.View : KeyboardGestureArea;
 
 export const MessagesListContainer = () => {
   const tailwind = useTailwind();
@@ -333,9 +329,7 @@ export const MessagesListContainer = () => {
   }
 
   return (
-    <PlatformSpecificKeyboardWrapperComponent
-      style={tailwind.style('flex-1 bg-white')}
-      interpolator="linear">
+    <Animated.View style={tailwind.style('flex-1 bg-white')}>
       <View
         style={[
           tailwind.style('flex-1'),
@@ -363,6 +357,6 @@ export const MessagesListContainer = () => {
           <ActivityIndicator />
         </View>
       )}
-    </PlatformSpecificKeyboardWrapperComponent>
+    </Animated.View>
   );
 };

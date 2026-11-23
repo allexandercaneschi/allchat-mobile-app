@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useConversationListStateContext } from '@/context';
-import { IOS_DESIGN, useHaptic, useSideTabBarLayout } from '@/utils';
+import { useHaptic, useSideTabBarLayout } from '@/utils';
 import { getFilteredConversations } from '@/store/conversation/conversationSelectors';
 import { selectUserId } from '@/store/auth/authSelectors';
 import {
@@ -24,6 +24,8 @@ import {
 } from '@/store/conversation/conversationSelectedSlice';
 import { selectCurrentState, setCurrentState } from '@/store/conversation/conversationHeaderSlice';
 import { ConversationFilterBar } from '../conversation-filters';
+import { AssigneeTabs } from '../AssigneeTabs';
+import { RequestsBanner } from '@/screens/requests/RequestsBanner';
 import { ConversationHeaderPresenter } from './ConversationHeaderPresenter';
 
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -127,7 +129,7 @@ export const ConversationHeader = () => {
   return (
     <Animated.View
       style={[
-        IOS_DESIGN || sideTabBar
+        sideTabBar
           ? tailwind.style('z-10')
           : [tailwind.style('border-b-[1px] bg-white z-10'), headerBorderAnimation],
         { paddingTop: sideTabBar?.contentTopPadding ?? 0 },
@@ -141,6 +143,8 @@ export const ConversationHeader = () => {
         onRightIconPress={handleRightIconPress}
         onClearFilter={handleClearFilter}
       />
+      {currentState === 'Select' ? null : <RequestsBanner />}
+      {currentState === 'Select' ? null : <AssigneeTabs />}
       {currentState === 'Filter' ? <ConversationFilterBar /> : null}
     </Animated.View>
   );

@@ -4,20 +4,10 @@ import type {
   NotificationSettings,
   NotificationSettingsPayload,
   PushPayload,
-  VoipPushPayload,
   RemoveDevicePayload,
 } from './settingsTypes';
 
 export class SettingsService {
-  static async verifyInstallationUrl(url: string): Promise<boolean> {
-    try {
-      await axios.get(`${url}api`);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   static async getNotificationSettings(): Promise<NotificationSettings> {
     const response = await apiService.get<NotificationSettings>('notification_settings');
     return response.data;
@@ -41,10 +31,6 @@ export class SettingsService {
       payload,
     );
     return response.data;
-  }
-
-  static async saveVoipToken(payload: VoipPushPayload): Promise<void> {
-    await apiService.post('notification_subscriptions', payload);
   }
 
   static async removeDevice(payload: RemoveDevicePayload): Promise<void> {

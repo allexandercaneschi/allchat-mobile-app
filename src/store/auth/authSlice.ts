@@ -1,7 +1,6 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { authActions } from './authActions';
 import { User } from '@/types/User';
-import type { WorkPreferences } from '@/types/common/AvailabilityStatus';
 import { AuthHeaders, VerificationChannel } from './authTypes';
 export interface AuthState {
   user: User | null;
@@ -94,18 +93,6 @@ export const authSlice = createSlice({
         };
       }
     },
-    setCurrentUserWorkPreferences(state, action: PayloadAction<WorkPreferences>) {
-      const { accepts_conversations: acceptsConversations, accepts_calls: acceptsCalls } =
-        action.payload;
-      const account = state.user?.accounts?.find(({ id }) => id === state.user?.account_id);
-      if (!account) return;
-      if (account.accepts_conversations !== acceptsConversations) {
-        account.accepts_conversations = acceptsConversations;
-      }
-      if (account.accepts_calls !== acceptsCalls) {
-        account.accepts_calls = acceptsCalls;
-      }
-    },
     setAccount: (state, action) => {
       if (state.user) {
         state.user.account_id = action.payload;
@@ -189,12 +176,6 @@ export const authSlice = createSlice({
           );
         }
       })
-      .addCase(authActions.updateWorkPreferences.fulfilled, (state, action) => {
-        state.user = {
-          ...state.user,
-          ...action.payload.user,
-        };
-      })
       .addCase(authActions.verifyMfa.pending, state => {
         state.uiFlags.isVerifyingMfa = true;
         state.error = null;
@@ -217,22 +198,6 @@ export const authSlice = createSlice({
       .addCase(authActions.verifyMfa.rejected, (state, action) => {
         state.uiFlags.isVerifyingMfa = false;
         state.error = action.payload?.errors[0] ?? null;
-      })
-      .addCase(authActions.loginWithSso.pending, state => {
-        state.uiFlags.isLoggingIn = true;
-        state.error = null;
-      })
-      .addCase(authActions.loginWithSso.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.headers = action.payload.headers;
-        state.uiFlags.isLoggingIn = false;
-        state.error = null;
-        state.mfaToken = null;
-        state.verificationChannel = null;
-      })
-      .addCase(authActions.loginWithSso.rejected, (state, action) => {
-        state.uiFlags.isLoggingIn = false;
-        state.error = action.payload?.errors[0] ?? null;
       });
   },
 });
@@ -241,7 +206,6 @@ export const {
   setAccount,
   resetAuth,
   setCurrentUserAvailability,
-  setCurrentUserWorkPreferences,
   clearAuthError,
   clearMfaToken,
 } = authSlice.actions;

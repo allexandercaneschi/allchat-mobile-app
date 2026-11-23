@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useEffect } from 'react';
-import { Alert, Platform, Share } from 'react-native';
+import { Alert, Share } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
@@ -31,7 +31,6 @@ import { selectInstallationUrl } from '@/store/settings/settingsSelectors';
 import { ConversationMetaInformation } from './components/ConversationMetaInformation';
 import { selectConversationParticipantsByConversationId } from '@/store/conversation-participant/conversationParticipantSelectors';
 import { usePaneRightInset } from '@/navigation/split/usePaneRightInset';
-import { IOS_DESIGN } from '@/utils';
 import { useIsInDetailPane } from '@/navigation/split/SplitViewContext';
 import { useRequiredAttributes } from '@/screens/resolve-attributes/useRequiredAttributes';
 
@@ -39,7 +38,7 @@ export type ConversationActionType = 'mute' | 'status' | 'unmute';
 
 export const ConversationActions = () => {
   const tailwind = useTailwind();
-  const isInPane = useIsInDetailPane() || IOS_DESIGN;
+  const isInPane = useIsInDetailPane();
   const sectionGap = isInPane ? 'pt-8' : 'pt-10';
   const paneRightInset = usePaneRightInset();
   const SCREEN_WIDTH = useContainerWidth();
@@ -72,7 +71,7 @@ export const ConversationActions = () => {
     try {
       const url = `${installationUrl}app/accounts/${conversation?.accountId}/conversations/${conversation?.id}`;
 
-      const message = Platform.OS === 'android' ? url : '';
+      const message = url;
 
       await Share.share({
         message,
@@ -138,7 +137,7 @@ export const ConversationActions = () => {
         <ConversationBasicActions
           status={status}
           updateConversationStatus={updateConversationStatus}
-          isMuted={isMuted || false}
+          isMuted={isMuted}
         />
         <Animated.View style={tailwind.style(sectionGap)}>
           <ConversationSettingsPanel

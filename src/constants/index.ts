@@ -1,6 +1,5 @@
 export const SCREENS = {
   LOGIN: 'Login',
-  CONFIG_URL: 'ConfigureURL',
   CONVERSATION: 'ConversationScreen',
   // Deprecated
   NOTIFICATION: 'NotificationScreen',
@@ -163,47 +162,13 @@ export const INBOX_ICON = {
 };
 
 export const LANGUAGES = {
-  af: 'Afrikaans',
-  ar: 'Arabic',
-  id: 'Bahasa Indonesia',
-  ca: 'Catalan',
-  cs: 'Czech',
-  da: 'Danish',
-  de: 'German',
   en: 'English',
-  el: 'Greek',
-  es: 'Spanish',
-  fa: 'Farsi',
-  fi: 'Finnish',
-  fr: 'French',
-  he: 'Hebrew',
-  hu: 'Hungarian',
-  it: 'Italian',
-  ja: 'Japanese',
-  ko: 'Korean',
-  ml: 'Malayalam',
-  nl: 'Dutch',
-  no: 'Norwegian',
-  pl: 'Polish',
-  pt_BR: 'Portuguese (Brazil)',
-  pt: 'Portuguese (Portugal)',
-  ro: 'Romanian',
-  ru: 'Russian',
-  sr: 'Serbian',
-  sv: 'Swedish',
-  ta: 'Tamil',
-  tr: 'Turkish',
-  uk: 'Ukrainian',
-  vi: 'Vietnamese',
-  zh_CN: 'Chinese (Simplified)',
-  zh_TW: 'Chinese (Traditional)',
+  pt_BR: 'Português (Brasil)',
 };
 
 export const URL_REGEX = {
   CONVERSATION: 'app/accounts/[-0-9]+/conversations/[-0-9]',
 };
-
-export const SSO_CALLBACK_URL = 'chatwootapp://auth/saml';
 
 export const CONVERSATION_TOGGLE_STATUS = {
   open: 'RESOLVE',
@@ -246,7 +211,8 @@ export const NOTIFICATION_PREFERENCE_TYPES = {
   push_sla_missed_first_response: 'CONVERSATION_SLA_MISSED_FIRST_RESPONSE',
   push_sla_missed_next_response: 'CONVERSATION_SLA_MISSED_NEXT_RESPONSE',
   push_sla_missed_resolution: 'CONVERSATION_SLA_MISSED_RESOLUTION',
-  push_voice_call_missed: 'VOICE_CALL_MISSED',
+  // ALLChat internal team chat
+  push_internal_message: 'INTERNAL_MESSAGE_PUSH',
 };
 
 export const NOTIFICATION_TYPES = [
@@ -258,7 +224,6 @@ export const NOTIFICATION_TYPES = [
   'sla_missed_first_response',
   'sla_missed_next_response',
   'sla_missed_resolution',
-  'voice_call_missed',
 ];
 
 export const URL_WITHOUT_HTTP_REGEX =
@@ -304,34 +269,7 @@ export const MEDIA_TYPES = [
 
 export const CONTENT_TYPES = {
   INCOMING_EMAIL: 'incoming_email',
-  VOICE_CALL: 'voice_call',
 };
-
-export const VOICE_CALL_STATUS = {
-  RINGING: 'ringing',
-  IN_PROGRESS: 'in-progress',
-  COMPLETED: 'completed',
-  NO_ANSWER: 'no-answer',
-  FAILED: 'failed',
-  REJECTED: 'rejected',
-} as const;
-
-export const VOICE_CALL_PROVIDERS = {
-  TWILIO: 'twilio',
-  WHATSAPP: 'whatsapp',
-} as const;
-
-export const VOICE_CALL_END_REASON = {
-  AGENT_REJECTED: 'agent_rejected',
-  OUTSIDE_WORKING_HOURS: 'outside_working_hours',
-} as const;
-
-export const VOICE_CALL_FAILURES = {
-  SYSTEM_UI_INCOMING: 'system_ui_incoming',
-  SYSTEM_UI_OUTGOING: 'system_ui_outgoing',
-  TWILIO_CALL_FAILED: 'twilio_call_failed',
-  WEBRTC_CONNECTION_LOST: 'webrtc_connection_lost',
-} as const;
 
 export const ORIENTATION = {
   LEFT: 'left',

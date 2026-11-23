@@ -9,6 +9,7 @@ import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 
 import { getStore } from '@/store/storeAccessor';
+import { SERVER } from '@/config/server';
 import I18n from '@/i18n';
 import { showToast } from '@/utils/toastUtils';
 
@@ -17,7 +18,6 @@ const nonAccountRoutes = [
   'profile/availability',
   'notification_subscriptions',
   'profile/set_active_account',
-  'profile/work_preferences',
 ];
 
 // True when a request was made for an account other than the one now active (e.g. it was
@@ -90,7 +90,7 @@ class APIService {
         const headers = this.getHeaders();
         const store = getStore();
         const state = store.getState();
-        config.baseURL = state.settings?.installationUrl;
+        config.baseURL = SERVER.installationUrl;
         const accountId =
           (config as AccountScopedRequestConfig).accountId ?? state.auth.user?.account_id;
         if (accountId && config.url !== undefined && !nonAccountRoutes.includes(config.url)) {

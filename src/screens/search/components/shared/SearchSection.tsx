@@ -18,7 +18,6 @@ import { SearchEmptyState } from './SearchEmptyState';
 import { SearchListItems } from './SearchListItems';
 import { FadeInView } from './FadeInView';
 import { Collapsible } from './Collapsible';
-import { IOS_DESIGN } from '@/utils';
 import i18n from 'i18n';
 
 const INITIAL_ITEMS_TO_SHOW = 5;
@@ -81,48 +80,13 @@ export function SearchSection({
     return null;
   }
 
-  const canCollapse = activeTab === 'all' && items.length > 0 && !isInitialLoading;
-
   const handleViewMorePress = () => {
     onTabChange(sectionId);
   };
 
   return (
     <Animated.View key={sectionId}>
-      {IOS_DESIGN ? (
-        <FadeInView
-          style={tailwind.style('px-4 pt-5 pb-1.5 flex-row items-center justify-between')}>
-          <Pressable
-            onPress={() => onViewMore(sectionId)}
-            disabled={!canCollapse}
-            hitSlop={{ top: 14, bottom: 14, left: 8, right: 8 }}
-            accessibilityRole="header"
-            style={tailwind.style('flex-row items-center flex-1')}>
-            <Animated.Text
-              style={tailwind.style(
-                'text-[13px] leading-[18px] font-inter-medium-24 text-gray-700',
-              )}>
-              {i18n.t(section.labelKey)}
-              {activeTab !== 'all' && ` (${items.length})`}
-            </Animated.Text>
-            {canCollapse ? (
-              <Animated.View style={[animatedIconStyle, tailwind.style('ml-1.5')]}>
-                <Icon icon={<CaretBottomSmall fill={tailwind.color('text-gray-700')} />} size={8} />
-              </Animated.View>
-            ) : null}
-          </Pressable>
-          {canCollapse && items.length > INITIAL_ITEMS_TO_SHOW && (
-            <Pressable onPress={handleViewMorePress} hitSlop={8} accessibilityRole="button">
-              <Animated.Text
-                style={tailwind.style(
-                  'text-[15px] leading-[20px] font-inter-normal-20 text-blue-800',
-                )}>
-                {i18n.t('SEARCH.VIEW_MORE')}
-              </Animated.Text>
-            </Pressable>
-          )}
-        </FadeInView>
-      ) : (
+      {
         <FadeInView style={tailwind.style('px-4 py-2 flex-row items-center justify-between')}>
           {activeTab === 'all' && items.length > 0 && !isInitialLoading ? (
             <Pressable
@@ -165,7 +129,7 @@ export function SearchSection({
               </Pressable>
             )}
         </FadeInView>
-      )}
+      }
       {isCancelled && items.length === 0 ? (
         <SearchEmptyState
           sectionLabel={i18n.t(section.labelKey)}

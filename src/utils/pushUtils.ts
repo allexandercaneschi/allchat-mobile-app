@@ -1,26 +1,6 @@
-import { Platform } from 'react-native';
 import { NOTIFICATION_TYPES } from '@/constants';
 import { Notification } from '@/types/Notification';
-
-let notifee: typeof import('@notifee/react-native').default | undefined;
-
-if (Platform.OS === 'ios') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  notifee = require('@notifee/react-native')
-    .default as typeof import('@notifee/react-native').default;
-}
-
-export const clearAllDeliveredNotifications = async () => {
-  if (Platform.OS === 'ios' && notifee) {
-    await notifee.cancelAllNotifications();
-  }
-};
-
-export const updateBadgeCount = async ({ count = 0 }) => {
-  if (Platform.OS === 'ios' && count >= 0 && notifee) {
-    await notifee.setBadgeCount(count);
-  }
-};
+import { findInternalChatLinkFromPush } from '@/screens/internal-chat/internalChatLinking';
 
 export const findConversationLinkFromPush = ({
   notification,
@@ -32,6 +12,14 @@ export const findConversationLinkFromPush = ({
   currentAccountId?: number;
 }) => {
   const { notificationType } = notification;
+
+  // Team chat messages open the internal conversation instead of a customer conversation.
+  const internalChatLink = findInternalChatLinkFromPush({
+    notification,
+    installationUrl,
+    currentAccountId,
+  });
+  if (internalChatLink) return internalChatLink;
 
   if (NOTIFICATION_TYPES.includes(notificationType)) {
     const { primaryActor, primaryActorId, primaryActorType } = notification;

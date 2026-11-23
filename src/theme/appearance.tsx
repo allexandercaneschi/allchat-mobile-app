@@ -1,22 +1,16 @@
 import React, { createContext, PropsWithChildren, useContext, useLayoutEffect } from 'react';
-import { Appearance, useColorScheme } from 'react-native';
-import { useAppSelector } from '@/hooks';
-import { selectTheme } from '@/store/settings/settingsSelectors';
+import { Appearance } from 'react-native';
 
-const AppearanceContext = createContext<'light' | 'dark'>('light');
+// The app is dark only. Setting the native scheme keeps system surfaces
+// (keyboard, dialogs, pickers) in step with it.
+const AppearanceContext = createContext<'light' | 'dark'>('dark');
 
 export const AppearanceProvider = ({ children }: PropsWithChildren) => {
-  const preference = useAppSelector(selectTheme) ?? 'system';
-  const systemScheme = useColorScheme();
-  const scheme =
-    preference === 'system' ? (systemScheme === 'dark' ? 'dark' : 'light') : preference;
-
   useLayoutEffect(() => {
-    Appearance.setColorScheme(preference === 'system' ? 'unspecified' : preference);
-    return () => Appearance.setColorScheme('unspecified');
-  }, [preference]);
+    Appearance.setColorScheme('dark');
+  }, []);
 
-  return <AppearanceContext.Provider value={scheme}>{children}</AppearanceContext.Provider>;
+  return <AppearanceContext.Provider value="dark">{children}</AppearanceContext.Provider>;
 };
 
 export const useAppAppearance = () => useContext(AppearanceContext);

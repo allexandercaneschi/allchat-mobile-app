@@ -20,11 +20,10 @@ import {
   selectSelectedConversation,
 } from '@/store/conversation/conversationSelectedSlice';
 import { conversationActions } from '@/store/conversation/conversationActions';
+import { upsertConversationRequest } from '@/store/conversation-request/conversationRequestSlice';
 import { isAssignableAgentFetching } from '@/store/assignable-agent/assignableAgentSelectors';
 import { showToast } from '@/utils/toastUtils';
 import i18n from '@/i18n';
-import { CONVERSATION_EVENTS } from '@/constants/analyticsEvents';
-import AnalyticsHelper from '@/utils/analyticsUtils';
 import { selectUserId } from '@/store/auth/authSelectors';
 
 type AssigneeCellProps = {
@@ -108,16 +107,23 @@ export const UpdateAssignee = () => {
       actionsModalSheetRef.current?.dismiss();
     } else {
       if (!selectedConversation?.id) return;
-      await dispatch(
-        conversationActions.assignConversation({
-          conversationId: selectedConversation?.id,
-          assigneeId: agent.id === assigneeId ? 0 : agent.id,
-        }),
-      );
-      AnalyticsHelper.track(CONVERSATION_EVENTS.ASSIGNEE_CHANGED);
-      showToast({
-        message: i18n.t('CONVERSATION.ASSIGN_CHANGE'),
-      });
+      try {
+        const result = await dispatch(
+          conversationActions.assignConversation({
+            conversationId: selectedConversation.id,
+            // Picking the current owner releases the conversation.
+            assigneeId: agent.id === assigneeId ? null : agent.id,
+          }),
+        ).unwrap();
+        if (result.kind === 'transferRequested') {
+          dispatch(upsertConversationRequest(result.request));
+          showToast({ message: i18n.t('OWNERSHIP.TRANSFER_SENT', { name: agent.name }) });
+        } else {
+          showToast({ message: i18n.t('CONVERSATION.ASSIGN_CHANGE') });
+        }
+      } catch {
+        // The API client already told the person that the request failed.
+      }
       actionsModalSheetRef.current?.dismiss();
     }
   };
