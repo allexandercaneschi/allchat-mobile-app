@@ -755,5 +755,60 @@
     "TONE_CONFIDENT": "Confident",
     "GENERATION_FAILED": "Failed to generate content. Please try again.",
     "FOLLOW_UP_FAILED": "Failed to send follow-up. Please try again."
+  },
+  "INTERNAL_CHAT": {
+    "TITLE": "Team chat",
+    "SEARCH_PLACEHOLDER": "Search chats and messages",
+    "EMPTY_LIST": "No conversations yet",
+    "EMPTY_LIST_HINT": "Start a chat with a colleague.",
+    "EMPTY_SEARCH": "Nothing found",
+    "MESSAGES_RESULTS": "Messages",
+    "LOADING_ERROR": "Could not load the team chat. Pull to refresh.",
+    "NEW_CHAT": "New chat",
+    "NEW_CHAT_SEARCH": "Search colleague",
+    "NO_AGENTS": "No colleagues found",
+    "COMPANY_ROOM": "Company room",
+    "TEAM_ROOM": "Team room",
+    "YOU": "You",
+    "NO_MESSAGES": "No messages yet",
+    "ATTENTION": {
+      "NUDGE": "{{name}} called your attention",
+      "URGENT": "Urgent message from {{name}}"
+    },
+    "CONVERSATION": {
+      "MESSAGE_PLACEHOLDER": "Write a message",
+      "SEND": "Send",
+      "URGENT": "Urgent",
+      "URGENT_ON": "Marked as urgent",
+      "CALL_ATTENTION": "Call attention",
+      "NUDGE_SENT": "You called {{name}}'s attention",
+      "NUDGE_RECEIVED": "{{name}} called your attention",
+      "NUDGE_WAIT": "Wait {{seconds}}s to call attention again",
+      "ASK_HELP": "Ask for help",
+      "CANNOT_POST_ADMINS_ONLY": "Only administrators can send messages in this room.",
+      "CANNOT_POST_ADMINS_AND_SUPERVISORS": "Only administrators and supervisors can send messages in this room.",
+      "SEND_FAILED": "Could not send the message. Try again.",
+      "LOAD_FAILED": "Could not load the messages."
+    },
+    "HELP_REQUEST": {
+      "TITLE": "Help request",
+      "TO_PERSON": "Asked {{name}} for help",
+      "TO_TEAM": "Asked the team for help",
+      "STATUS_OPEN": "Open",
+      "STATUS_CLAIMED": "Taken by {{name}}",
+      "STATUS_RESOLVED": "Resolved",
+      "CLAIM": "Take it",
+      "RESOLVE": "Resolve",
+      "ALREADY_CLAIMED": "Someone already took this request.",
+      "ACTION_FAILED": "Could not update the request. Try again.",
+      "NEW_TITLE": "Ask for help",
+      "WHO": "Who should help?",
+      "PERSON": "A person",
+      "TEAM": "My team",
+      "NO_TEAMS": "You are not in any team.",
+      "MESSAGE_PLACEHOLDER": "Describe what you need",
+      "SEND": "Send request",
+      "SENT": "Help request sent"
+    }
   }
 }

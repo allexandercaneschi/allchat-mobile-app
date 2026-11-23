@@ -481,5 +481,60 @@
     "EXECUTION_SUCCESS": "Macro executada com sucesso",
     "EXECUTION_ERROR": "Falha ao executar macro",
     "NO_MACROS": "Nenhuma macro encontrada"
+  },
+  "INTERNAL_CHAT": {
+    "TITLE": "Chat interno",
+    "SEARCH_PLACEHOLDER": "Buscar conversas e mensagens",
+    "EMPTY_LIST": "Nenhuma conversa ainda",
+    "EMPTY_LIST_HINT": "Comece uma conversa com um colega.",
+    "EMPTY_SEARCH": "Nada encontrado",
+    "MESSAGES_RESULTS": "Mensagens",
+    "LOADING_ERROR": "Não foi possível carregar o chat interno. Puxe para atualizar.",
+    "NEW_CHAT": "Nova conversa",
+    "NEW_CHAT_SEARCH": "Buscar colega",
+    "NO_AGENTS": "Nenhum colega encontrado",
+    "COMPANY_ROOM": "Sala da empresa",
+    "TEAM_ROOM": "Sala do time",
+    "YOU": "Você",
+    "NO_MESSAGES": "Nenhuma mensagem ainda",
+    "ATTENTION": {
+      "NUDGE": "{{name}} chamou sua atenção",
+      "URGENT": "Mensagem urgente de {{name}}"
+    },
+    "CONVERSATION": {
+      "MESSAGE_PLACEHOLDER": "Escreva uma mensagem",
+      "SEND": "Enviar",
+      "URGENT": "Urgente",
+      "URGENT_ON": "Marcada como urgente",
+      "CALL_ATTENTION": "Chamar atenção",
+      "NUDGE_SENT": "Você chamou a atenção de {{name}}",
+      "NUDGE_RECEIVED": "{{name}} chamou sua atenção",
+      "NUDGE_WAIT": "Aguarde {{seconds}}s para chamar a atenção de novo",
+      "ASK_HELP": "Pedir ajuda",
+      "CANNOT_POST_ADMINS_ONLY": "Só administradores podem enviar mensagens nesta sala.",
+      "CANNOT_POST_ADMINS_AND_SUPERVISORS": "Só administradores e supervisores podem enviar mensagens nesta sala.",
+      "SEND_FAILED": "Não foi possível enviar a mensagem. Tente de novo.",
+      "LOAD_FAILED": "Não foi possível carregar as mensagens."
+    },
+    "HELP_REQUEST": {
+      "TITLE": "Pedido de ajuda",
+      "TO_PERSON": "Pediu ajuda a {{name}}",
+      "TO_TEAM": "Pediu ajuda ao time",
+      "STATUS_OPEN": "Aberto",
+      "STATUS_CLAIMED": "Assumido por {{name}}",
+      "STATUS_RESOLVED": "Resolvido",
+      "CLAIM": "Assumir",
+      "RESOLVE": "Resolver",
+      "ALREADY_CLAIMED": "Outra pessoa já assumiu este pedido.",
+      "ACTION_FAILED": "Não foi possível atualizar o pedido. Tente de novo.",
+      "NEW_TITLE": "Pedir ajuda",
+      "WHO": "Quem pode ajudar?",
+      "PERSON": "Uma pessoa",
+      "TEAM": "Meu time",
+      "NO_TEAMS": "Você não está em nenhum time.",
+      "MESSAGE_PLACEHOLDER": "Descreva o que você precisa",
+      "SEND": "Enviar pedido",
+      "SENT": "Pedido de ajuda enviado"
+    }
   }
 }

@@ -30,6 +30,7 @@ import searchSlice from '@/store/search/searchSlice';
 import copilotSlice from '@/store/copilot/copilotSlice';
 import callSlice from '@/store/call/callSlice';
 import accountSlice from '@/store/account/accountSlice';
+import internalChatSlice from '@/store/internal-chat/internalChatSlice';
 
 export const appReducer = combineReducers({
   auth: authSlice,
@@ -61,4 +62,5 @@ export const appReducer = combineReducers({
   copilot: copilotSlice,
   calls: callSlice,
   account: accountSlice,
+  internalChat: internalChatSlice,
 });

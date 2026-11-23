@@ -29,7 +29,8 @@ const persistConfig = {
   key: 'Root',
   version: CURRENT_VERSION,
   storage: AsyncStorage,
-  blacklist: ['calls'],
+  // internalChat: private conversations are not kept on the device; the server is the source.
+  blacklist: ['calls', 'internalChat'],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   migrate: async (state: any) => {
     // If the stored version is older or doesn't exist, return initial state

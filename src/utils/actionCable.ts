@@ -60,6 +60,12 @@ import { cancelJoin, pendingJoin } from '@/services/voice/pendingJoins';
 import { systemCall, systemEndReason } from '@/services/voice/systemCall';
 
 import { callActions } from '@/store/call/callActions';
+import {
+  INTERNAL_CHAT_MESSAGE_CREATED,
+  INTERNAL_CHAT_MESSAGE_UPDATED,
+  onInternalChatMessageCreated,
+  onInternalChatMessageUpdated,
+} from '@/store/internal-chat/internalChatEvents';
 import { clearActiveCall, clearLocalCall } from '@/store/call/callSlice';
 
 interface ActionCableConfig {
@@ -96,6 +102,9 @@ class ActionCableConnector extends BaseActionCableConnector {
       'voice_call.outbound_connected': this.onVoiceCallOutboundConnected,
       'voice_call.outbound_accepted': this.onVoiceCallOutboundAccepted,
       'voice_call.ended': this.onVoiceCallEnded,
+      // ALLChat internal team chat. Sent only to the members of the conversation.
+      [INTERNAL_CHAT_MESSAGE_CREATED]: onInternalChatMessageCreated,
+      [INTERNAL_CHAT_MESSAGE_UPDATED]: onInternalChatMessageUpdated,
 
       // TODO: Handle all these events later
       // 'conversation.contact_changed': this.onConversationContactChange,
