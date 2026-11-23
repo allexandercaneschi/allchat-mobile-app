@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useState, useEffect } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useRefsContext } from '@/context';
@@ -13,7 +13,6 @@ import { filterLabels } from '@/store/label/labelSelectors';
 
 import { LabelItem } from '../LabelItem';
 import { LabelStack } from './LabelStack';
-import { IOS_DESIGN } from '@/utils';
 import { useIsInDetailPane } from '@/navigation/split/SplitViewContext';
 
 interface LabelActionsProps {
@@ -27,7 +26,7 @@ interface LabelActionsProps {
 
 export const LabelActions = (props: LabelActionsProps) => {
   const tailwind = useTailwind();
-  const isInPane = useIsInDetailPane() || IOS_DESIGN;
+  const isInPane = useIsInDetailPane();
   const { labels, onLabelsUpdate, sheetRef, titleText, addLabelText, searchPlaceholderText } =
     props;
   const [searchTerm, setSearchTerm] = useState('');
@@ -129,18 +128,8 @@ export const LabelActions = (props: LabelActionsProps) => {
 };
 
 const styles = StyleSheet.create({
-  labelShadow:
-    Platform.select({
-      ios: {
-        shadowColor: '#00000040',
-        shadowOffset: { width: 0, height: 0.15 },
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-        elevation: 2,
-      },
-      android: {
-        elevation: 4,
-        backgroundColor: 'white',
-      },
-    }) || {}, // Add fallback empty object
+  labelShadow: {
+    elevation: 4,
+    backgroundColor: 'white',
+  },
 });

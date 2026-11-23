@@ -1,12 +1,11 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React from 'react';
-import { Pressable, StyleSheet, Platform } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { CaretRight, TickIcon } from '@/svg-icons';
 import { GenericListType } from '@/types';
 import { Icon } from '@/components-next/common/icon';
-import { useIOSListText, useIsSplitLayout } from '@/utils';
 
 type GenericListProps = {
   sectionTitle?: string;
@@ -97,8 +96,6 @@ const ListItem = (props: ListItemProps) => {
 export const SettingsList = (props: GenericListProps) => {
   const tailwind = useTailwind();
   const { list, sectionTitle } = props;
-  const iosList = useIOSListText();
-  const isSplit = useIsSplitLayout();
 
   return (
     <Animated.View>
@@ -112,11 +109,7 @@ export const SettingsList = (props: GenericListProps) => {
           </Animated.Text>
         </Animated.View>
       ) : null}
-      <Animated.View
-        style={[
-          tailwind.style('rounded-[13px] mx-4', iosList && isSplit ? 'bg-gray-50' : 'bg-white'),
-          iosList ? null : styles.listShadow,
-        ]}>
+      <Animated.View style={[tailwind.style('rounded-[13px] mx-4', 'bg-white'), styles.listShadow]}>
         {list.map(
           (listItem, index) =>
             !listItem.disabled && (
@@ -133,17 +126,7 @@ export const SettingsList = (props: GenericListProps) => {
   );
 };
 const styles = StyleSheet.create({
-  listShadow:
-    Platform.select({
-      ios: {
-        shadowColor: '#00000040',
-        shadowOffset: { width: 0, height: 0.15 },
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-        elevation: 2,
-      },
-      android: {
-        elevation: 4,
-      },
-    }) || {}, // Add fallback empty object
+  listShadow: {
+    elevation: 4,
+  },
 });

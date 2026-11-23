@@ -19,7 +19,6 @@ import { LastActivityTime } from './LastActivityTime';
 import { SLA } from '@/types/common/SLA';
 import { Inbox } from '@/types/Inbox';
 import { TypingMessage } from './TypingMessage';
-import { IOS_LIST_TEXT, useIOSListText } from '@/utils';
 import { useIsRowSelected } from '@/navigation/split/SelectedRowBackground';
 
 type ConversationDetailSubCellProps = Pick<
@@ -54,7 +53,6 @@ const checkIfPropsAreSame = (
 
 export const ConversationItemDetail = memo((props: ConversationDetailSubCellProps) => {
   const tailwind = useTailwind();
-  const iosText = useIOSListText();
   const isRowSelected = useIsRowSelected();
   const {
     id: conversationId,
@@ -95,24 +93,18 @@ export const ConversationItemDetail = memo((props: ConversationDetailSubCellProp
         'flex-1 border-b-[1px]',
         isRowSelected ? 'border-b-transparent' : 'border-b-blackA-A3',
         'gap-1 py-3',
-        iosText ? 'pr-2.5' : '',
+        '',
       )}>
       <AnimatedNativeView
-        style={tailwind.style(
-          'flex flex-row justify-between items-center',
-          iosText ? 'h-[22px]' : 'h-[24px]',
-        )}>
+        style={tailwind.style('flex flex-row justify-between items-center', 'h-[24px]')}>
         <AnimatedNativeView
-          style={tailwind.style(
-            'flex flex-row flex-1 items-center gap-[5px] mr-2',
-            iosText ? 'h-[22px]' : 'h-[24px]',
-          )}>
+          style={tailwind.style('flex flex-row flex-1 items-center gap-[5px] mr-2', 'h-[24px]')}>
           <Text
             numberOfLines={1}
             style={tailwind.style(
               'flex-shrink text-base font-inter-medium-24 tracking-[0.24px] text-gray-950 capitalize',
-              iosText && IOS_LIST_TEXT.title,
-              iosText && (unreadCount > 0 ? IOS_LIST_TEXT.unreadTitle : IOS_LIST_TEXT.readTitle),
+              false,
+              false,
             )}>
             {senderName}
           </Text>
@@ -144,10 +136,7 @@ export const ConversationItemDetail = memo((props: ConversationDetailSubCellProp
             )}
           </AnimatedNativeView>
           <AnimatedNativeView
-            style={tailwind.style(
-              'flex flex-row justify-between items-center gap-2',
-              iosText ? 'h-5' : 'h-6',
-            )}>
+            style={tailwind.style('flex flex-row justify-between items-center gap-2', 'h-6')}>
             <AnimatedNativeView style={tailwind.style('flex flex-row flex-1 gap-2 items-center')}>
               {hasSLA && appliedSla && (
                 <SLAIndicator

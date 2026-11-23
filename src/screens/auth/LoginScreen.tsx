@@ -6,14 +6,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import { EMAIL_REGEX } from '@/constants';
-import { EyeIcon, EyeSlash, LockIcon } from '@/svg-icons';
+import { EyeIcon, EyeSlash } from '@/svg-icons';
 import { tailwind } from '@/theme';
 import i18n from '@/i18n';
 import { resetAuth } from '@/store/auth/authSlice';
 import { authActions } from '@/store/auth/authActions';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 
-import { BottomSheetHeader, LanguageList, Button, Icon, AuthButton } from '@/components-next';
+import { BottomSheetHeader, LanguageList, Button, Icon } from '@/components-next';
 import { Sheet } from '@/components-next/common/sheet/Sheet';
 import {
   selectInstallationUrl,
@@ -23,7 +23,6 @@ import {
 import { selectIsLoggingIn } from '@/store/auth/authSelectors';
 import { setLocale } from '@/store/settings/settingsSlice';
 import { useRefsContext } from '@/context/RefsContext';
-import { SsoUtils } from '@/utils/ssoUtils';
 import { showMfaSetupRequiredAlert } from './utils/mfaSetupRequiredAlert';
 
 type FormData = {
@@ -61,10 +60,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     dispatch(resetAuth());
-    if (!installationUrl) {
-      navigation.navigate('ConfigureURL' as never);
-    }
-  }, [installationUrl, navigation, dispatch]);
+  }, [dispatch]);
 
   const onSubmit = async (data: FormData) => {
     const { email, password } = data;
@@ -91,38 +87,12 @@ const LoginScreen = () => {
     }
   };
 
-  // TODO: Change this condition based on EE check
-  // Show SSO login button only if installation URL contains app.chatwoot.com
-  const showSsoLogin = installationUrl.includes('app.chatwoot.com');
-
   const openResetPassword = () => {
     navigation.navigate('ResetPassword' as never);
   };
 
-  const openConfigInstallationURL = () => {
-    navigation.navigate('ConfigureURL' as never);
-  };
-
   const onChangeLanguage = (locale: string) => {
     dispatch(setLocale(locale));
-  };
-
-  const handleSsoLogin = async () => {
-    if (!installationUrl) {
-      return;
-    }
-
-    try {
-      const result = await SsoUtils.loginWithSSO(installationUrl);
-
-      if (result.type === 'success' && result.url) {
-        const ssoParams = SsoUtils.parseCallbackUrl(result.url);
-        await SsoUtils.handleSsoCallback(ssoParams, dispatch);
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      // SSO login error handled silently
-    }
   };
 
   return (
@@ -155,27 +125,6 @@ const LoginScreen = () => {
               {i18n.t('LOGIN.DESCRIPTION', { baseUrl })}
             </Animated.Text>
           </View>
-
-          {showSsoLogin && (
-            <View>
-              <AuthButton
-                text={i18n.t('LOGIN.LOGIN_VIA_SSO')}
-                icon={<LockIcon />}
-                handlePress={handleSsoLogin}
-                disabled={isLoggingIn}
-                variant="outline"
-                style={tailwind.style('mt-8')}
-              />
-
-              <View style={tailwind.style('flex-row items-center my-6')}>
-                <View style={tailwind.style('flex-1 h-px bg-gray-300')} />
-                <Animated.Text style={tailwind.style('px-4 text-sm text-gray-600')}>
-                  OR
-                </Animated.Text>
-                <View style={tailwind.style('flex-1 h-px bg-gray-300')} />
-              </View>
-            </View>
-          )}
 
           <Controller
             control={control}
@@ -272,13 +221,6 @@ const LoginScreen = () => {
             handlePress={handleSubmit(onSubmit)}
           />
 
-          <Pressable
-            style={tailwind.style('flex-row justify-center items-center mt-6')}
-            onPress={openConfigInstallationURL}>
-            <Animated.Text style={tailwind.style('text-sm text-gray-900')}>
-              {i18n.t('LOGIN.CHANGE_URL')}
-            </Animated.Text>
-          </Pressable>
           <Pressable
             style={tailwind.style('flex-row justify-center items-center mt-4')}
             onPress={() => languagesModalSheetRef.current?.present()}>

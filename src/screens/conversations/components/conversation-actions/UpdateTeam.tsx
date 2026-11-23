@@ -14,8 +14,6 @@ import { conversationActions } from '@/store/conversation/conversationActions';
 import { selectLoading } from '@/store/team/teamSelectors';
 import { showToast } from '@/utils/toastUtils';
 import i18n from '@/i18n';
-import { CONVERSATION_EVENTS } from '@/constants/analyticsEvents';
-import AnalyticsHelper from '@/utils/analyticsUtils';
 import { filterTeams } from '@/store/team/teamSelectors';
 
 type TeamCellProps = {
@@ -40,7 +38,6 @@ const TeamCell = (props: TeamCellProps) => {
         teamId: value.id === teamId ? undefined : value.id,
       }),
     );
-    AnalyticsHelper.track(CONVERSATION_EVENTS.TEAM_CHANGED);
     showToast({
       message: i18n.t('CONVERSATION.TEAM_CHANGE'),
     });

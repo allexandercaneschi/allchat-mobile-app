@@ -4,7 +4,6 @@ import { Text } from 'react-native';
 
 import { NativeView } from '@/components-next/native-components';
 import { formatTimeToShortForm, formatRelativeTime } from '@/utils/dateTimeUtils';
-import { IOS_LIST_TEXT, useIOSListText } from '@/utils/listTypography';
 
 // Constants from Vue component
 const MINUTE_IN_MS = 60000;
@@ -17,7 +16,6 @@ type LastActivityTimeProps = {
 
 export const LastActivityTime = ({ timestamp }: LastActivityTimeProps) => {
   const tailwind = useTailwind();
-  const iosText = useIOSListText();
   const [, setTick] = useState(0);
 
   useEffect(() => {
@@ -47,7 +45,7 @@ export const LastActivityTime = ({ timestamp }: LastActivityTimeProps) => {
       <Text
         style={tailwind.style(
           'text-sm font-inter-420-20 leading-[16px] tracking-[0.32px] text-gray-700',
-          iosText && IOS_LIST_TEXT.meta,
+          false,
         )}>
         {lastActivityTime}
       </Text>

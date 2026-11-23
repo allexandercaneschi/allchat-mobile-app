@@ -10,7 +10,6 @@ import { PriorityIndicator, ChannelIndicator } from '@/components-next/list-comp
 import { Inbox } from '@/types/Inbox';
 import { ConversationAdditionalAttributes } from '@/types/Conversation';
 import { NotificationTypeIndicator } from './NotificationTypeIndicator';
-import { IOS_LIST_TEXT, useIOSListText } from '@/utils';
 import { useIsRowSelected } from '@/navigation/split/SelectedRowBackground';
 
 type InboxItemProps = {
@@ -34,7 +33,6 @@ type InboxItemProps = {
 
 export const InboxItemComponent = (props: InboxItemProps) => {
   const tailwind = useTailwind();
-  const iosText = useIOSListText();
   const isRowSelected = useIsRowSelected();
   const {
     isRead,
@@ -55,43 +53,31 @@ export const InboxItemComponent = (props: InboxItemProps) => {
     <Animated.View
       style={tailwind.style(
         'py-3 border-b-[1px]',
-        iosText ? 'ml-4 mr-1.5 pr-2.5' : 'ml-3 pr-4',
-        iosText && isRead ? (tailwind.isDark ? 'opacity-80' : 'opacity-50') : '',
+        'ml-3 pr-4',
+        '',
         isRowSelected ? 'border-b-transparent' : 'border-b-blackA-A3',
       )}>
       <Animated.View style={tailwind.style('')}>
         <AnimatedNativeView
-          style={tailwind.style(
-            'flex flex-row justify-between items-center',
-            iosText ? 'h-[22px]' : 'h-[24px]',
-          )}>
+          style={tailwind.style('flex flex-row justify-between items-center', 'h-[24px]')}>
           <AnimatedNativeView
-            style={tailwind.style(
-              'flex flex-row flex-1 items-center gap-[5px] mr-2',
-              iosText ? 'h-[22px]' : 'h-[24px]',
-            )}>
+            style={tailwind.style('flex flex-row flex-1 items-center gap-[5px] mr-2', 'h-[24px]')}>
             <Animated.Text
               numberOfLines={1}
               style={tailwind.style(
                 'flex-shrink text-base font-inter-medium-24 tracking-[0.24px] text-gray-950 capitalize',
-                iosText && IOS_LIST_TEXT.notificationTitle,
-                iosText && (isRead ? IOS_LIST_TEXT.readTitle : IOS_LIST_TEXT.unreadTitle),
+                false,
+                false,
               )}>
               {sender?.name || ''}
             </Animated.Text>
             <NativeView style={tailwind.style('flex flex-row flex-shrink-0 items-center gap-0.5')}>
               <Animated.Text
-                style={tailwind.style(
-                  'text-sm font-inter-420-20 text-gray-700',
-                  iosText && IOS_LIST_TEXT.footnote,
-                )}>
+                style={tailwind.style('text-sm font-inter-420-20 text-gray-700', false)}>
                 #
               </Animated.Text>
               <Animated.Text
-                style={tailwind.style(
-                  'text-sm font-inter-420-20 text-gray-700',
-                  iosText && IOS_LIST_TEXT.footnote,
-                )}>
+                style={tailwind.style('text-sm font-inter-420-20 text-gray-700', false)}>
                 {conversationId}
               </Animated.Text>
             </NativeView>
@@ -106,7 +92,7 @@ export const InboxItemComponent = (props: InboxItemProps) => {
               <Animated.Text
                 style={tailwind.style(
                   'text-sm font-inter-420-20 leading-[16px] tracking-[0.32px] text-gray-700',
-                  iosText && IOS_LIST_TEXT.footnote,
+                  false,
                 )}>
                 {lastActivityAt()}
               </Animated.Text>
@@ -114,8 +100,7 @@ export const InboxItemComponent = (props: InboxItemProps) => {
           </AnimatedNativeView>
         </AnimatedNativeView>
 
-        <Animated.View
-          style={tailwind.style('flex flex-row justify-between', iosText ? 'mt-1' : 'mt-1.5')}>
+        <Animated.View style={tailwind.style('flex flex-row justify-between', 'mt-1.5')}>
           <Animated.View style={tailwind.style('flex flex-row items-center gap-1.5 flex-1')}>
             {hasAssignee && (
               <Avatar
@@ -128,7 +113,7 @@ export const InboxItemComponent = (props: InboxItemProps) => {
             <Animated.Text
               style={tailwind.style(
                 'font-inter-420-20 text-md text-gray-900 leading-[17px] tracking-[0.32px] flex-shrink',
-                iosText && IOS_LIST_TEXT.body,
+                false,
               )}
               numberOfLines={1}
               ellipsizeMode="tail">
@@ -138,7 +123,7 @@ export const InboxItemComponent = (props: InboxItemProps) => {
           <NotificationTypeIndicator type={notificationType} />
         </Animated.View>
       </Animated.View>
-      {isRead && !iosText && (
+      {isRead && (
         <Animated.View style={tailwind.style('absolute bg-white opacity-50 inset-0 z-20')} />
       )}
     </Animated.View>

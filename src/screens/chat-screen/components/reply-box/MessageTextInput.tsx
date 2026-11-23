@@ -1,15 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
-import { withAlpha } from '@/theme/withAlpha';
 import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
-import {
-  BlurEvent,
-  FocusEvent,
-  Platform,
-  Pressable,
-  StyleSheet,
-  ScrollView,
-  useWindowDimensions,
-} from 'react-native';
+import { BlurEvent, FocusEvent, Pressable, StyleSheet, ScrollView } from 'react-native';
 import Animated, {
   LayoutAnimationConfig,
   LinearTransition,
@@ -17,8 +8,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import Svg, { Path, Rect } from 'react-native-svg';
-import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
-import { ExpandComposeIcon } from '@/svg-icons';
 
 import { useChatWindowContext } from '@/context';
 import { Icon } from '@/components-next/common';
@@ -85,7 +74,6 @@ export const Locked = ({ plain = false }: { plain?: boolean }) => {
   );
 };
 const TYPING_INDICATOR_IDLE_TIME = 4000;
-const useLiquidGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
 
 // eslint-disable-next-line no-empty-pattern
 export const MessageTextInput = ({
@@ -99,12 +87,10 @@ export const MessageTextInput = ({
   const tailwind = useTailwind();
   const dispatch = useAppDispatch();
   const messageContent = useAppSelector(selectMessageContent);
-  const { height: windowHeight } = useWindowDimensions();
-  const iosMaxHeight = Math.max(124, Math.round(windowHeight * 0.4));
 
   const lockIconAnimatedPosition = useAnimatedStyle(() => {
     return {
-      bottom: Platform.OS === 'ios' ? 5.5 : 6,
+      bottom: 6,
     };
   });
 
@@ -215,7 +201,7 @@ export const MessageTextInput = ({
           style={[
             tailwind.style(
               'bg-white border-t border-gray-200 rounded-[13px] mx-4 px-2 w-full max-h-[250px]',
-              Platform.OS === 'ios' ? 'absolute bottom-full' : 'relative h-[150px]',
+              'relative h-[150px]',
             ),
             styles.listShadow,
           ]}>
@@ -245,33 +231,8 @@ export const MessageTextInput = ({
     <LayoutAnimationConfig skipEntering={true}>
       <Animated.View
         layout={LinearTransition.springify().mass(1).damping(15).stiffness(70)}
-        style={[
-          composer
-            ? tailwind.style('flex-1')
-            : iosStyle
-              ? tailwind.style(
-                  'flex-1 flex-row items-end rounded-[18px]',
-                  useLiquidGlass
-                    ? ''
-                    : isPrivateMessage
-                      ? 'bg-amber-100 border-[0.5px] border-amber-500'
-                      : 'bg-white border-[0.5px] border-blackA-A6',
-                )
-              : tailwind.style('flex-1 my-0.5'),
-        ]}>
-        {iosStyle && !composer && useLiquidGlass ? (
-          <GlassView
-            colorScheme={tailwind.isDark ? 'dark' : 'light'}
-            glassEffectStyle="regular"
-            isInteractive
-            tintColor={
-              isPrivateMessage
-                ? withAlpha(tailwind.color('bg-amber-300') as string, 0.45)
-                : undefined
-            }
-            style={[StyleSheet.absoluteFill, { borderRadius: 18 }]}
-          />
-        ) : null}
+        style={[composer ? tailwind.style('flex-1') : tailwind.style('flex-1 my-0.5')]}>
+        {null}
         <MentionInput
           keyboardAppearance={tailwind.isDark ? 'dark' : 'light'}
           // @ts-expect-error MentionInput ref typing issue with forwardRef
@@ -287,14 +248,8 @@ export const MessageTextInput = ({
               isInsertSpaceAfterMention: true,
             },
           ]}
-          maxNumberOfLines={iosStyle ? 5 : 3}
-          containerStyle={
-            composer
-              ? tailwind.style('flex-1 self-stretch')
-              : iosStyle
-                ? tailwind.style('flex-1')
-                : undefined
-          }
+          maxNumberOfLines={3}
+          containerStyle={composer ? tailwind.style('flex-1 self-stretch') : undefined}
           multiline
           enablesReturnKeyAutomatically
           style={[
@@ -302,20 +257,12 @@ export const MessageTextInput = ({
               ? tailwind.style(
                   'flex-1 px-4 pt-3 pb-3 text-[17px] leading-[22px] font-inter-normal-20 text-gray-950',
                 )
-              : iosStyle
-                ? [
-                    tailwind.style(
-                      'text-[17px] leading-[22px] font-inter-normal-20 text-gray-950',
-                      'pt-[7px] pb-[7px] pl-3.5 pr-1 min-h-9',
-                    ),
-                    { maxHeight: iosMaxHeight },
-                  ]
-                : tailwind.style(
-                    'text-base font-inter-normal-20 tracking-[0.24px] leading-[20px] android:leading-[18px]',
-                    'ml-[5px] mr-2 py-2 pl-3 pr-[36px] rounded-2xl text-gray-950',
-                    'min-h-9 max-h-[76px]',
-                    isPrivateMessage ? 'bg-amber-100' : 'bg-blackA-A4',
-                  ),
+              : tailwind.style(
+                  'text-base font-inter-normal-20 tracking-[0.24px] leading-[20px] android:leading-[18px]',
+                  'ml-[5px] mr-2 py-2 pl-3 pr-[36px] rounded-2xl text-gray-950',
+                  'min-h-9 max-h-[76px]',
+                  isPrivateMessage ? 'bg-amber-100' : 'bg-blackA-A4',
+                ),
             // TODO: Try settings includeFontPadding to false and have a single lineHeight value of 20
           ]}
           placeholderTextColor={tailwind.color('bg-gray-800')}
@@ -333,34 +280,10 @@ export const MessageTextInput = ({
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
         />
-        {iosStyle && !composer && onExpand ? (
-          <Pressable
-            hitSlop={5}
-            onPress={onExpand}
-            accessibilityRole="button"
-            accessibilityLabel={i18n.t('CONVERSATION.EXPAND_REPLY')}
-            style={tailwind.style('h-9 w-[30px] items-center justify-center')}>
-            <Icon size={20} icon={<ExpandComposeIcon />} />
-          </Pressable>
-        ) : null}
-        {iosStyle && !composer ? (
-          <Pressable
-            hitSlop={5}
-            onPress={toggleReplyMode}
-            accessibilityRole="button"
-            accessibilityState={{ selected: isPrivateMessage }}
-            accessibilityLabel={i18n.t('CONVERSATION.PRIVATE_NOTE_SHORT')}
-            accessibilityHint={i18n.t('CONVERSATION.PRIVATE_MSG_INPUT')}
-            style={tailwind.style('h-9 w-[34px] pr-1 items-center justify-center')}>
-            {isPrivateMessage ? (
-              <Icon size={29} icon={<Locked plain />} />
-            ) : (
-              <Icon size={29} icon={<Unlock />} />
-            )}
-          </Pressable>
-        ) : null}
+        {null}
+        {null}
       </Animated.View>
-      {iosStyle ? null : (
+      {
         <Animated.View
           style={[
             // Pre calculated value to position the lock
@@ -375,23 +298,13 @@ export const MessageTextInput = ({
             )}
           </Pressable>
         </Animated.View>
-      )}
+      }
     </LayoutAnimationConfig>
   );
 };
 
 const styles = StyleSheet.create({
-  listShadow:
-    Platform.select({
-      ios: {
-        shadowColor: '#00000040',
-        shadowOffset: { width: 0, height: 0.15 },
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-        elevation: 2,
-      },
-      android: {
-        elevation: 4,
-      },
-    }) || {}, // Add fallback empty object
+  listShadow: {
+    elevation: 4,
+  },
 });

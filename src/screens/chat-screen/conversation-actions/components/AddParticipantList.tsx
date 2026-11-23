@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { AddParticipant, CloseIcon, Overflow } from '@/svg-icons';
@@ -10,9 +10,6 @@ import i18n from '@/i18n';
 import { useAppDispatch } from '@/hooks';
 import { conversationParticipantActions } from '@/store/conversation-participant/conversationParticipantActions';
 import { showToast } from '@/utils/toastUtils';
-import AnalyticsHelper from '@/utils/analyticsUtils';
-import { CONVERSATION_EVENTS } from '@/constants/analyticsEvents';
-import { IOS_DESIGN } from '@/utils';
 import { useIsInDetailPane } from '@/navigation/split/SplitViewContext';
 
 type ListItemProps = {
@@ -91,7 +88,7 @@ type AddParticipantListProps = {
 
 export const AddParticipantList = (props: AddParticipantListProps) => {
   const tailwind = useTailwind();
-  const isInPane = useIsInDetailPane() || IOS_DESIGN;
+  const isInPane = useIsInDetailPane();
   const { conversationParticipants, onAddParticipant, conversationId } = props;
   const dispatch = useAppDispatch();
   const isRemovingParticipantRef = useRef(false);
@@ -109,7 +106,6 @@ export const AddParticipantList = (props: AddParticipantListProps) => {
     const userIds = remainingParticipants.map(p => p.id);
     try {
       await dispatch(conversationParticipantActions.update({ conversationId, userIds })).unwrap();
-      AnalyticsHelper.track(CONVERSATION_EVENTS.PARTICIPANT_CHANGED);
       showToast({ message: i18n.t('CONVERSATION.PARTICIPANT_CHANGE') });
     } catch {
       showToast({ message: i18n.t('ERRORS.COMMON_ERROR') });
@@ -180,17 +176,7 @@ export const AddParticipantList = (props: AddParticipantListProps) => {
 };
 
 const styles = StyleSheet.create({
-  listShadow:
-    Platform.select({
-      ios: {
-        shadowColor: '#00000040',
-        shadowOffset: { width: 0, height: 0.15 },
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-        elevation: 2,
-      },
-      android: {
-        elevation: 4,
-      },
-    }) || {}, // Add fallback empty object
+  listShadow: {
+    elevation: 4,
+  },
 });

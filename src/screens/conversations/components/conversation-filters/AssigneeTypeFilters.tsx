@@ -15,6 +15,7 @@ import { AssigneeOptions } from '@/types';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/store/auth/authSelectors';
 import { getUserPermissions } from '@/utils/permissionUtils';
+import { getAvailableAssigneeTypes } from '../../assigneeTabs';
 
 type AssigneeTypeCellProps = {
   value: string;
@@ -65,22 +66,7 @@ export const AssigneeTypeFilters = () => {
 
   const userPermissions = user ? getUserPermissions(user, activeAccountId) : [];
 
-  // If userPermissions contains any values conversation_manage_permission,administrator, agent then keep all the assignee types
-  // If conversation_manage is not available and conversation_unassigned_manage only is available, then return only unassigned and mine
-  // If conversation_manage is not available and conversation_participating_manage only is available, then return only all and mine
-  let assigneeTypes = assigneeTypeList;
-
-  if (
-    userPermissions.includes('conversation_manage') ||
-    userPermissions.includes('agent') ||
-    userPermissions.includes('administrator')
-  ) {
-    // Keep all the assignee types
-  } else if (userPermissions.includes('conversation_unassigned_manage')) {
-    assigneeTypes = assigneeTypeList.filter(type => type !== 'all');
-  } else {
-    assigneeTypes = assigneeTypeList.filter(type => type !== 'unassigned');
-  }
+  const assigneeTypes = getAvailableAssigneeTypes(userPermissions);
   return (
     <Animated.View>
       <BottomSheetHeader headerText={i18n.t('CONVERSATION.FILTERS.ASSIGNEE_TYPE.TITLE')} />

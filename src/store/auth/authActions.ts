@@ -9,12 +9,9 @@ import type {
   ResetPasswordPayload,
   ResetPasswordResponse,
   AvailabilityPayload,
-  WorkPreferencesPayload,
   ProfileResponse,
   ApiErrorResponse,
   SetActiveAccountPayload,
-  SsoAuthPayload,
-  SsoAuthResponse,
 } from './authTypes';
 import { handleApiError } from './authUtils';
 import I18n from '@/i18n';
@@ -61,19 +58,8 @@ export const authActions = {
     AuthService.updateAvailability,
   ),
 
-  updateWorkPreferences: createAuthThunk<ProfileResponse, WorkPreferencesPayload>(
-    'auth/updateWorkPreferences',
-    AuthService.updateWorkPreferences,
-  ),
-
   setActiveAccount: createAuthThunk<ProfileResponse, SetActiveAccountPayload>(
     'auth/setActiveAccount',
     AuthService.setActiveAccount,
-  ),
-
-  loginWithSso: createAuthThunk<SsoAuthResponse, SsoAuthPayload>(
-    'auth/loginWithSso',
-    AuthService.loginWithSso,
-    I18n.t('ERRORS.AUTH'),
   ),
 };

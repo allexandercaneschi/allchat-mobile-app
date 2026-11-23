@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { useMemo } from 'react';
-import { Platform, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import Clipboard from '@react-native-clipboard/clipboard';
 import * as Sentry from '@sentry/react-native';
@@ -11,7 +11,6 @@ import { Icon } from '@/components-next/common';
 import { showToast } from '@/utils/toastUtils';
 import { formatAttributeValue } from '@/utils/attributeUtils';
 import { expandTabs } from '@/utils/expandTabs';
-import { IOS_DESIGN } from '@/utils';
 import { useIsInDetailPane } from '@/navigation/split/SplitViewContext';
 
 type AttributeItemProps = {
@@ -105,7 +104,7 @@ type AttributeListProps = {
 };
 export const AttributeList = (props: AttributeListProps) => {
   const tailwind = useTailwind();
-  const isInPane = useIsInDetailPane() || IOS_DESIGN;
+  const isInPane = useIsInDetailPane();
   const { list, sectionTitle } = props;
 
   return (
@@ -143,17 +142,7 @@ export const AttributeList = (props: AttributeListProps) => {
 };
 
 const styles = StyleSheet.create({
-  listShadow:
-    Platform.select({
-      ios: {
-        shadowColor: '#00000040',
-        shadowOffset: { width: 0, height: 0.15 },
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-        elevation: 2,
-      },
-      android: {
-        elevation: 4,
-      },
-    }) || {}, // Add fallback empty object
+  listShadow: {
+    elevation: 4,
+  },
 });

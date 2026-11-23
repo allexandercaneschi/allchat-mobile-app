@@ -69,43 +69,41 @@ export const handleOpenPhotosLibrary = async (dispatch: AppDispatch) => {
 };
 
 export const handleLaunchCamera = async (dispatch: AppDispatch) => {
-  request(Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA).then(
-    async result => {
-      if (RESULTS.BLOCKED === result) {
-        Alert.alert(
-          'Permission Denied',
-          'The permission to access the camera has been denied and cannot be requested again. Please enable it in your device settings if you wish to use the camera feature.',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
+  request(PERMISSIONS.ANDROID.CAMERA).then(async result => {
+    if (RESULTS.BLOCKED === result) {
+      Alert.alert(
+        'Permission Denied',
+        'The permission to access the camera has been denied and cannot be requested again. Please enable it in your device settings if you wish to use the camera feature.',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Open Settings',
+            onPress: () => {
+              // Open app settings
+              Linking.openSettings();
             },
-            {
-              text: 'Open Settings',
-              onPress: () => {
-                // Open app settings
-                Linking.openSettings();
-              },
-            },
-          ],
-          { cancelable: false },
-        );
-      }
-      if (RESULTS.GRANTED === result) {
-        const imageResult = await launchCamera({
-          presentationStyle: 'formSheet',
-          mediaType: 'mixed',
-        });
-        if (imageResult.didCancel) {
-        } else if (imageResult.errorCode) {
-        } else {
-          if (imageResult.assets && imageResult.assets?.length > 0) {
-            validateFileAndSetAttachments(dispatch, imageResult.assets[0]);
-          }
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+    if (RESULTS.GRANTED === result) {
+      const imageResult = await launchCamera({
+        presentationStyle: 'formSheet',
+        mediaType: 'mixed',
+      });
+      if (imageResult.didCancel) {
+      } else if (imageResult.errorCode) {
+      } else {
+        if (imageResult.assets && imageResult.assets?.length > 0) {
+          validateFileAndSetAttachments(dispatch, imageResult.assets[0]);
         }
       }
-    },
-  );
+    }
+  });
 };
 
 /**

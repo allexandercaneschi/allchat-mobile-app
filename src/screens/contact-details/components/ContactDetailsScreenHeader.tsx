@@ -7,7 +7,7 @@ import { CloseIcon } from '@/svg-icons';
 import { useTailwind } from '@/theme/useTailwind';
 import { expandTabs } from '@/utils/expandTabs';
 import { useIsInContactPane } from '@/navigation/split/SplitViewContext';
-import { IOS_DESIGN, useSideTabBarLayout } from '@/utils';
+import { useSideTabBarLayout } from '@/utils';
 import { PageHeader } from '@/navigation/split/PageHeader';
 
 type ContactDetailsScreenHeaderProps = {
@@ -27,7 +27,7 @@ export const ContactDetailsScreenHeader = (props: ContactDetailsScreenHeaderProp
     navigation.dispatch(StackActions.pop());
   };
 
-  if (isInContactPane || IOS_DESIGN) {
+  if (isInContactPane) {
     const isFullScreen = !isInContactPane;
     return (
       <Animated.View

@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -108,16 +108,14 @@ export const MessageMenu = (props: PropsWithChildren<MessageMenuProps>) => {
     return <React.Fragment>{children}</React.Fragment>;
   }
 
-  if (Platform.OS === 'android') {
-    return (
-      <React.Fragment>
-        <GestureDetector gesture={longPressGesture}>{children}</GestureDetector>
-        {isSheetMounted && (
-          <MessageActionsSheet menuOptions={menuOptions} onClose={() => setIsSheetMounted(false)} />
-        )}
-      </React.Fragment>
-    );
-  }
+  return (
+    <React.Fragment>
+      <GestureDetector gesture={longPressGesture}>{children}</GestureDetector>
+      {isSheetMounted && (
+        <MessageActionsSheet menuOptions={menuOptions} onClose={() => setIsSheetMounted(false)} />
+      )}
+    </React.Fragment>
+  );
 
   return (
     <ContextMenu.Root>

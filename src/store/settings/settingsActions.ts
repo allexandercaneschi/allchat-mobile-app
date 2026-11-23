@@ -16,15 +16,9 @@ import { SettingsService } from './settingsService';
 import type {
   NotificationSettings,
   NotificationSettingsPayload,
-  InstallationUrls,
   PushPayload,
-  VoipPushPayload,
 } from './settingsTypes';
-import { getVoipToken, isSystemCallUiAvailable } from '@/services/voice/chatwootCalls';
-import I18n from '@/i18n';
-import { URL_TYPE } from '@/constants/url';
-import { checkValidUrl, extractDomain, handleApiError, buildWebSocketUrl } from './settingsUtils';
-import { showToast } from '@/utils/toastUtils';
+import { handleApiError } from './settingsUtils';
 import { isUnactionablePushError } from '@/utils/sentryUtils';
 
 const createSettingsThunk = <TResponse, TPayload>(
@@ -42,37 +36,6 @@ const createSettingsThunk = <TResponse, TPayload>(
 };
 
 export const settingsActions = {
-  setInstallationUrl: createAsyncThunk<InstallationUrls, string>(
-    'settings/setInstallationUrl',
-    async (url, { rejectWithValue }) => {
-      try {
-        const installationUrl = extractDomain({ url });
-        const INSTALLATION_URL = `${URL_TYPE}${installationUrl}/`;
-        const WEB_SOCKET_URL = buildWebSocketUrl(installationUrl);
-
-        if (!checkValidUrl({ url: INSTALLATION_URL })) {
-          throw new Error(I18n.t('CONFIGURE_URL.ERROR'));
-        }
-
-        const isValid = await SettingsService.verifyInstallationUrl(INSTALLATION_URL);
-
-        if (!isValid) {
-          throw new Error(I18n.t('CONFIGURE_URL.ERROR'));
-        }
-
-        return {
-          installationUrl: INSTALLATION_URL,
-          webSocketUrl: WEB_SOCKET_URL,
-          baseUrl: installationUrl,
-        };
-      } catch (error) {
-        const message = error instanceof Error ? error.message : I18n.t('CONFIGURE_URL.ERROR');
-        showToast({ message });
-        return rejectWithValue(message);
-      }
-    },
-  ),
-
   getNotificationSettings: createSettingsThunk<NotificationSettings, void>(
     'settings/getNotificationSettings',
     () => SettingsService.getNotificationSettings(),
@@ -130,25 +93,6 @@ export const settingsActions = {
           error instanceof Error ? error.message : 'Error saving device details',
         );
       }
-    },
-  ),
-
-  saveVoipToken: createAsyncThunk<{ voipToken: string | null }, void>(
-    'settings/saveVoipToken',
-    async () => {
-      if (!isSystemCallUiAvailable()) return { voipToken: null };
-      const voipToken = getVoipToken() ?? null;
-      if (!voipToken) return { voipToken: null };
-      const payload: VoipPushPayload = {
-        subscription_type: 'apns_voip',
-        subscription_attributes: {
-          devicePlatform: getSystemName(),
-          push_token: voipToken,
-          device_id: await getUniqueId(),
-        },
-      };
-      await SettingsService.saveVoipToken(payload);
-      return { voipToken };
     },
   ),
 

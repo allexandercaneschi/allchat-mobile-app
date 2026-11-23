@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ScrollView } from 'react-native';
-import { Platform } from 'react-native';
-import { KeyboardGestureArea, KeyboardProvider } from 'react-native-keyboard-controller';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Animated } from 'react-native';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { tailwind } from '@/theme';
@@ -12,9 +11,6 @@ import { TEXT_ONLY } from './mock-data/textOnly';
 import { getAllGroupedMessages } from './mock-data/helper';
 
 const ALL_MESSAGES_MOCKDATA = getAllGroupedMessages(TEXT_ONLY);
-
-const PlatformSpecificKeyboardWrapperComponent =
-  Platform.OS === 'android' ? Animated.View : KeyboardGestureArea;
 
 const mockSendMessageSlice = createSlice({
   name: 'sendMessage',
@@ -66,9 +62,7 @@ export const Basic: Story = {
           <KeyboardProvider>
             <ChatWindowProvider conversationId={29}>
               <ScrollView contentContainerStyle={tailwind.style('flex')}>
-                <PlatformSpecificKeyboardWrapperComponent
-                  style={tailwind.style('flex-1 bg-white')}
-                  interpolator="linear">
+                <Animated.View style={tailwind.style('flex-1 bg-white')}>
                   <MessagesList
                     currentUserId={1}
                     isEmailInbox={false}
@@ -78,7 +72,7 @@ export const Basic: Story = {
                     onEndReached={() => {}}
                     onStartReached={() => {}}
                   />
-                </PlatformSpecificKeyboardWrapperComponent>
+                </Animated.View>
               </ScrollView>
             </ChatWindowProvider>
           </KeyboardProvider>

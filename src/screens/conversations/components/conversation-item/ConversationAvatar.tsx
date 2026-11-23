@@ -7,7 +7,6 @@ import { isEqual } from 'lodash';
 import { Avatar, AvatarStatusType } from '@/components-next/common';
 import { AnimatedNativeView } from '@/components-next/native-components';
 import { AvailabilityStatus } from '@/types';
-import { useIOSListText } from '@/utils';
 
 type ConversationAvatarProps = {
   src: ImageURISource;
@@ -23,15 +22,14 @@ const checkIfPropsAreSame = (prev: ConversationAvatarProps, next: ConversationAv
 export const ConversationAvatar = memo((props: ConversationAvatarProps) => {
   const tailwind = useTailwind();
   const { src, name, status } = props;
-  const iosList = useIOSListText();
-  const size = iosList ? '2xl' : '4xl';
+  const size = '4xl';
   return (
     <AnimatedNativeView
       style={tailwind.style('')}
       layout={LinearTransition.springify().mass(1).damping(21).stiffness(115)}>
       <Avatar
         size={size}
-        initialsClassName={iosList ? 'text-[14px]' : undefined}
+        initialsClassName={undefined}
         {...{ src, name, status: status as AvatarStatusType }}
       />
     </AnimatedNativeView>

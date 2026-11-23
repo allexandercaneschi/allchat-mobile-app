@@ -26,7 +26,7 @@ import { InboxHeader, InboxItemContainer } from './components';
 import { useInboxListStateContext } from '@/context';
 import { resetNotifications } from '@/store/notification/notificationSlice';
 import { showToast } from '@/utils/toastUtils';
-import { IOS_DESIGN, useTabBarHeight, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
+import { useTabBarHeight, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
 import i18n from '@/i18n';
 import { selectSortOrder } from '@/store/notification/notificationFilterSlice';
 import { selectCurrentUserAccountId } from '@/store/auth/authSelectors';
@@ -234,7 +234,7 @@ const InboxScreen = () => {
   const isSplit = useIsSplitLayout();
   const [headerHeight, setHeaderHeight] = useState(0);
   const sideTabBar = useSideTabBarLayout();
-  const hasOverlayHeader = IOS_DESIGN || sideTabBar !== null;
+  const hasOverlayHeader = sideTabBar !== null;
   const scrollEdge = useScrollEdge();
   const sortOrder = useAppSelector(selectSortOrder);
   const dispatch = useAppDispatch();

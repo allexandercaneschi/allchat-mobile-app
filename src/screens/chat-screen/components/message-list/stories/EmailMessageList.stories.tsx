@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ScrollView } from 'react-native';
-import { Platform } from 'react-native';
-import { KeyboardGestureArea, KeyboardProvider } from 'react-native-keyboard-controller';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Animated } from 'react-native';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { tailwind } from '@/theme';
@@ -13,9 +12,6 @@ import { Provider } from 'react-redux';
 import { getAllGroupedMessages } from './mock-data/helper';
 const ALL_MESSAGES_MOCKDATA = getAllGroupedMessages(EMAIL_MESSAGES);
 const EMAIL_ATTACHMENTS_MOCKDATA = getAllGroupedMessages(EMAIL_ATTACHMENTS);
-
-const PlatformSpecificKeyboardWrapperComponent =
-  Platform.OS === 'android' ? Animated.View : KeyboardGestureArea;
 
 const mockSendMessageSlice = createSlice({
   name: 'sendMessage',
@@ -74,9 +70,7 @@ export const EmailMessageList: Story = {
           <KeyboardProvider>
             <ChatWindowProvider conversationId={29}>
               <ScrollView contentContainerStyle={tailwind.style('flex')}>
-                <PlatformSpecificKeyboardWrapperComponent
-                  style={tailwind.style('flex-1 bg-white')}
-                  interpolator="linear">
+                <Animated.View style={tailwind.style('flex-1 bg-white')}>
                   <MessagesList
                     messages={ALL_MESSAGES_MOCKDATA}
                     isFlashListReady={false}
@@ -86,7 +80,7 @@ export const EmailMessageList: Story = {
                     isEmailInbox={true}
                     currentUserId={1}
                   />
-                </PlatformSpecificKeyboardWrapperComponent>
+                </Animated.View>
               </ScrollView>
             </ChatWindowProvider>
           </KeyboardProvider>
@@ -104,9 +98,7 @@ export const EmailAttachmentsList: Story = {
           <KeyboardProvider>
             <ChatWindowProvider conversationId={134}>
               <ScrollView contentContainerStyle={tailwind.style('flex')}>
-                <PlatformSpecificKeyboardWrapperComponent
-                  style={tailwind.style('flex-1 bg-white')}
-                  interpolator="linear">
+                <Animated.View style={tailwind.style('flex-1 bg-white')}>
                   <MessagesList
                     messages={EMAIL_ATTACHMENTS_MOCKDATA}
                     isFlashListReady={false}
@@ -116,7 +108,7 @@ export const EmailAttachmentsList: Story = {
                     isEmailInbox={true}
                     currentUserId={1}
                   />
-                </PlatformSpecificKeyboardWrapperComponent>
+                </Animated.View>
               </ScrollView>
             </ChatWindowProvider>
           </KeyboardProvider>

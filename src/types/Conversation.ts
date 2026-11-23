@@ -73,6 +73,8 @@ export interface ConversationAdditionalAttributes {
 export interface ConversationMeta {
   sender: Contact;
   assignee: Agent;
+  /** `AgentBot` when a bot holds the conversation; absent when nobody does. */
+  assigneeType?: 'User' | 'AgentBot';
   team: Team | null;
   hmacVerified: boolean | null;
   channel: Channel;

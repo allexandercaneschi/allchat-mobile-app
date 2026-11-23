@@ -18,7 +18,7 @@ import {
 import { useSideToolbar } from '@/context';
 import { CheckedIcon, CloseIcon, FilterIcon, UncheckedIcon, SearchIcon } from '@/svg-icons';
 import i18n from '@/i18n';
-import { IOS_DESIGN, useIsSplitLayout, useScaleAnimation } from '@/utils';
+import { useIsSplitLayout, useScaleAnimation } from '@/utils';
 import { useHeaderAnimation } from '@/hooks/useHeaderAnimation';
 import { ConversationFilterMenu } from '../conversation-filters/ConversationFilterMenu';
 import { SideLayoutListAction } from './SideLayoutListAction';
@@ -232,7 +232,7 @@ export const ConversationHeaderPresenter = ({
   );
   const isSideLayout = useSideToolbar(actionItems, !isSplit);
 
-  if ((isSplit || (IOS_DESIGN && !isSideLayout)) && currentState === 'Select') {
+  if (isSplit && currentState === 'Select') {
     return (
       <Animated.View style={tailwind.style('flex flex-row items-center px-4 pt-1 pb-3')}>
         <Animated.View style={tailwind.style('w-[124px] flex-row items-center')}>
@@ -262,7 +262,7 @@ export const ConversationHeaderPresenter = ({
     );
   }
 
-  if (isSplit || (IOS_DESIGN && !isSideLayout)) {
+  if (isSplit) {
     return (
       <Animated.View style={tailwind.style('flex flex-row items-center px-4 pt-1 pb-3')}>
         <Animated.View style={tailwind.style('w-24 flex-row items-center')}>

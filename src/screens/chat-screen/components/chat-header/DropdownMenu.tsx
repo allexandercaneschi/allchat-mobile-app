@@ -1,6 +1,6 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React, { PropsWithChildren, useRef } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
@@ -65,50 +65,46 @@ export const ChatDropdownMenu = (props: PropsWithChildren<ChatDropdownMenuProps>
     contextMenuSheetRef.current?.dismiss();
   };
 
-  if (Platform.OS === 'android') {
-    return (
-      <React.Fragment>
-        <Pressable onPress={openSheet} style={tailwind.style('ml-4')} hitSlop={8}>
-          {children}
-        </Pressable>
-        <Sheet ref={contextMenuSheetRef} autoSize>
-          <BottomSheetHeader headerText="Select action" />
-          <Animated.View style={tailwind.style('py-1 pl-3')}>
-            {dropdownMenuList?.map((option, index) => {
-              const handleOnOptionSelect = () => {
-                option.onSelect(option.url, option.title);
+  return (
+    <React.Fragment>
+      <Pressable onPress={openSheet} style={tailwind.style('ml-4')} hitSlop={8}>
+        {children}
+      </Pressable>
+      <Sheet ref={contextMenuSheetRef} autoSize>
+        <BottomSheetHeader headerText="Select action" />
+        <Animated.View style={tailwind.style('py-1 pl-3')}>
+          {dropdownMenuList?.map((option, index) => {
+            const handleOnOptionSelect = () => {
+              option.onSelect(option.url, option.title);
 
-                setTimeout(() => {
-                  closeSheet();
-                }, 100);
-              };
-              return (
-                <Pressable
-                  key={option.title + index}
-                  style={tailwind.style('flex flex-row items-center')}
-                  onPress={handleOnOptionSelect}>
-                  <Animated.View
+              setTimeout(() => {
+                closeSheet();
+              }, 100);
+            };
+            return (
+              <Pressable
+                key={option.title + index}
+                style={tailwind.style('flex flex-row items-center')}
+                onPress={handleOnOptionSelect}>
+                <Animated.View
+                  style={tailwind.style(
+                    'flex-1 flex-row justify-between py-[11px] pr-3',
+                    index !== dropdownMenuList.length - 1 ? 'border-b-[1px] border-blackA-A3' : '',
+                  )}>
+                  <Animated.Text
                     style={tailwind.style(
-                      'flex-1 flex-row justify-between py-[11px] pr-3',
-                      index !== dropdownMenuList.length - 1
-                        ? 'border-b-[1px] border-blackA-A3'
-                        : '',
+                      'text-base text-gray-950 font-inter-420-20 leading-[21px] tracking-[0.16px] capitalize',
                     )}>
-                    <Animated.Text
-                      style={tailwind.style(
-                        'text-base text-gray-950 font-inter-420-20 leading-[21px] tracking-[0.16px] capitalize',
-                      )}>
-                      {option.title}
-                    </Animated.Text>
-                  </Animated.View>
-                </Pressable>
-              );
-            })}
-          </Animated.View>
-        </Sheet>
-      </React.Fragment>
-    );
-  }
+                    {option.title}
+                  </Animated.Text>
+                </Animated.View>
+              </Pressable>
+            );
+          })}
+        </Animated.View>
+      </Sheet>
+    </React.Fragment>
+  );
 
   const Trigger = props.plainTrigger ? DropdownMenuTriggerPlain : DropdownMenuTrigger;
   return (

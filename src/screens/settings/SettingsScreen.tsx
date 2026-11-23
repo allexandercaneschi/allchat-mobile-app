@@ -1,31 +1,25 @@
 import { useTailwind } from '@/theme/useTailwind';
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
+  Alert,
   StatusBar,
   Text,
-  Platform,
   Pressable,
   ScrollView,
   View,
   useWindowDimensions,
 } from 'react-native';
-import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 // import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackActions, useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import DeviceInfo from 'react-native-device-info';
-import ChatWootWidget from '@chatwoot/react-native-widget';
 import { useSelector } from 'react-redux';
 import * as Application from 'expo-application';
 import { Account, AvailabilityStatus } from '@/types';
 import { switchAccount } from '@/utils/accountUtils';
 
-import { RecentSearches } from '@/screens/search/utils/recentSearches';
 import i18n from 'i18n';
-import { HELP_URL } from '@/constants/url';
-import { openURL } from '@/utils/urlUtils';
 
 import {
   BottomSheetHeader,
@@ -36,67 +30,35 @@ import {
   SwitchAccount,
   SettingsList,
 } from '@/components-next';
-import { AppearancePicker } from './components/AppearancePicker';
-import { Theme } from '@/types/common/Theme';
-import { selectTheme } from '@/store/settings/settingsSelectors';
-import { SheetRef } from '@/components-next/common/sheet/Sheet';
 import { Sheet } from '@/components-next/common/sheet/Sheet';
 import { UserAvatar } from './components/UserAvatar';
 
 import { LANGUAGES } from '@/constants';
 import { useRefsContext } from '@/context';
-import {
-  AppearanceIcon,
-  ChatIcon,
-  ChatwootIcon,
-  NotificationIcon,
-  PhoneOutlineIcon,
-  SwitchIcon,
-  TranslateIcon,
-} from '@/svg-icons';
+import { LockIcon, NotificationIcon, SwitchIcon, TranslateIcon } from '@/svg-icons';
 import { GenericListType } from '@/types';
 
-import {
-  IOS_DESIGN,
-  useHaptic,
-  useIsSplitLayout,
-  useSideTabBarLayout,
-  useTabBarHeight,
-} from '@/utils';
+import { useHaptic, useIsSplitLayout, useSideTabBarLayout, useTabBarHeight } from '@/utils';
 import { HeaderSpacer, ScrollEdgeHeader, useScrollEdge } from '@/components-next/side-toolbar';
 import { SettingsHeader } from './SettingsHeader';
 import { DebugActions } from './components/DebugActions';
-import { WorkPausedNote } from './components/WorkPausedNote';
-import { useWorkPreferences } from './hooks/useWorkPreferences';
 import {
   selectCurrentUserAvailability,
-  selectSupportsWorkPreferences,
   selectUser,
   selectAccounts,
 } from '@/store/auth/authSelectors';
-import { logout } from '@/store/auth/authSlice';
 import { authActions } from '@/store/auth/authActions';
-import {
-  selectLocale,
-  selectIsChatwootCloud,
-  selectPushToken,
-} from '@/store/settings/settingsSelectors';
+import { selectBiometricLockEnabled, selectLocale } from '@/store/settings/settingsSelectors';
 import { settingsActions } from '@/store/settings/settingsActions';
-import { setLocale } from '@/store/settings/settingsSlice';
+import { setBiometricLock, setLocale } from '@/store/settings/settingsSlice';
+import { useLogout } from '@/hooks/useLogout';
+import { authenticateUser, isDeviceSecured } from '@/security/biometricAuth';
 
-import AnalyticsHelper from '@/utils/analyticsUtils';
-import { PROFILE_EVENTS } from '@/constants/analyticsEvents';
 import { getUserPermissions } from '@/utils/permissionUtils';
 import { CONVERSATION_PERMISSIONS } from '@/constants/permissions';
-import { selectAllInboxes } from '@/store/inbox/inboxSelectors';
-import { isVoiceCallEnabled } from '@/utils/inboxUtils';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { showToast } from '@/utils/toastUtils';
 import { PaneHeader } from '@/navigation/split/PaneHeader';
-import { PageHeader } from '@/navigation/split/PageHeader';
-import { SwipeBackPage } from '@/navigation/split/SwipeBackPage';
-import { getVoipToken } from '@/services/voice/chatwootCalls';
-import { callActions } from '@/store/call/callActions';
 
 const appName = Application.applicationName;
 const appVersion = Application.nativeApplicationVersion;
@@ -104,24 +66,18 @@ const appVersion = Application.nativeApplicationVersion;
 const buildNumber = Application.nativeBuildVersion;
 const appVersionDetails = buildNumber ? `${appVersion} (${buildNumber})` : appVersion;
 
-type SettingsPane = 'availability' | 'notifications' | 'language' | 'account' | 'appearance';
+type SettingsPane = 'availability' | 'notifications' | 'language' | 'account';
 
 const SettingsScreen = () => {
   const tailwind = useTailwind();
   const navigation = useNavigation();
-  const appearance = useAppSelector(selectTheme) ?? 'system';
-  const appearanceSheetRef = useRef<SheetRef>(null);
   const isSplit = useIsSplitLayout();
   const { width } = useWindowDimensions();
   const [pane, setPane] = useState<SettingsPane>('availability');
-  const [iosPage, setIosPage] = useState<SettingsPane | null>(null);
   const openPane = (next: SettingsPane, openSheetInstead: () => void) => () => {
     if (isSplit) {
       hapticSelection?.();
       setPane(next);
-    } else if (IOS_DESIGN) {
-      hapticSelection?.();
-      setIosPage(next);
     } else {
       openSheetInstead();
     }
@@ -129,10 +85,10 @@ const SettingsScreen = () => {
   const dispatch = useAppDispatch();
   const tabBarHeight = useTabBarHeight();
   const sideTabBar = useSideTabBarLayout();
-  const hasOverlayHeader = IOS_DESIGN || sideTabBar !== null;
+  const hasOverlayHeader = sideTabBar !== null;
   const scrollEdge = useScrollEdge();
   const [headerHeight, setHeaderHeight] = useState(0);
-  const pageBackground = IOS_DESIGN && !isSplit ? 'bg-gray-50' : 'bg-white';
+  const pageBackground = 'bg-white';
   const savedAvailabilityStatus =
     (useSelector(selectCurrentUserAvailability) as AvailabilityStatus) || 'offline';
   const [pendingAvailability, setPendingAvailability] = useState<AvailabilityStatus | null>(null);
@@ -140,58 +96,19 @@ const SettingsScreen = () => {
 
   // const { bottom } = useSafeAreaInsets();
 
-  const [showWidget, toggleWidget] = useState(false);
   const user = useSelector(selectUser);
-  const {
-    name,
-    email,
-    avatar_url: avatarUrl,
-    identifier_hash: identifierHash,
-    account_id: activeAccountId,
-  } = user || {};
+  const { name, email, avatar_url: avatarUrl, account_id: activeAccountId } = user || {};
 
   // Refetch when the active account changes; notification settings are account-scoped.
   useEffect(() => {
     dispatch(settingsActions.getNotificationSettings());
   }, [dispatch, activeAccountId]);
 
-  const pushToken = useAppSelector(selectPushToken);
-
   const userPermissions = getUserPermissions(user, activeAccountId);
 
   const hasConversationPermission = CONVERSATION_PERMISSIONS.some(permission =>
     userPermissions.includes(permission),
   );
-
-  const userDetails = {
-    identifier: email,
-    name,
-    avatar_url: avatarUrl,
-    email,
-    identifier_hash: identifierHash,
-  };
-
-  const customAttributes = {
-    originatedFrom: 'mobile-app',
-    appName,
-    appVersion: appVersionDetails,
-    deviceId: DeviceInfo.getDeviceId(),
-    packageName: appName,
-    operatingSystem: Platform.OS, // android/ios
-  };
-
-  const isChatwootCloud = useAppSelector(selectIsChatwootCloud);
-  const hasVoiceInbox = useAppSelector(state => selectAllInboxes(state).some(isVoiceCallEnabled));
-  const supportsWorkPreferences = useAppSelector(selectSupportsWorkPreferences);
-  const showWorkPreferences = hasVoiceInbox && supportsWorkPreferences;
-  const isOnline = availabilityStatus === 'online';
-  const {
-    preferences: workPreferences,
-    isLocked: isWorkPreferenceLocked,
-    toggle: toggleWorkPreference,
-  } = useWorkPreferences();
-
-  const chatwootInstance = isChatwootCloud ? `${appName} cloud` : `${appName} self-hosted`;
 
   const accounts = useSelector(selectAccounts) || [];
 
@@ -218,10 +135,6 @@ const SettingsScreen = () => {
   };
 
   const changeAvailabilityStatus = (updatedStatus: string) => {
-    AnalyticsHelper.track(PROFILE_EVENTS.TOGGLE_AVAILABILITY_STATUS, {
-      from: availabilityStatus,
-      to: updatedStatus,
-    });
     const payload = { profile: { availability: updatedStatus, account_id: activeAccountId } };
     setPendingAvailability(updatedStatus as AvailabilityStatus);
     // TODO: Fix this later
@@ -237,7 +150,7 @@ const SettingsScreen = () => {
   };
 
   const changeAccount = (accountId: number) => {
-    if (!switchAccount(dispatch, accountId)) return;
+    switchAccount(dispatch, accountId);
     navigation.dispatch(StackActions.replace('Tab'));
   };
 
@@ -251,10 +164,6 @@ const SettingsScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeLocale]);
 
-  const openHelpCenter = () => {
-    openURL({ URL: HELP_URL });
-  };
-
   // const openSystemSettings = () => {
   //   if (Platform.OS === 'ios') {
   //     Linking.openURL('app-settings:');
@@ -263,16 +172,24 @@ const SettingsScreen = () => {
   //   }
   // };
 
-  const onClickLogout = useCallback(async () => {
-    // Server hangup requires the current session.
-    await dispatch(callActions.endLocalCalls()).catch(() => {});
-    await AsyncStorage.removeItem('cwCookie');
-    await RecentSearches.clearAll();
-    await dispatch(settingsActions.removeDevice({ pushToken }));
-    const voipToken = getVoipToken();
-    if (voipToken) await dispatch(settingsActions.removeDevice({ pushToken: voipToken }));
-    dispatch(logout());
-  }, [dispatch, pushToken]);
+  const onClickLogout = useLogout();
+
+  const biometricLockEnabled = useAppSelector(selectBiometricLockEnabled);
+
+  const toggleBiometricLock = useCallback(async () => {
+    if (biometricLockEnabled) {
+      dispatch(setBiometricLock(false));
+      return;
+    }
+    if (!(await isDeviceSecured())) {
+      Alert.alert(i18n.t('APP_LOCK.SETTING'), i18n.t('APP_LOCK.NOT_AVAILABLE'));
+      return;
+    }
+    // Proving it works before turning it on avoids locking the user out.
+    if (await authenticateUser(i18n.t('APP_LOCK.ENABLE_PROMPT'))) {
+      dispatch(setBiometricLock(true));
+    }
+  }, [biometricLockEnabled, dispatch]);
 
   const availabilityList: GenericListType[] = [
     {
@@ -284,35 +201,16 @@ const SettingsScreen = () => {
       isSelected: isSplit && pane === 'availability',
       onPressListItem: openPane('availability', openSheet),
     },
-    {
-      title: i18n.t('SETTINGS.RECEIVE_CONVERSATIONS'),
-      icon: <ChatIcon />,
-      checked: workPreferences.accepts_conversations,
-      disabled: !showWorkPreferences,
-      inactive: !isOnline,
-      locked: isWorkPreferenceLocked('accepts_conversations'),
-      onPressListItem: () => toggleWorkPreference('accepts_conversations'),
-    },
-    {
-      title: i18n.t('SETTINGS.RECEIVE_VOICE_CALLS'),
-      icon: <PhoneOutlineIcon stroke="#858585" />,
-      checked: workPreferences.accepts_calls,
-      disabled: !showWorkPreferences,
-      inactive: !isOnline,
-      locked: isWorkPreferenceLocked('accepts_calls'),
-      onPressListItem: () => toggleWorkPreference('accepts_calls'),
-    },
   ];
 
   const preferencesList: GenericListType[] = [
     {
-      hasChevron: true,
-      title: i18n.t('SETTINGS.APPEARANCE'),
-      icon: <AppearanceIcon />,
-      subtitle: i18n.t(`SETTINGS.APPEARANCE_${(appearance as Theme).toUpperCase()}`),
+      hasChevron: false,
+      title: i18n.t('APP_LOCK.SETTING'),
+      icon: <LockIcon />,
+      subtitle: i18n.t(biometricLockEnabled ? 'APP_LOCK.SETTING_ON' : 'APP_LOCK.SETTING_OFF'),
       subtitleType: 'light',
-      isSelected: isSplit && pane === 'appearance',
-      onPressListItem: openPane('appearance', () => appearanceSheetRef.current?.present()),
+      onPressListItem: toggleBiometricLock,
     },
     {
       hasChevron: true,
@@ -348,25 +246,6 @@ const SettingsScreen = () => {
           openPane('account', () => switchAccountSheetRef.current?.present())();
         }
       },
-    },
-  ];
-
-  const supportList: GenericListType[] = [
-    {
-      hasChevron: true,
-      title: i18n.t('SETTINGS.READ_DOCS'),
-      icon: <SwitchIcon />,
-      subtitle: '',
-      subtitleType: 'light',
-      onPressListItem: openHelpCenter,
-    },
-    {
-      hasChevron: true,
-      title: i18n.t('SETTINGS.CHAT_WITH_US'),
-      icon: <ChatwootIcon />,
-      subtitle: '',
-      subtitleType: 'light',
-      onPressListItem: () => toggleWidget(true),
     },
   ];
 
@@ -416,13 +295,9 @@ const SettingsScreen = () => {
         </Animated.View>
         <Animated.View style={tailwind.style('pt-6')}>
           <SettingsList sectionTitle={i18n.t('SETTINGS.AVAILABILITY')} list={availabilityList} />
-          {showWorkPreferences && !isOnline && <WorkPausedNote />}
         </Animated.View>
         <Animated.View style={tailwind.style('pt-6')}>
           <SettingsList sectionTitle={i18n.t('SETTINGS.PREFERENCES')} list={preferencesList} />
-        </Animated.View>
-        <Animated.View style={tailwind.style('pt-6')}>
-          <SettingsList sectionTitle={i18n.t('SETTINGS.SUPPORT')} list={supportList} />
         </Animated.View>
         <Animated.View style={tailwind.style('pt-6 mx-4')}>
           <Button
@@ -436,7 +311,7 @@ const SettingsScreen = () => {
           style={tailwind.style('p-4 items-center')}
           onLongPress={() => debugActionsSheetRef.current?.present()}>
           <Text style={tailwind.style('text-sm text-gray-700 ')}>
-            {`${chatwootInstance} ${appVersionDetails}`}
+            {`${appName} ${appVersionDetails}`}
           </Text>
         </Pressable>
       </Animated.ScrollView>
@@ -449,10 +324,6 @@ const SettingsScreen = () => {
           <SettingsHeader />
         </ScrollEdgeHeader>
       ) : null}
-      <Sheet ref={appearanceSheetRef} autoSize>
-        <BottomSheetHeader headerText={i18n.t('SETTINGS.APPEARANCE')} />
-        <AppearancePicker />
-      </Sheet>
       <Sheet ref={userAvailabilityStatusSheetRef} height={190}>
         <BottomSheetHeader headerText={i18n.t('SETTINGS.SET_AVAILABILITY')} />
         <AvailabilityStatusList
@@ -484,25 +355,11 @@ const SettingsScreen = () => {
         <BottomSheetHeader headerText={i18n.t('SETTINGS.DEBUG_ACTIONS')} />
         <DebugActions />
       </Sheet>
-      {!!process.env.EXPO_PUBLIC_CHATWOOT_WEBSITE_TOKEN &&
-        !!process.env.EXPO_PUBLIC_CHATWOOT_BASE_URL &&
-        !!showWidget && (
-          <ChatWootWidget
-            websiteToken={process.env.EXPO_PUBLIC_CHATWOOT_WEBSITE_TOKEN}
-            locale="en"
-            baseUrl={process.env.EXPO_PUBLIC_CHATWOOT_BASE_URL}
-            closeModal={() => toggleWidget(false)}
-            isModalVisible={showWidget}
-            user={userDetails}
-            customAttributes={customAttributes}
-          />
-        )}
     </SafeAreaView>
   );
 
   const titleFor = (p: SettingsPane) =>
     ({
-      appearance: i18n.t('SETTINGS.APPEARANCE'),
       availability: i18n.t('SETTINGS.SET_AVAILABILITY'),
       notifications: i18n.t('SETTINGS.NOTIFICATION_PREFERENCES'),
       language: i18n.t('SETTINGS.SET_LANGUAGE'),
@@ -511,7 +368,6 @@ const SettingsScreen = () => {
 
   const renderPaneCard = (p: SettingsPane) => (
     <View style={tailwind.style('rounded-[13px] bg-white overflow-hidden')}>
-      {p === 'appearance' ? <AppearancePicker /> : null}
       {p === 'availability' ? (
         <AvailabilityStatusList
           changeAvailabilityStatus={changeAvailabilityStatus}
@@ -556,25 +412,7 @@ const SettingsScreen = () => {
           </SafeAreaView>
         </>
       ) : null}
-      {!isSplit && IOS_DESIGN && iosPage ? (
-        <Animated.View
-          entering={SlideInRight.duration(280)}
-          exiting={SlideOutRight.duration(240)}
-          style={tailwind.style('absolute inset-0')}>
-          <SwipeBackPage
-            onBack={() => setIosPage(null)}
-            style={tailwind.style('flex-1 bg-gray-50')}>
-            <SafeAreaView edges={['top', 'left', 'right']} style={tailwind.style('flex-1')}>
-              <PageHeader title={titleFor(iosPage)} onBack={() => setIosPage(null)} />
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={tailwind.style('px-4 pt-2', `pb-[${tabBarHeight}px]`)}>
-                {renderPaneCard(iosPage)}
-              </ScrollView>
-            </SafeAreaView>
-          </SwipeBackPage>
-        </Animated.View>
-      ) : null}
+      {null}
     </View>
   );
 };

@@ -3,7 +3,6 @@ import { Text, type TextStyle, type StyleProp } from 'react-native';
 import { highlightText } from '@/utils/highlightText';
 import { useTailwind } from '@/theme/useTailwind';
 import { expandTabs } from '@/utils/expandTabs';
-import { IOS_DESIGN } from '@/utils';
 
 type HighlightedTextProps = {
   text: string;
@@ -19,9 +18,7 @@ export const HighlightedText = ({
   numberOfLines,
 }: HighlightedTextProps) => {
   const tailwind = useTailwind();
-  const HIGHLIGHT_STYLE = tailwind.style(
-    IOS_DESIGN ? 'font-inter-semibold-20 text-gray-950' : 'font-inter-medium-24 text-blue-800',
-  );
+  const HIGHLIGHT_STYLE = tailwind.style('font-inter-medium-24 text-blue-800');
 
   if (!rawText) return null;
   const text = expandTabs(rawText);

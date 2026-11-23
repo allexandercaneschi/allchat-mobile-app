@@ -20,7 +20,7 @@ import { useSideTabBarLayout } from '@/utils';
 import { SideToolbarProvider } from '@/context';
 import { CONVERSATION_PERMISSIONS } from 'constants/permissions';
 
-import { ConversationStack, SettingsStack, InboxStack } from '../stack';
+import { ContactsStack, ConversationStack, SettingsStack, InboxStack } from '../stack';
 
 import { selectInstallationUrl } from '@/store/settings/settingsSelectors';
 import { settingsActions } from '@/store/settings/settingsActions';
@@ -30,17 +30,16 @@ import { inboxActions } from '@/store/inbox/inboxActions';
 import { labelActions } from '@/store/label/labelActions';
 import actionCableConnector from '@/utils/actionCable';
 import { setCurrentState } from '@/store/conversation/conversationHeaderSlice';
-import AnalyticsHelper from '@/utils/analyticsUtils';
-import { clearAllDeliveredNotifications } from '@/utils/pushUtils';
 import { dashboardAppActions } from '@/store/dashboard-app/dashboardAppActions';
 import { customAttributeActions } from '@/store/custom-attribute/customAttributeActions';
 import { accountActions } from '@/store/account/accountActions';
 import { clearSelection } from '@/store/conversation/conversationSelectedSlice';
-import { runCallReadiness } from '@/screens/call/utils/callReadiness';
 import { RESULTS, checkNotifications, requestNotifications } from 'react-native-permissions';
 import { CustomTabBar } from './CustomTabBar';
 import { InternalChatListScreen } from '@/screens/internal-chat';
 import { useInternalChatBootstrap } from '@/screens/internal-chat/useInternalChatBootstrap';
+import { useLoadMyRequests } from '@/screens/requests/useIncomingRequests';
+import { useUnreadWidgetRefresh } from '@/widget/useUnreadWidgetRefresh';
 
 const Tab = createBottomTabNavigator();
 
@@ -58,6 +57,8 @@ export const Tabs = () => {
   const accountId = useAppSelector(selectCurrentUserAccountId);
   const webSocketUrl = useAppSelector(selectWebSocketUrl);
   useInternalChatBootstrap();
+  useLoadMyRequests(accountId);
+  useUnreadWidgetRefresh();
 
   useEffect(() => {
     // Here is the place we are loading all the data for the app first time first time or user switches account
@@ -71,7 +72,6 @@ export const Tabs = () => {
     dispatch(dashboardAppActions.index());
     dispatch(customAttributeActions.index());
     dispatch(accountActions.show());
-    initAnalytics();
     initSentry();
     initPushNotifications();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +82,6 @@ export const Tabs = () => {
       const { status } = await checkNotifications();
       if (status !== RESULTS.GRANTED) await requestNotifications(['alert', 'sound', 'badge']);
       await inboxesLoaded;
-      await runCallReadiness();
     } catch {
       // Prompt failures must not prevent registration.
     }
@@ -90,16 +89,7 @@ export const Tabs = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const initAnalytics = useCallback(async () => {
-    if (user) {
-      AnalyticsHelper.identify(user);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const initPushNotifications = useCallback(async () => {
-    clearAllDeliveredNotifications();
-  }, []);
+  const initPushNotifications = useCallback(async () => {}, []);
 
   const initSentry = useCallback(async () => {
     setSentryUser(user, installationUrl);
@@ -178,6 +168,9 @@ export const Tabs = () => {
             options={{ headerShown: false }}
             component={ConversationStack}
           />
+        )}
+        {hasConversationPermission && (
+          <Tab.Screen name="Contacts" options={{ headerShown: false }} component={ContactsStack} />
         )}
         <Tab.Screen
           name="InternalChat"

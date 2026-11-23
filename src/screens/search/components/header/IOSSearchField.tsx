@@ -1,13 +1,11 @@
 import React from 'react';
-import { ActivityIndicator, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
-import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
+import { ActivityIndicator, Pressable, TextInput, View } from 'react-native';
 
 import { Icon } from '@/components-next/common/icon';
 import { CloseIcon, SearchIcon } from '@/svg-icons';
 import { useTailwind } from '@/theme/useTailwind';
 import i18n from 'i18n';
 
-const useLiquidGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
 const HEIGHT = 44;
 
 type IOSSearchFieldProps = {
@@ -30,16 +28,9 @@ export const IOSSearchField = ({
     <View
       style={tailwind.style(
         `flex-1 h-[${HEIGHT}px] flex-row items-center rounded-full pl-3.5 pr-2.5`,
-        useLiquidGlass ? '' : 'bg-white border-[0.5px] border-blackA-A6',
+        'bg-white border-[0.5px] border-blackA-A6',
       )}>
-      {useLiquidGlass ? (
-        <GlassView
-          colorScheme={tailwind.isDark ? 'dark' : 'light'}
-          glassEffectStyle="regular"
-          isInteractive
-          style={[StyleSheet.absoluteFill, { borderRadius: HEIGHT / 2 }]}
-        />
-      ) : null}
+      {null}
       <Icon icon={<SearchIcon stroke={tailwind.color('text-gray-700')} />} size={17} />
       <TextInput
         autoFocus

@@ -21,6 +21,7 @@ import {
   InboxFilters,
   AssigneeTypeFilters,
 } from './components';
+import { NewConversationFab } from './components/NewConversationFab';
 
 import { ActionTabs } from '@/components-next';
 import { Sheet } from '@/components-next/common/sheet/Sheet';
@@ -37,6 +38,7 @@ import { Conversation } from '@/types';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import {
   selectBottomSheetState,
+  selectCurrentState,
   setBottomSheetState,
 } from '@/store/conversation/conversationHeaderSlice';
 import { resetActionState } from '@/store/conversation/conversationActionSlice';
@@ -56,7 +58,7 @@ import { clearAssignableAgents } from '@/store/assignable-agent/assignableAgentS
 import i18n from '@/i18n';
 import ActionBottomSheet from '@/navigation/tabs/ActionBottomSheet';
 import { getCurrentRouteName } from '@/utils/navigationUtils';
-import { IOS_DESIGN, useTabBarHeight, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
+import { useTabBarHeight, useIsSplitLayout, useSideTabBarLayout } from '@/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // The screen list thats need to be checked for refreshing the conversations list
@@ -322,7 +324,7 @@ const ConversationScreen = () => {
   const isSplit = useIsSplitLayout();
   const [headerHeight, setHeaderHeight] = useState(0);
   const sideTabBar = useSideTabBarLayout();
-  const hasOverlayHeader = IOS_DESIGN || sideTabBar !== null;
+  const hasOverlayHeader = sideTabBar !== null;
   const scrollEdge = useScrollEdge();
   const filters = useAppSelector(selectFilters);
   const currentBottomSheet = useAppSelector(selectBottomSheetState);
@@ -339,6 +341,7 @@ const ConversationScreen = () => {
     dispatch(resetActionState());
   };
 
+  const headerState = useAppSelector(selectCurrentState);
   const isInbox = currentBottomSheet === 'inbox_id';
 
   const filterHeight = (() => {
@@ -421,6 +424,7 @@ const ConversationScreen = () => {
           </Sheet>
           <ActionBottomSheet />
           <ActionTabs />
+          {headerState === 'Select' ? null : <NewConversationFab />}
         </ConversationListStateProvider>
       </SafeAreaView>
     </SplitView>

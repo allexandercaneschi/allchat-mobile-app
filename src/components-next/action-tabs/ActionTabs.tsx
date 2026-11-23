@@ -1,18 +1,17 @@
 import { useTailwind } from '@/theme/useTailwind';
 import React from 'react';
-import { Platform, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
 import { useContainerWidth, useRefsContext } from '@/context';
-import { IOS_DESIGN, useHaptic, useScaleAnimation } from '@/utils';
+import { useHaptic, useScaleAnimation } from '@/utils';
 import { Icon } from '../common';
 import { useAppDispatch } from '@/hooks';
 import { setActionState } from '@/store/conversation/conversationActionSlice';
-import { ACTION_TAB_HEIGHT, IOS_BAR_WIDTH } from './actionTabsLayout';
+import { ACTION_TAB_HEIGHT } from './actionTabsLayout';
 import { ActionTabBarBackground } from './ActionTabBarBackground';
-import { IOSActionBar } from './IOSActionBar';
 
 const ActionLabelTag = () => (
   <Svg width="29" height="28" viewBox="0 0 29 28" fill="none">
@@ -123,30 +122,14 @@ export const ActionTabs = () => {
     },
   ];
 
-  if (IOS_DESIGN) {
-    return (
-      <IOSActionBar barLeft={left + (containerWidth - IOS_BAR_WIDTH) / 2} bottom={bottom + 8} />
-    );
-  }
-
   return (
     <ActionTabBarBackground
-      blurAmount={25}
-      blurType={tailwind.isDark ? 'dark' : 'light'}
-      style={Platform.select({
-        ios: [
-          tailwind.style(
-            'flex flex-row rounded-[30px] items-center absolute justify-between w-[220px] px-6 py-[15px]',
-            `h-[${ACTION_TAB_HEIGHT}px] bottom-[${bottom + 8}px] left-[${barLeft}px]`,
-          ),
-        ],
-        android: [
-          tailwind.style(
-            'flex flex-row rounded-[30px] items-center absolute justify-between w-[220px] px-6 py-[15px] bg-white',
-            `h-[${ACTION_TAB_HEIGHT}px] bottom-[${bottom + 8}px] left-[${barLeft}px]`,
-          ),
-        ],
-      })}>
+      style={[
+        tailwind.style(
+          'flex flex-row rounded-[30px] items-center absolute justify-between w-[220px] px-6 py-[15px] bg-white',
+          `h-[${ACTION_TAB_HEIGHT}px] bottom-[${bottom + 8}px] left-[${barLeft}px]`,
+        ),
+      ]}>
       {bulkSelectActions.map(actionItem => {
         return <ActionItem key={actionItem.action} {...{ actionItem }} />;
       })}

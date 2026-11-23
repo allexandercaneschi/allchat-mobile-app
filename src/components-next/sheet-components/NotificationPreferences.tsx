@@ -8,7 +8,6 @@ import i18n from 'i18n';
 import { selectNotificationSettings } from '@/store/settings/settingsSelectors';
 import { settingsActions } from '@/store/settings/settingsActions';
 import { NOTIFICATION_PREFERENCE_TYPES } from '@/constants';
-import { useIOSListText } from '@/utils';
 
 const addOrRemoveItemFromArray = <T,>(array: T[], key: T): T[] => {
   const index = array.indexOf(key);
@@ -76,36 +75,6 @@ export const NotificationPreferences = () => {
   };
 
   const typedPushFlags = allPushFlags as NotificationPreferenceType[];
-  const iosList = useIOSListText();
-
-  if (iosList) {
-    return (
-      <Animated.View>
-        {typedPushFlags.map((item: NotificationPreferenceType, index) => (
-          <Animated.View key={item} style={tailwind.style('flex-row items-center pl-4')}>
-            <Animated.View
-              style={tailwind.style(
-                'flex-1 flex-row items-center justify-between min-h-[44px] py-[11px] pr-4 gap-3',
-                index < typedPushFlags.length - 1 ? 'border-b-[1px] border-b-blackA-A3' : '',
-              )}>
-              <Animated.Text
-                style={tailwind.style(
-                  'flex-1 text-[17px] leading-[22px] font-inter-normal-20 text-gray-950',
-                )}>
-                {preferenceLabel(item)}
-              </Animated.Text>
-              <Switch
-                style={styles.compactSwitch}
-                trackColor={{ true: tailwind.color('bg-blue-800') as string }}
-                onValueChange={() => onPushItemChange(item)}
-                value={selectedPushFlags.includes(item)}
-              />
-            </Animated.View>
-          </Animated.View>
-        ))}
-      </Animated.View>
-    );
-  }
 
   return (
     <Animated.View style={tailwind.style('py-4 px-3')}>

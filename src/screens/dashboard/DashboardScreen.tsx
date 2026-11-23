@@ -14,9 +14,6 @@ import { Conversation } from '@/types';
 import { User } from '@/types/User';
 import { PaneHeader } from '@/navigation/split/PaneHeader';
 import type { DashboardColumnParams } from '@/navigation/split/SplitViewContext';
-import { FullScreenPage } from '@/navigation/split/FullScreenPage';
-import { PageHeader } from '@/navigation/split/PageHeader';
-import { IOS_DESIGN } from '@/utils';
 
 type DashboardScreenProps = {
   paneParams?: DashboardColumnParams;
@@ -80,15 +77,6 @@ const DashboardScreen = ({ paneParams }: DashboardScreenProps = {}) => {
       }}
     />
   );
-
-  if (IOS_DESIGN && !paneParams) {
-    return (
-      <FullScreenPage>
-        <PageHeader title={title ?? ''} onBack={handleBackPress} />
-        {webview}
-      </FullScreenPage>
-    );
-  }
 
   return (
     <Animated.View style={tailwind.style('flex-1', paneParams ? '' : `bg-white pt-[${top}px]`)}>

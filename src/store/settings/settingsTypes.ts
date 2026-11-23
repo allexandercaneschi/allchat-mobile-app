@@ -21,31 +21,6 @@ export interface NotificationSettingsPayload {
   };
 }
 
-export interface InstallationUrls {
-  installationUrl: string;
-  webSocketUrl: string;
-  baseUrl: string;
-}
-
-export interface SettingsState extends InstallationUrls {
-  uiFlags: {
-    isSettingUrl: boolean;
-    isUpdating: boolean;
-    isLocaleSet: boolean;
-  };
-  notificationSettings: NotificationSettings | null;
-  localeValue: string;
-}
-
-export interface VoipPushPayload {
-  subscription_type: 'apns_voip';
-  subscription_attributes: {
-    devicePlatform: string;
-    push_token: string;
-    device_id: string;
-  };
-}
-
 export interface PushPayload {
   subscription_type: string;
   subscription_attributes: {
